@@ -1,9 +1,8 @@
 ---
 layout: post
-title: Research Notebook: Acquiring Baseball Stats from the NCAA with R
+title: Acquiring Baseball Stats from the NCAA with R
 tags: [R, web-scraping, baseball, baseballr, NCAA]
 ---
-
 
 In the latest release of my [baseballr](https://billpetti.github.io/baseballr/) package I've included a function that makes it easy for a user to pull data from the [NCAA's website](http://stats.ncaa.org) for baseball teams across the three major divisions (I, II, III).
 
