@@ -1,7 +1,7 @@
-# A Crash Course in the R Programming Language
-Bill Petti  
-Orignally Created May 2016  
-
+---
+layout: page
+title: A Crash Course in the R Programming Language
+---
 
 # R Script for this Course
 
@@ -2347,7 +2347,7 @@ Creating histograms is extremely easy using the base plot functionality in R:
 hist(survey_data$Q2)
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-112-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-112-1.png)<!-- -->
 
 You can directly edit the breaks to be used:
 
@@ -2358,7 +2358,7 @@ hist(survey_data$Q2, main = "Frequency of Responses to Q2",
      breaks = c(0.0, 1.0, 2.0, 3.0, 4.0, 5.0))
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-113-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-113-1.png)<!-- -->
 
 You can also extract the values instead of the histogram:
 
@@ -2415,7 +2415,7 @@ hist(survey_data$Q2, main = "Frequency of Responses to Q2",
      labels = TRUE)
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-116-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-116-1.png)<!-- -->
 
 You can further customize a `hist` through a variety of arguments. See `?hist` for an accounting of the additional arguments.
 
@@ -2430,7 +2430,7 @@ plot(ERA ~ ERA_YR2, data = era_yr2, main = "ERA, Year 1 to Year 2",
      ylab = "ERA YR2")
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-117-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-117-1.png)<!-- -->
 
 As are box plots:
 
@@ -2439,7 +2439,7 @@ As are box plots:
 boxplot(era_yr2$ERA, main = "ERA", ylab = "ERA")
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-118-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-118-1.png)<!-- -->
 
 ## `ggplot2`
 
@@ -2455,7 +2455,7 @@ ggplot(diamonds, aes(x = carat, y = price)) +
   geom_point()
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-119-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-119-1.png)<!-- -->
 
 Let's save the base of the plot as an object and then add additional layers one by one:  
 
@@ -2465,7 +2465,7 @@ p <- ggplot(diamonds, aes(x = carat, y = price))
 p
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-120-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-120-1.png)<!-- -->
 
 We can color code each point by the $color variable in the dataset:
 
@@ -2474,7 +2474,7 @@ We can color code each point by the $color variable in the dataset:
 p + geom_point(aes(color = color))
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-121-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-121-1.png)<!-- -->
 
 We could also adjust the size of each point by the `depth` variable
 
@@ -2483,7 +2483,7 @@ We could also adjust the size of each point by the `depth` variable
 p + geom_point(aes(color = color, size = depth))
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-122-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-122-1.png)<!-- -->
 
 This is a bit hard to make out, so let's add some transparency to each point using the alpha argument:
 
@@ -2492,7 +2492,7 @@ This is a bit hard to make out, so let's add some transparency to each point usi
 p + geom_point(aes(color = color, size = depth, alpha = .3))
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-123-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-123-1.png)<!-- -->
 
 This still looks pretty messy, so let's create separate plots to compare broken out by color. To do this, we can use the facet argument:  
 
@@ -2502,7 +2502,7 @@ p + geom_point(aes(color = color)) +
   facet_wrap(~color)
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-124-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-124-1.png)<!-- -->
 
 Facets can also work with two dimensions, and we can place the facets in a grid pattern:  
 
@@ -2512,7 +2512,7 @@ p + geom_point(aes(color = color)) +
   facet_grid(cut ~ clarity)
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-125-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-125-1.png)<!-- -->
 
 Faceting also makes it easy to view individual variables at once--for example, density plots for each survey question:
 
@@ -2533,7 +2533,7 @@ ggplot(survey_data_melt, aes(value)) + geom_density() + facet_wrap(~variable)
 ## Warning: Removed 16 rows containing non-finite values (stat_density).
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-126-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-126-1.png)<!-- -->
 
 `ggplot2` also makes it easy to add a trend line to a scatter plot using `stat_smooth`:  
 
@@ -2547,7 +2547,7 @@ p + geom_point() +
 ## `geom_smooth()` using method = 'gam'
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-127-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-127-1.png)<!-- -->
 
 The grey shaded area is the confidence interval of the smoothed trend.
 
@@ -2559,7 +2559,7 @@ ggplot(diamonds, aes(y = carat, x = cut)) +
   geom_boxplot()
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-128-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-128-1.png)<!-- -->
 
 ### Fleshing out a `ggplot` visual
 
@@ -2577,7 +2577,7 @@ pp <- p + geom_point() +
 pp
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-129-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-129-1.png)<!-- -->
 
 Formatting of text is accomplished by altering the theme of the plot.
 
@@ -2591,7 +2591,7 @@ ppp <- pp + theme(axis.title = element_text(face = "bold", size = 14),
 ppp
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-130-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-130-1.png)<!-- -->
 
 You can also remove elements of the plot via the theme() argument.
 
@@ -2604,7 +2604,7 @@ pppp <- ppp + theme(panel.background = element_blank())
 pppp
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-131-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-131-1.png)<!-- -->
 
 You can also use custom color palettes via a series of `scale_` arguments.
 
@@ -2618,7 +2618,7 @@ ppppp <- pppp + geom_point(aes(colour = color), size = 3) +
 ppppp
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-132-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-132-1.png)<!-- -->
 
 ### `ggplot` Themes
 
@@ -2629,19 +2629,19 @@ There are some built in variations of the basic theme in ggplot. You can easily 
 ppppp + theme_minimal()
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-133-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-133-1.png)<!-- -->
 
 ```r
 ppppp + theme_bw()
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-133-2.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-133-2.png)<!-- -->
 
 ```r
 ppppp + theme_grey()
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-133-3.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-133-3.png)<!-- -->
 
 If you want, you can create your own palette of colors and use them in a plot as well:
 
@@ -2662,7 +2662,7 @@ ggplot(group_means, aes(factor(group), mean)) +
         panel.background = element_blank())
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-134-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-134-1.png)<!-- -->
 
 ## Correlation/R^2 Heatmap
 
@@ -2697,7 +2697,7 @@ ggplot(survey_data_correlations_melt, aes(Var1, Var2)) +
         axis.text = element_text(size = 12, face = "bold"))
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-136-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-136-1.png)<!-- -->
 
 We should remove all values of 1 to make the heatmapping more intuititve and to display better
 
@@ -2719,7 +2719,7 @@ ggplot(survey_data_correlations_melt, aes(Var1, Var2)) +
         axis.text = element_text(size = 12, face = "bold"))
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-137-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-137-1.png)<!-- -->
 
 If the labels are distracting you can remove them:
 
@@ -2737,7 +2737,7 @@ ggplot(survey_data_correlations_melt, aes(Var1, Var2)) +
         axis.text = element_text(size = 12, face = "bold"))
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-138-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-138-1.png)<!-- -->
 
 We could also plot the R^2 between questions:
 
@@ -2758,7 +2758,7 @@ ggplot(survey_data_correlations_melt_r2, aes(Var1, Var2)) +
         axis.text = element_text(size = 12, face = "bold"))
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-139-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-139-1.png)<!-- -->
 
 # Additional Resources
 
