@@ -5,7 +5,7 @@ title: A Crash Course in the R Programming Language
 
 # R Script for this Course
 
-An R script that contains all the code below can be found [here](https://github.com/BillPetti/R-Crash-Course/blob/master/RCrashCourse.scripts.R)
+An R script that contains all the code below can be found [here](https://github.com/BillPetti/R-Crash-Course/blob/master/RCrashCourse.scripts.R).
 
 You can also download a pdf version of this course [here](https://raw.githubusercontent.com/BillPetti/R-Crash-Course/master/Crash_course_in_R.pdf).
 
