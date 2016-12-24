@@ -1,3 +1,9 @@
+---
+layout: page
+title: About me
+subtitle: 
+---
+
 # A Crash Course in the R Programming Language
 Bill Petti  
 Orignally Created May 2016  
