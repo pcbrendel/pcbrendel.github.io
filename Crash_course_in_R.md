@@ -2098,7 +2098,7 @@ ggplot(group_means, aes(x=mean, y=as.factor(group))) +
   geom_errorbarh(aes(xmin=Lower, xmax=Upper), height = .3)
 ```
 
-![](Crash_course_in_R_files/figure-html/unnamed-chunk-99-1.png)<!-- -->
+![](https://raw.githubusercontent.com/BillPetti/BillPetti.github.io/master/Crash_course_in_R_files/figure-markdown_github/unnamed-chunk-99-1.png)<!-- -->
 
 ## Linear Regression
 
