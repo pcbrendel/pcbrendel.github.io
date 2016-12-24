@@ -16,7 +16,7 @@ R is also an open source language, meaning anyone can contribute to the R projec
  
 R has become one of the most popular languages used by statisticians and data scientists. As a resut, there is a massive community that contributes to R
 
-# R Fundamentals
+# R Fundamentals  
 ## Working Directory
 
 It's always good to check and see where R will be saving your files--that includes data from your current session and any objects that you export from R (we'll walk through that a little later)
