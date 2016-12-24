@@ -7,6 +7,8 @@ title: A Crash Course in the R Programming Language
 
 An R script that contains all the code below can be found [here](https://github.com/BillPetti/R-Crash-Course/blob/master/RCrashCourse.scripts.R)
 
+You can also download a pdf version of this course [here](https://raw.githubusercontent.com/BillPetti/R-Crash-Course/master/Crash_course_in_R.pdf).
+
 # What is R?
 
 R is an object-oriented programming language focused on manipulating and analyzing data. Everything in R is an object: e.g. datasets, functions, models, plots, etc.  
