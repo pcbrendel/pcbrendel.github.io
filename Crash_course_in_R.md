@@ -1,7 +1,7 @@
 ---
 layout: page
 title: A Crash Course in the R Programming Language
-data: Orignally Created May 2016  
+date: Orignally Created May 2016  
 ---
 
 # R Script for this Course
