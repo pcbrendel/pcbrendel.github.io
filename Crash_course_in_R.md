@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: A Crash Course in the R Programming Language
 date: Orignally Created May 2016  
 ---
