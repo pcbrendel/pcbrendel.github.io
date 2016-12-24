@@ -17,6 +17,7 @@ R is also an open source language, meaning anyone can contribute to the R projec
 R has become one of the most popular languages used by statisticians and data scientists. As a resut, there is a massive community that contributes to R
 
 # R Fundamentals  
+
 ## Working Directory
 
 It's always good to check and see where R will be saving your files--that includes data from your current session and any objects that you export from R (we'll walk through that a little later)
@@ -85,7 +86,8 @@ foo2
 
 R throws an error because `foo2` has not been assigned as an object in the environment, and that's because we commented out the assignment.
 
-## Data Structures
+## Data Structures  
+
 ### Vectors
 
 A vector in R is sequence of elements of the same type. They can be numeric:
