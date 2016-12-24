@@ -1,13 +1,8 @@
 ---
 layout: page
-title: About me
-subtitle: 
+title: A Crash Course in the R Programming Language
+data: Orignally Created May 2016  
 ---
-
-# A Crash Course in the R Programming Language
-Bill Petti  
-Orignally Created May 2016  
-
 
 # R Script for this Course
 
