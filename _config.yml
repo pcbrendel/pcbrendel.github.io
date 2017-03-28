@@ -28,6 +28,7 @@ navbar-links:
     - baseballr package for R: "https://billpetti.github.io/baseballr/"
     - Interactive Spray Chart Tool: "https://public.tableau.com/profile/billpetti#!/vizhome/SprayChartComparison/About"
     - Edge% Shiny App: "https://billpetti.shinyapps.io/edge_shiny/"
+    - Hitter Volatility (VOL and corrVOL) Leaderboards: "https://rawgit.com/BillPetti/Offensive-Consistency-MLB/master/corrVOL/individual_seasons_VOL_1974_2016.html"
   R Crash Course: "Crash_course_in_R"
   Articles & Media Appearances: "http://billpetti.tumblr.com"
   Other Links:
