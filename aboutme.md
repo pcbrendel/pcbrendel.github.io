@@ -5,8 +5,8 @@ subtitle:
 ---
 
 
-I lead consulting for predictive modeling and data science at [Gallup](http://www.gallup.com/home.aspx). I also moonlight as a baseball researcher and consult for several Major League teams. My public work can be found at [The Hardball Times](http://www.hardballtimes.com/author/billpetti/). I have also developed a number of public tools for baseball analysis, such as the [baseballr package for R](https://BillPetti.github.io/baseballr), the [Interactive Spray Chart Tool](https://billpetti.shinyapps.io/shiny_spraychart), and the [Edge% app](https://billpetti.shinyapps.io/edge_shiny/).
+I lead consulting for predictive modeling and data science at [Gallup](http://www.gallup.com/home.aspx) and am a big fan of the [R programming language](https://cran.r-project.org). I also moonlight as a baseball researcher and have consulted for several Major League teams. 
 
-For more information on these tools, visit the [Baseball Tools page](https://billpetti.github.io/baseball_tools_home/).
+My public baseball research can mostly be found at [The Hardball Times](http://www.hardballtimes.com/author/billpetti/). 
 
-You can visit the [baseballr package page](https://billpetti.github.io/baseballr/) for more details as well.
+I have also developed a number of public tools for baseball analysis, such as the [baseballr package for R](https://BillPetti.github.io/baseballr), the [Interactive Spray Chart Tool](https://billpetti.shinyapps.io/shiny_spraychart), and the [Edge% app](https://billpetti.shinyapps.io/edge_shiny/). For more information on these tools, visit the [Baseball Tools page](https://billpetti.github.io/baseball_tools_home/).
