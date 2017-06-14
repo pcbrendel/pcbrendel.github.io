@@ -17,6 +17,12 @@ R is also an open source language, meaning anyone can contribute to the R projec
  
 R has become one of the most popular languages used by statisticians and data scientists. As a resut, there is a massive community that contributes to R
 
+In order to complete this crash course you will need R installed on your computer, as well as the RStudio IDE.
+
+To download and install R, go to the [CRAN homepage](https://cran.r-project.org/) and following links to download and install.
+
+To downloand and install RStudio, follow this [link](https://www.rstudio.com/products/rstudio/).
+
 # R Fundamentals    
 
 ## Working Directory
