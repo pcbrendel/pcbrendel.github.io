@@ -13,7 +13,7 @@ The tool allows you to filter by player position, number of games played in 2016
 
 The Consistency metric tries to quantify how evenly players distribute their total fantasy points on a game to game basis. So, two players could score the same number of points in a season, but one could perform similarly each week while the other is more of a boom or bust player.
 
-![alt text](https://github.com/BillPetti/BillPetti.github.io/blob/master/_posts/qb_comparison_br.png?raw=true)
+![alt text](https://github.com/BillPetti/BillPetti.github.io/blob/master/_posts/qb_comparison_pr.png?raw=true)
 ![alt text](https://github.com/BillPetti/BillPetti.github.io/blob/master/_posts/qb_comparison_br.png?raw=true)  
 
 For example, we can compare Philip Rivers to Ben Roethlisberger. Both quarterbacks are projected to average 15.4 points per week, but Rivers has been far more consistent than Big Ben over the past four years. Rivers average Consistency is .43 standard deviations better than the average quarterback, while Roethlisberger has averaged .228 standard deviations worse than average.
