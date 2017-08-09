@@ -24,4 +24,4 @@ Here's some more detail about the Consistency metrics that are included:
 **2016 Normalized Consistency**: 2016 Consistency scores were normalized by season and position using z-scores; so, how many standard deviations above or below the league average on a per-player basis. Again, lower scores = more consistent.  
 **Normalized Consistency (2013-2016)**: Average seasonal Consistency from 2013-2016 was calcualted and then normalized by season and position using z-scores; so, how many standard deviations above or below the league average ona per-player basis. Again, lower scores = more consistent.  
 
-Special thanks to Dennis Erny (http://www.armchairanalysis.com) for the game-by-game data and to FantasyPros.com for the projected points and draft data.  
+Special thanks to [Dennis Erny at Armchair Analysis](http://www.armchairanalysis.com) for the game-by-game data and to FantasyPros.com for the projected points and draft data.
