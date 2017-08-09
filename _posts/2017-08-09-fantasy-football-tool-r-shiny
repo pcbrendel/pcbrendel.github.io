@@ -9,7 +9,7 @@ Consistency metric. This year I've updated the tool, building it in R Shiny. It 
 
 ![alt text](https://github.com/BillPetti/BillPetti.github.io/blob/master/_posts/shiny_tool.png?raw=true "shiny tool snapshot")  
 
-The tool allows you to filter by player position, number of games played in 2016, and total number projected fantasy points for the upcoming season.
+The tool allows you to filter by player position, number of games played in 2016, and total number projected fantasy points for the upcoming season. You can also download the underlying data in csv format using the download button.
 
 The Consistency metric tries to quantify how evenly players distribute their total fantasy points on a game to game basis. So, two players could score the same number of points in a season, but one could perform similarly each week while the other is more of a boom or bust player.
 
