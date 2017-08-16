@@ -4,8 +4,6 @@ title: Exploring Trends in Baby Names from Scratch in R
 tags: [R, dplyr, ggplot2, baby names]
 ---
 
-# Introduction
-
 I have nine nieces and nephews with another one on the way, so the topic of baby names has been floating around pretty consistently over the past few months. When people started throwing around potential names I wanted to see how the popularity of those names had trended over time.
 
 Now, there are a number of tools for R for exploring trends in baby names in the United States. Hadley Wickham's [babynames R package](https://cran.r-project.org/package=babynames) contains the country-level data from the Social Security Administration (SSA) from 1880-2015. There is also [code for a  `shiny` application](https://ntguardian.wordpress.com/2016/08/22/ssa-baby-names-visualization-with-r-and-shiny/) for exploring the data from Wickham's package.
