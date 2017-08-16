@@ -54,7 +54,7 @@ require(readr)
 require(scales)
 require(stringr) 
 
-source("/Users/williampetti/R-Plotting-Resources/theme_bp_grey")
+source("https://raw.githubusercontent.com/BillPetti/R-Plotting-Resources/master/theme_bp_grey")
 
 ```
 We want to create a list of file names to apply the function to. We can do that by using the `list.files` function. 
