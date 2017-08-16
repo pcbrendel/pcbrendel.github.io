@@ -180,6 +180,6 @@ test_freq %>%
 ```
 ![alt text](https://github.com/BillPetti/BillPetti.github.io/blob/master/_posts/girls_rank.png?raw=true "girls_rank")
 
-So, niether name is ranked before 1938, and Addison doesn't even show up until the late 1970's. Mallory generally floated in the 2000-4000 area for decades until the early 1980's, catepulting to 333 in 1983 and peaking at 83 in 1986. Why might that be? Well, one guess is the popular sitcome "Family Ties" aired from 1982 to 1989 and featured a Mallory as part of the main cast.
+So, niether name is ranked before 1938, and Addison doesn't even show up until the late 1970's. Mallory generally floated in the 2000-4000 area for decades until the early 1980's, catepulting to 333 in 1983 and peaking at 83 in 1986. Why might that be? Well, one guess is the popular sitcome ["Family Ties"](https://en.wikipedia.org/wiki/Family_Ties) aired from 1982 to 1989 and featured a Mallory as part of the main cast.
 
 Addison's path was a littel different. The name came out of nowhere in 1980 and cracked the top 3000 only five years later. Addison increased in popularity pretty steadily after that, but it did jump from just outside the top-100 to 28 between 2005 and 2006. What was happening in popular culture then? The medical drama "Grey's Anatomy" premiered in 2005 and one of it's main characters was named [Addison](https://en.wikipedia.org/wiki/Addison_Montgomery). My wife and I had never watched the show, so when our daughter was born in 2007 we didn't realize how popular the name had become. Whoops!
