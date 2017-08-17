@@ -10,7 +10,7 @@ Now, there are a number of tools for R for exploring trends in baby names in the
 
 I could have easily used Wickham's package, but there was one slight problem--I wanted the data through 2016.  So I decided to download the data directly from the SSA, process it, and create my own visualizations. 
 
-This required some processing in order to get the data in a nice, tidy single data set for exploration. I thought it might be helpful to share my code for those that may just be getting started with R. (For pros, there may not be much here of interest.)
+This required some processing in order to get the data in a nice, tidy single data set for exploration. I thought it might be helpful to share my code for those that may just be getting started with R. (For pros, there may not be much here of interest. But, hey, someone is always trying to learn something for the first time.)
 
 # Acquiring and Processing the Data
 
