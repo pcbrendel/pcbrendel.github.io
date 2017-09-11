@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Creating Stat Lines from Pitch-by-Pitch data with baseballr 0.3.3
+title: Creating Stat Lines from Pitch-by-Pitch Data with baseballr 0.3.3
 tags: [R, tidyverse, baseballr, baseball]
 ---
 
