@@ -83,7 +83,6 @@ print(output, n = 40, width = Inf)
 From here, you can cut the data in infinite ways. You could take all pitches that induced a swing by J.D. Martinez over the same time period and see how well he performed on swings by pitch type:
 
 ```r
-
 jd_martinez <- test %>%
   filter(player_name == "J.D. Martinez")
 
