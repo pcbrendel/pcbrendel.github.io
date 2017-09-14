@@ -5,7 +5,7 @@ subtitle:
 ---
 
 
-I am the Global Data Strategist for [Gallup](http://www.gallup.com/home.aspx) and am a big fan of the [R programming language](https://cran.r-project.org). I also moonlight as a baseball researcher and have consulted for several Major League teams. 
+I serve as the Global Data Strategist for [Gallup](http://www.gallup.com/home.aspx) and am a big fan of the [R programming language](https://cran.r-project.org). I also moonlight as a baseball researcher and have consulted for several Major League teams. 
 
 My public baseball research can mostly be found at [The Hardball Times](http://www.hardballtimes.com/author/billpetti/). 
 
