@@ -58,7 +58,6 @@ Here's an example of how I use it:
 
 ```r
 retry_function(update_statcast_function(), max_attempts = 10, wait_seconds = 1800)
-
 ```
 
 The `update_statcast_function()` will retry up to 10 times every 30 minutes until the data from the night before is obtained. That means if the data isn't available at 0700 EST the job will automatically keep trying until 1200 EST. 
