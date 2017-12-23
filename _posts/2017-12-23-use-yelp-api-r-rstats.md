@@ -1,21 +1,20 @@
 ---
 layout: post
-title: "Using the Yelp API with R"
+title: Using the Yelp API with R
 tags: [R, API, httr, Yelp]
 ---
 
 This is a guide to using the Yelp API with R. The approach borrows liberally from advice [published by Jenny Bryan](https://github.com/jennybc/yelpr).
 
-First, let's load the required packages.
+First, let's load the required packages:
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 require(tidyverse)
 require(httr)
-require(purrr)
 require(kniter)
 ```
 
-Second, we create a token for use with your API request. This requires that you have a `client_id` and a `client_secret`, both of which are provided when you [create an app through their developer area](https://www.yelp.com/developers/v3/manage_app).
+Second, we create a token for use with your API request. This requires that you have a `client_id` and a `client_secret`, both of which are provided when you [create an app through their developer area](https://www.yelp.com/developers/v3/manage_app):
 
 ```{r}
 client_id <- "u7OsCslyV-a18y5xow_uUA"
@@ -28,7 +27,7 @@ res <- POST("https://api.yelp.com/oauth2/token",
 
 token <- content(res)$access_token
 ```
-Next, we build the url for the query. In this example, we will query businesses with the term `sports` within 5 miles of Philadephia.
+Next, we build the url for the query. In this example, we will query businesses with the term `sports` within 5 miles of Philadephia:
 
 ```{r}
 yelp <- "https://api.yelp.com"
@@ -46,7 +45,7 @@ res <- GET(url, add_headers('Authorization' = paste("bearer", token)))
 results <- content(res)
 ```
 
-Now that we have the data we can create a function to parse and format the data.
+Now that we have the data we can create a function to parse and format the data:
 
 ```{r}
 yelp_httr_parse <- function(x) {
@@ -70,7 +69,7 @@ arrange(payload, distance)  %>%
   knitr::kable()
 ```
 
-We can wrap the previous steps into a single function.
+We can wrap the previous steps into a single function:
 
 ```{r}
 yelp_business_search <- function(term = NULL, location = NULL, categories = NULL, 
@@ -104,7 +103,7 @@ yelp_business_search <- function(term = NULL, location = NULL, categories = NULL
   payload
 }
 ```
-Now, we can use that function to find all Dunkin Donuts locations within 10 miles of Philadelphia, PA.
+Now, we can use that function to find all Dunkin Donuts locations within 10 miles of Philadelphia, PA:
 
 ```{r}
 results <- yelp_business_search(term = "Dunkin' Donuts", 
