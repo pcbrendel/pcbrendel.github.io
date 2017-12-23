@@ -72,8 +72,9 @@ And here are our results:
 We can wrap the previous steps into a single function:
 
 ```r
-yelp_business_search <- function(term = NULL, location = NULL, categories = NULL, 
-                                 radius = NULL, limit = 50, client_id = NULL, 
+yelp_business_search <- function(term = NULL, location = NULL, 
+                                 categories = NULL, radius = NULL, 
+                                 limit = 50, client_id = NULL, 
                                  client_secret = NULL) {
   
   yelp <- "https://api.yelp.com"
