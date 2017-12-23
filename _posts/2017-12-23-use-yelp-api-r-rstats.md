@@ -28,7 +28,6 @@ res <- POST("https://api.yelp.com/oauth2/token",
 
 token <- content(res)$access_token
 ```
-
 Next, you build the url for your query. In this example, we will query businesses with the term `sports` within 5 miles of Philadephia:
 
 ```{r}
