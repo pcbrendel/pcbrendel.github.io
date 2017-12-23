@@ -8,7 +8,7 @@ This is a guide to using the Yelp API with R. The approach borrows liberally fro
 
 First, let's load the required packages:
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r}
 require(tidyverse)
 require(httr)
 require(kniter)
