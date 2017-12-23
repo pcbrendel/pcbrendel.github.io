@@ -12,7 +12,7 @@ First, load required packages:
 require(tidyverse)
 require(httr)
 require(purrr)
-require(DT)
+require(kniter)
 ```
 
 Second, create a token for use with your API request. This requires that you have a `client_id` and a `client_secret`, both of which are provided when you [create an app through their developer area](https://www.yelp.com/developers/v3/manage_app):
