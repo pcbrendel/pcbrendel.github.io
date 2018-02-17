@@ -272,6 +272,8 @@ statcast_bind <- statcast_bind %>%
   filter(!is.na(game_date))
 ```
 
-After each year finishes, you will see a print out that tells you whetehr there is any missing data for the dates the function attempted to pull from baseballsavant. That way you can go back re-run the query if you need it (i.e. if there is actually data avaliable). 
+After each year finishes, you will see a print out that tells you whether there is any missing data for the dates the function attempted to pull from baseballsavant. That way you can go back re-run the query if you need it (i.e. if there is actually data avaliable). 
 
-And that's it! I find it takes about 2.5-3 hours to obtain all of the data from 2008-2017, so plan accordingly.
+And that's it! I find it takes about 2.5-3 hours to obtain all of the data from 2008-2017, so plan accordingly. After that you can dump the data into your favorite database of choice.
+
+Happy database building!
