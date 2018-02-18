@@ -20,7 +20,7 @@ require(dplyr)
 require(xml2)
 require(magrittr)
 ```
-I loop over all regular season dates for which there was some play-by-play data to avoid annoying errors. I obtained these by querying the FanGraphs database that I have access to, but there are other ways you could gather them. To make life easier, I've exported the dates for years between 2008 through 2017 and posted it at GitHub for anyone that wants to use it.
+I loop over all regular season dates for which there was some play-by-play data to avoid annoying errors. I obtained these by querying the FanGraphs database that I have access to, but there are other ways you could gather them. To make life easier, I've exported the dates for years between 2008 through 2017 in a csv file and posted it on GitHub for anyone that wants to use it.
 
 Next, load the dates file:
 
@@ -62,7 +62,7 @@ x2017season <- dates_reduced %>%
   filter(substr(GameDate, 1, 4) == 2017)
   ```
 
-Now, you can use one of the functions in `baseballr` to scrape all batters or pitchers based on the dates, but here's the raw function that use for this:
+Now, you can use one of the functions in `baseballr` to scrape all batters or pitchers based on the dates, but here's the raw function that I use for this:
 
 ```r
 scrape_statcast_savant_pitcher_date <- function(start_date, end_date) {
@@ -128,7 +128,7 @@ scrape_statcast_savant_pitcher_date <- function(start_date, end_date) {
 ```
 The function builds the url for the csv download of the data, returns a payload based on the url, checks to see whether any data was returned, and if it was does a bunch of formatting and variable coding to the data.
 
-I also include some code to ensure pauses inbetween each attempt to scrape a new date.
+I also include some code to ensure pauses between each attempt to scrape a new date. The length of the pause is randomly generated.
 
 I would recommend testing the function on a small date range to start. Once you are sure it is working properly, here is how I then loop over each date for each year:
 
@@ -272,7 +272,7 @@ statcast_bind <- statcast_bind %>%
   filter(!is.na(game_date))
 ```
 
-After each year finishes, you will see a print out that tells you whether there is any missing data for the dates the function attempted to pull from baseballsavant. That way you can go back re-run the query if you need it (i.e. if there is actually data avaliable). 
+After each year finishes, you will see a print out that tells you whether there is any missing data for the dates the function attempted to pull from baseballsavant. That way you can go back and re-run the query if you need it (i.e. if there is actually data avaliable that the query didn't return). 
 
 And that's it! I find it takes about 2.5-3 hours to obtain all of the data from 2008-2017, so plan accordingly. After that you can dump the data into your favorite database of choice.
 
