@@ -15,7 +15,9 @@ In terms of the play-in games, here's what the model thinks:
 | St. Bonaventure (11) |  UCLA (11) | UCLA (60%, 1.5:1) |
 | LIU (16) | Radford (16) | Radford (73%, 2.7:1) |
 | Syracuse (11) | Arizona State (11) | Arizona St. (52%, 1.1:1)|
-| North Carolina State (16) | Texas Southern (16) | Texas Southern (68%, 2.1:1) |
+| North Carolina Central (16) | Texas Southern (16) | Texas Southern (68%, 2.1:1) |
+
+The surest game here according to the model is Radford-UCLA, with Radford a 2.7 to 1 favorite to advance. Texas Southern is roughly 2 to 1 to been NC Central. UCLA is the favorite over St. Bonaventure, but not by much. And Syracuse-Arizona State is essentially a toss-ups.
 
 Once the tournment fully kicks off on Thursday I'll post a link to my full slate of predictions. These will be straight probabilities from the model.
 
