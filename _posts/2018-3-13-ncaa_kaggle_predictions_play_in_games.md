@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Prediction Fun with the 2018 NCAA Men's Tournament
-tags: [R, NCAA, basketball, March Madness]
+tags: [Kaggle, prediction, NCAA, basketball, March Madness]
 ---
 
 For the first time, I decided to submit predictions for the annual [Kaggle March Madness prediction contest](https://www.kaggle.com/c/mens-machine-learning-competition-2018). Since I have the predictions at hand I thought I would post them as each round progresses with any comments about what it's seeing.
