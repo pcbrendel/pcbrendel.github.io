@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 2018 NCAA Men's Tournament: First Round Predictions
+title: NCAA Men's Tournament: First Round Predictions for 2018
 tags: [R, NCAA, basketball, March Madness]
 ---
 
