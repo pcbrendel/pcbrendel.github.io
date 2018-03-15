@@ -4,7 +4,7 @@ title: NCAA Men's Tournament First Round Predictions for 2018
 tags: [R, NCAA, basketball, March Madness]
 ---
 
-In my last post I provided my model's predictions for the play-in games.
+In [my last post](https://billpetti.github.io/2018-03-13-ncaa_kaggle_predictions_play_in_games/) I provided my model's predictions for the play-in games.
 
 | Team 1 | Team 2 | Predicted Winner (%, odds) | Actual Winner |
 |-----------|------------|--------------------------------------|------|
