@@ -54,17 +54,17 @@ With the play-in games behind us, we now turn to the round of 64. In terms of th
 
 Not surprisingly, almost all matchups with a 1-4 seed have the higher seed with a win likelihood of at least 90%. The two exceptions are Michigan-Montana and Arizona-Buffalo.
 
-Arizona is the biggest surprise to me, with the model only giving them 3.3 to 1 odds of beating a 13-seed Buffalo. If you dig in, the adjusted points differential for Arizona is only 11.3 with Buffalo sporting a 7.2. That's very close, much closer than any comparable matchup. 
+Arizona is the biggest surprise to me, with the model only giving them 3.3 to 1 odds of beating a 13-seed Buffalo. If you dig in, the adjusted points differential for Arizona this year was 11.3 compared to Buffalo's 7.2, a difference of 4.1. That's very close, much closer than any comparable matchup. 
 
-Kentucky also appears to be in a tough spot with their 5-12 matchup against Dayton. The model only gives Kentucky a 69.4% chance to move on. [FiveThirtyEight](https://projects.fivethirtyeight.com/2018-march-madness-predictions/) is more confident in Kentucky (24%) and instead thinks Clemson is in 5-seed in the biggest trouble (62% versus 78% for my model).
+Kentucky also appears to be in a tough spot with their 5-12 matchup against Dayton. The model only gives Kentucky a 69.4% chance to move on. [FiveThirtyEight](https://projects.fivethirtyeight.com/2018-march-madness-predictions/) is more confident in Kentucky (76%) and instead thinks Clemson is the 5-seed in the biggest trouble (62% likeihood to win versus 78% for my model).
 
-The model is only calling four true upsets in the first round:
+The model is only calling four true upsets in the first round, but it is not highly confident in any of them:
 
 - Loyola over Miami (a 6-11 matchup)
 - Butler over Arkansas and Oklahoma over Rhose Island (both 7-10 matchups)
 - Florida State over Missouri
 
-Now, the model isn't highly confident in these upsets. Butler has the best chance, but it's only 56.8%, or 1.3:1 odds. Loyola and Miami is literally a toss up, with the model giving Loyola a probability of 50.2%. The adjusted differential here has Miami only 1.3 points per game better than Loyola, which is appears to be a big factor driving the prediction. Even at these even odds, my model is far more bullish on Loyola than, say, FiveThirtyEight, which currently gives Loyola only a 40% chance to beat Miami in round one. 
+Now, the model isn't highly confident in these upsets. Butler has the best chance, but it's only 56.8%, close to FiveThirtyEight's 60% prediction. Loyola-Miami is literally a toss up, with the model giving Loyola a probability of 50.2%. The adjusted differential here has Miami only 1.3 points per game better than Loyola, which is appears to be a big factor driving the prediction. Even at these even odds, my model is far more bullish on Loyola than, say, FiveThirtyEight, which currently gives Loyola only a 40% chance to beat Miami in round one. 
 
 For those interested, you can find all of the model's predictions for every possible matchup [here](https://rawgit.com/BillPetti/predicting-march-madness/master/ncaa_2018_mens_pred.html). These are based on all 68 teams that were selected for the tournament this year.
 
