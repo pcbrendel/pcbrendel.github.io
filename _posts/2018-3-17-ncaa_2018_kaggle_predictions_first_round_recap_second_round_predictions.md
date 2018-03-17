@@ -11,7 +11,7 @@ After the second day? Well...
 
 ![alt text](https://github.com/BillPetti/BillPetti.github.io/blob/master/_posts/crying_blackish.gif?raw=true "crying")
 
-| team1          | team2                 | team1_seed | team2_seed | predicted_winner | win_likelihood | actual_winner  |
+| Team 1          | Team 2            | Team 1 Seedc | Team 2 Seed | Predicted Winner | Win Likelihood | Actual Winner|
 |----------------|-----------------------|------------|------------|------------------|----------------|----------------|
 | Miami FL       | Loyola Chicago        | 6          | 11         | Loyola Chicago   | 50.2%          | Loyola Chicago |
 | Missouri       | Florida St.           | 8          | 9          | Florida St.      | 52.2%          | Florida St.    |
