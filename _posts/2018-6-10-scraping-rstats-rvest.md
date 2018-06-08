@@ -12,13 +12,15 @@ I used the `rvest` package from Hadley Wickham to scrape the data from the websi
 
 When you click on the browse link you see the basic structure of the site; books are listed with a mixture of images and text. Much of the information we want is visible without having to crawl through the  books links: book title, ISBN number, author, book category, and the list price. The price of the book for those purchasing through BookDepot is show in the orange circle overlapping the book image.
 
-![alt text](image "book depot browse")
+![alt text](https://github.com/BillPetti/BillPetti.github.io/blob/master/_posts/book_scrape_1.png?raw=true "book depot browse")
 
 First, we can see that there are 10,000 total books listed in 417 pages of 24 books each. I'd rather not loop through 417 pages, so we can adjust the link such that the books will be displayed in fewer pages. We can use the following link and adjust it so that we are starting on the first page and the page will display 1000 results: http://www.bookdepot.com/Store/Browse?page=1&size=1000&sort=arrival_1.
 
 Next, we need to figure out how each of these elements are structured in the page's underlying html code. In many cases, it's a great idea to start by using Hadley's SelectorGadget tool. You can select different elements and see what node to note when using `rvest` to extract the content. You can also deselect elements that are not relevant so that you get the specific element you need without any extraneous results. 
 
 Let's use the book's ISBN as an example. When you select the ISBN you not only get that element, but the type of binding (paperback or hardcover) as well as the genre (fiction, etc.). You will see the number of total elements in parentheses. Here we see 4000. Of course, we only want 1000, so we need to remove some things.
+
+![alt text](https://github.com/BillPetti/BillPetti.github.io/blob/master/_posts/book_scrape_2.png?raw=true "book depot browse2")
 
 You can select different elements that show as highlighted that you are not interested in. After playing around a bit you will see `.small:nth-child(8)` and only 1000 total elements, which is exactly what we want. 
 
