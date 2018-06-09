@@ -6,11 +6,11 @@ tags: [R, rvest, scraping]
 
 A friend of mine was looking for a reference to help him make some choices about which books to order and the quality of the pricing. Essentially, he wanted to see what competitor outlets were offering for different books.
 
-He asked whether there was a way to efficiently collect this information from a few websites in spreadsheet form. The information on these sites was not in table form, so even if he wanted to spend the time manually copying and pasting the tables it wasn't possible.
+He asked whether there was a way to efficiently collect this information from a few websites in spreadsheet form. The information on these sites was not in table form, so even if he wanted to spend the time manually copying and pasting from tables it wasn't possible.
 
 I used the `rvest` package from Hadley Wickham to scrape the data from the websites and thought I'd walk through my code and approach. I'll use [BookDepot](http://www.bookdepot.com) as an example.
 
-When you click on the browse link you see the basic structure of the site; books are listed with a mixture of images and text. Much of the information we want is visible without having to crawl through the  books links: book title, ISBN number, author, book category, and the list price. The price of the book for those purchasing through BookDepot is show in the orange circle overlapping the book image.
+When you click on the browse link you see the basic structure of the site; books are listed with a mixture of images and text. Much of the information we want is visible without having to crawl through the links for each book: book title, ISBN number, author, book category, and the list price. The price of the book for those purchasing through BookDepot is show in the orange circle overlapping the book image.
 
 ![alt text](https://github.com/BillPetti/BillPetti.github.io/blob/master/_posts/book_scrape_1.png?raw=true "book depot browse")
 
@@ -24,7 +24,7 @@ Let's use the book's ISBN as an example. When you select the ISBN you not only g
 
 You can select different elements that show as highlighted that you are not interested in. After playing around a bit you will see `.small:nth-child(8)` and only 1000 total elements, which is exactly what we want. 
 
-Repeat this process for every data element we want. Once we know the nodes we want to extract when can get to scraping.
+Repeat this process for every data element we want. Once we know the nodes we want to extract we can get to scraping.
 
 First, we load a few necessary packages and set our options (this turns off scientific notation):
 
@@ -96,7 +96,7 @@ payload <- read_html(url)
                         ISBN = isbn$ISBN)
 ```
 
-We create separate frames for each element we want. Then there's a little formatting we need to do for some of them using some regular expression magic. Once we have each data frame we simply bind them together. 
+We create separate data frames for each element we want. Then there's a little formatting we need to do for some of them using some regular expression magic. Once we have each data frame we simply bind them together. 
 
 We'll need to do this 10 times for each of the results pages. A function and a loop will make this simple.
 
