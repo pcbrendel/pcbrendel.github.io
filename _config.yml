@@ -30,9 +30,9 @@ navbar-links:
     - Interactive Spray Chart Tool: "https://billpetti.shinyapps.io/shiny_spraychart"
     - Edge% Shiny App: "https://billpetti.shinyapps.io/edge_shiny/"
     - Hitter Volatility (VOL and corrVOL) Leaderboards: "https://rawgit.com/BillPetti/Offensive-Consistency-MLB/master/corrVOL/individual_seasons_VOL_1974_2016.html"
-		- Cumulative Home Runs by Plate Appearances App: "http://billpetti.shinyapps.io/shiny_spraychart"
-    - Umpire IDs for games since 2008: "https://app.box.com/s/x20ahfe5e3a3y9sknz3g5y2ojbef3fzx"
-		- Statcast-PITCHf/x Working Glossary: "https://app.box.com/v/statcast-pitchfx-glossary-pett"
+    - Cumulative Home Runs by Plate Appearances App: "http://billpetti.shinyapps.io/shiny_spraychart"
+    - Umpire IDs for games since 2008: "https://app.box.com/s/x20ahfe5e3a3y9sknz3g5y2ojbef3fzx
+    - Statcast-PITCHf/x Working Glossary: "https://app.box.com/v/statcast-pitchfx-glossary-pett"
     - 40-man Roster Hitter Heatmaps: "https://www.dropbox.com/home/Public/hitter_heatmaps_40_man_rosters"
   R Crash Course: "Crash_course_in_R"
   Articles & Media Appearances: "http://billpetti.tumblr.com/tagged/media"
