@@ -1,5 +1,4 @@
 ---
-layout: page
 title: "2019 Ocean City Rentals"
 output: html_document
 always_allow_html: yes
