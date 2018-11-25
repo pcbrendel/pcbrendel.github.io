@@ -1,0 +1,123 @@
+---
+title: "2019 Ocean City Rentals"
+output: html_document
+always_allow_html: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+Results only include houses with 2-3 bathrooms and 4 bedrooms between $3,000 and $4,400 for the week of July 7th through July 14th.
+
+```{r}
+require(tidyverse)
+require(rvest)
+require(xml2)
+require(XML)
+require(magrittr)
+require(DT)
+
+get_OC_rental_listings <- function(week, year, min_price = 3000, max_price = 3499, date_string = "July 06, 2019 to July 13, 2019") {
+  
+  url <- paste0("http://www.bergerrealty.com/rental/search.html?week=", week, "&nweek=1&beds=7&bath=4&ulimit=0&minprice=", min_price, "&maxprice=", max_price, "&sortby=1&limit=100&year=", year)
+  
+  geo <- read_html(url) %>%
+    html_nodes(".geo") %>%
+    html_text() %>%
+    gsub(pattern = date_string, 
+        replacement = "") %>%
+    data_frame()
+
+  price <- read_html(url) %>%
+    html_nodes(".price") %>%
+    html_text() %>%
+    data_frame() 
+
+  html <- htmlParse(url) %>%
+    xpathSApply("//a/@href") %>%
+    data_frame()
+  colnames(html) <- "urls"
+  
+  html <- html %>%
+    filter(grepl("rental/[0-9]", urls)) %>%
+    filter(!grepl("plus", urls)) %>%
+    filter(!grepl("facebook", urls)) %>%
+    filter(!grepl("twitter", urls)) %>%
+    mutate(urls = paste0("http://www.bergerrealty.com", .$urls)) %>%
+    mutate(urls = gsub("&beds.*", "", .$urls))
+  
+  results <- cbind(geo, price) 
+  colnames(results) <-  c("address", "price")
+  number <- sapply(strsplit(results$address, " "), function(x) x[1])
+  street <- sapply(strsplit(results$address, " "), function(x) x[2])
+  floor <- sapply(strsplit(results$address, " "), function(x) x[4])
+  
+  results <- cbind(results, number, street, floor, html)
+  
+  results$number <- as.integer(as.character(number))
+  results$block <- ifelse(nchar(results$number) == 3, substr(results$number, 1,1), substr(results$number, 1,2)) %>%
+    as.integer()
+  
+  results$price <- gsub(x = results$price, pattern = "\\$", replacement = "") %>%
+    as.numeric()
+  
+  results <- results %>% 
+    mutate(date = gsub(", 2019", "", x = date_string)) %>%
+    select(date, block, number, street, floor, price, address, urls) 
+  
+  return(results)
+  
+  Sys.sleep(sample(seq(.01, .10, .01), 1))
+  
+}
+
+weeks_dates <- data_frame(week_num = c(27, 28, 29, 30, 31, 32, 33), 
+                          date_string = c("July 06, 2019 to July 13, 2019", "July 13, 2019 to July 20, 2019", "July 20, 2019 to July 27, 2019", "July 27, 2019 to August 03, 2019", "August 03, 2019 to August 10, 2019", "August 10, 2019 to August 17, 2019", "August 17, 2019 to August 24, 2019"))
+
+min_price <- c(2999, 3500, 4000)
+
+prices <- data_frame(min_price = c(2999, 3500, 4000), 
+                     max_price = c(3499, 3999, 4401))
+
+grid <- expand.grid(weeks_dates$week_num, min_price) %>%
+  rename(week_num = Var1, 
+         min_price = Var2) %>%
+  left_join(prices, by = "min_price") %>%
+  left_join(weeks_dates, by = "week_num")
+
+results <- list()
+
+for (i in seq_along(grid$week_num)) {
+  
+  payload <- get_OC_rental_listings(week = grid$week_num[i], 
+                                    year = 2019, 
+                                    min_price = grid$min_price[i], 
+                                    max_price = grid$max_price[i], 
+                                    date_string = grid$date_string[i])
+  
+  results[[i]] <- payload
+}
+
+results_df <- bind_rows(results)
+
+date_factors <- results_df %>%
+  select(date) %>%
+  unique()
+
+results_all <- results_df %>%
+  distinct(block, number, street, floor, price, address, .keep_all = TRUE) %>%
+  filter(street %in% c("Central", "Wesley", "Asbury")) %>%
+  filter(block >= 18) %>%
+  mutate(`direction facing` = case_when((.$number %% 2) == 0 ~ "Ocean Side", (.$number %% 2) == 1 ~ "Bay Side")) %>%
+  select(date, block, number, street, floor, price, `direction facing`, address, urls) %>%
+  mutate(date = factor(date, levels = unique(date_factors$date))) %>%
+  arrange(date, block, number) 
+
+results_all <- results_all %>%
+  mutate('link to listing' = paste0("<a href='", urls, "' target='_blank'>click to view</a>"))
+
+results_all %>%
+  select(-urls) %>%
+  datatable(filter = "top", options = list(pageLength = 100, autoWidth = FALSE), escape = F)
+```
