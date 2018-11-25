@@ -1,9 +1,6 @@
 ---
+layout: page
 title: "2019 Ocean City Rentals"
-output: 
-  html_document: 
-    keep_md: yes
-always_allow_html: yes
 ---
 
 
