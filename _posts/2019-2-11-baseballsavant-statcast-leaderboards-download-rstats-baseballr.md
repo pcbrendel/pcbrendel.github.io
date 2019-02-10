@@ -4,7 +4,7 @@ title: Directly Downloading Statcast Leaderboards with baseballr
 tags: [R, baseballr, statcast, scraping]
 ---
 
-[BaseballSavant](https://baseballsavant.mlb.com) recently made their series of [leaderboards](https://baseballsavant.mlb.com/statcast_leaderboard) available through csv downloads. The [baseballr](https://billpetti.github.io/baseballr/) package now includes a function that allows users to directly read these leaderboad csv's into `R`.
+[BaseballSavant](https://baseballsavant.mlb.com) recently made their series of [leaderboards](https://baseballsavant.mlb.com/statcast_leaderboard) available through csv downloads. The [baseballr](https://billpetti.github.io/baseballr/) package now includes a function that allows users to directly read these leaderboard csv's into `R`.
 
 ![directional outs above average leaderboard screenshot](https://github.com/BillPetti/BillPetti.github.io/blob/master/_posts/statcast_leaderboard.png?raw=true)
 
@@ -76,8 +76,8 @@ You can also look at pop times for catchers with a minimum of 20 throws to secon
 10  2018 Sandy Leon                      0.69       1.97      1.95      1.98
 # ... with 26 more rows
 ```
-New Phillie J.T. Realmuto had the fastest average pop time on stolen base attempts to second base at 1.90 seconds He was two one hundreths of a second faster when he caught a runner (1.88 vs. 1.90).  As good as Jorge Alfaro is as a thrower, he trailed Realmuto by about four one hundreths on average, and Realmuto appeared to be more consistent with his pop times given the smalle difference between caught stealing and succcess steal times. 
+New Phillie J.T. Realmuto had the fastest average pop time on stolen base attempts to second base at 1.90 seconds He was two one hundreths of a second faster when he caught a runner (1.88 vs. 1.90).  As good as Jorge Alfaro is as a thrower, he trailed Realmuto by about four one hundreths on average, and Realmuto appeared to be more consistent with his pop times given the small difference between caught stealing and success steal times. 
 
 The one leaderboard not yet available through a csv download are the series of positional leaderboards. If and when they become available I will add them to the function. 
 
-If you run into any issues, please post a reproduceable example [here](https://github.com/BillPetti/baseballr/issues).
+If you run into any issues, please post a reproducible example [here](https://github.com/BillPetti/baseballr/issues).
