@@ -36,20 +36,20 @@ require(dplyr)
 
 > payload %>%
 +   arrange(est_woba) %>% 
-+   select(year:player_id, pa, woba:est_woba_minus_woba_diff)
-# A tibble: 274 x 8
-    year last_name first_name player_id    pa  woba est_woba est_woba_minus_woba_diff
-   <int> <chr>     <chr>          <int> <int> <dbl>    <dbl>                    <dbl>
- 1  2018 Diaz      Edwin         621242   280 0.214    0.212                    0.002
- 2  2018 Hader     Josh          623352   306 0.219    0.229                   -0.01 
- 3  2018 Treinen   Blake         595014   315 0.187    0.23                    -0.043
- 4  2018 Ottavino  Adam          493603   309 0.231    0.23                     0.001
- 5  2018 Sale      Chris         519242   617 0.237    0.232                    0.005
- 6  2018 Verlander Justin        434378   833 0.26     0.236                    0.024
- 7  2018 Betances  Dellin        476454   272 0.259    0.236                    0.023
- 8  2018 Pressly   Ryan          519151   292 0.267    0.241                    0.026
- 9  2018 deGrom    Jacob         594798   835 0.23     0.243                   -0.013
-10  2018 Scherzer  Max           453286   866 0.252    0.246                    0.006
++   select(year:last_name, pa, woba:est_woba_minus_woba_diff)
+# A tibble: 274 x 6
+    year last_name    pa  woba est_woba est_woba_minus_woba_diff
+   <int> <chr>     <int> <dbl>    <dbl>                    <dbl>
+ 1  2018 Diaz        280 0.214    0.212                    0.002
+ 2  2018 Hader       306 0.219    0.229                   -0.01 
+ 3  2018 Treinen     315 0.187    0.23                    -0.043
+ 4  2018 Ottavino    309 0.231    0.23                     0.001
+ 5  2018 Sale        617 0.237    0.232                    0.005
+ 6  2018 Verlander   833 0.26     0.236                    0.024
+ 7  2018 Betances    272 0.259    0.236                    0.023
+ 8  2018 Pressly     292 0.267    0.241                    0.026
+ 9  2018 deGrom      835 0.23     0.243                   -0.013
+10  2018 Scherzer    866 0.252    0.246                    0.006
 # ... with 264 more rows
 ```
 You can also look at pop times for catchers with a minimum of 20 throws to second base:
