@@ -6,7 +6,7 @@ tags: [R, baseballr, statcast, scraping]
 
 [BaseballSavant](https://baseballsavant.mlb.com) recently made their series of [leaderboards](https://baseballsavant.mlb.com/statcast_leaderboard) available through csv downloads. The [baseballr](https://billpetti.github.io/baseballr/) package now includes a function that allows users to directly read these leaderboad csv's into `R`.
 
-![directional outs above average leaderboard screenshot](https://github.com/BillPetti/BillPetti.github.io/blob/master/_posts/statcast_leaderboard?raw=true)
+![directional outs above average leaderboard screenshot](https://github.com/BillPetti/BillPetti.github.io/blob/master/_posts/statcast_leaderboard.png?raw=true)
 
 The `scrape_statcast_leaderboards()` function can be used to access all of the leaderboards available as csv downloads. The function isn't doing anything too sophisticated; it simply builds the appropriate url for the csv download based on a series of parameters and then reads the csv into `R`.
 
