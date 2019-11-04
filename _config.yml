@@ -28,9 +28,9 @@ navbar-links:
     - Shiny App: "https://pcbrendel.shinyapps.io/multibias/"
     - R Package: "https://github.com/pcbrendel/multibias"
   Simple Bias Analysis Tutorials:
-    - Uncontrolled Confounding "UC"
-    - Selection Bias "Sel"
-    - Information Bias "MC"
+    - Uncontrolled Confounding: "UC"
+    - Selection Bias: "Sel"
+    - Information Bias: "MC"
   Baseball Class Projects: "baseball_class_projects"
   Other Links:
     - My PhD Dissertation: "https://escholarship.org/uc/item/4c50w909"
