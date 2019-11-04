@@ -101,7 +101,7 @@ ggplot(plotdata, aes(fill = Type, x = team, y = value)) +
   scale_y_continuous(breaks = 1:12)
 ```
 
-![Standings](Standings.png)
+![Standings](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/Standings.png)
 
 ### 5. Conclusions
 
