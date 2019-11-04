@@ -1,6 +1,6 @@
 ---
-title: 2017 Fantasy Baseball Standings
-subtitle: by Paul Brendel
+title: Analyzing the 2017 Fantasy Baseball Standings
+tags: datapasta, ggplot2
 social-share: true
 ---
 
@@ -101,7 +101,7 @@ ggplot(plotdata, aes(fill = Type, x = team, y = value)) +
   scale_y_continuous(breaks = 1:12)
 ```
 
-![Standings](Standings.png)
+![Standings](_posts/Standings.png)
 
 ### 5. Conclusions
 
