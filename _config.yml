@@ -4,7 +4,7 @@
 # baseurl is the website's URL without the hostname
 
 # If you are building a simple GitHub user page (http://username.github.io) then use these settings:
-url: "http://BillPetti.github.io"
+url: "http://pcbrendel.github.io"
 baseurl: ""
 
 # If you are building a GitHub project page then use these settings:
@@ -17,27 +17,17 @@ baseurl: ""
 title: Home
 
 # Short description of your site
-description: Personal Homepage of Bill Petti
+description: Personal Homepage of Paul Brendel
 
 # --- Navigation bar options --- #
 
 # List of links in the navigation bar
 navbar-links:
   About Me: "aboutme"
-  Baseball Tools: 
-    - Baseball Tools Home: "baseball_tools_home"
-    - baseballr package for R: "https://billpetti.github.io/baseballr/"
-    - Interactive Spray Chart Tool: "https://billpetti.shinyapps.io/shiny_spraychart"
-    - Edge% Shiny App: "https://billpetti.shinyapps.io/edge_shiny/"
-    - MLB Game Feed Viewer: "https://billpetti.shinyapps.io/live_pbp_viewer/"
-    - Hitter Volatility (VOL and corrVOL) Leaderboards: "https://rawgit.com/BillPetti/Offensive-Consistency-MLB/master/corrVOL/individual_seasons_VOL_1974_2016.html"
-    - Cumulative Home Runs by Plate Appearances App: "http://billpetti.shinyapps.io/shiny_spraychart"
-    - Umpire IDs for games since 2008: "https://app.box.com/s/x20ahfe5e3a3y9sknz3g5y2ojbef3fzx"
-    - Game Day Supplemental Data File: "https://app.box.com/v/gamedayboxscoredata"
-    - Statcast-PITCHf/x Working Glossary: "https://app.box.com/v/statcast-pitchfx-glossary-pett"
-    - 40-man Roster Hitter Heatmaps: "https://www.dropbox.com/home/Public/hitter_heatmaps_40_man_rosters"
-  R Crash Course: "Crash_course_in_R"
-  Articles & Media Appearances: "http://billpetti.tumblr.com/tagged/media"
+  Simultaneous Multi-bias Analysis: 
+    - Shiny App: "https://pcbrendel.shinyapps.io/multibias/"
+    - R Package: "https://github.com/pcbrendel/multibias"
+  Bias Analysis Tutorials: "Crash_course_in_R"
   Other Links:
     - Fantasy Football Player Tool: "https://billpetti.shinyapps.io/shiny_ffl_app/"
     - Built with Beautiful Jekyll: "http://deanattali.com/beautiful-jekyll/"
@@ -68,14 +58,14 @@ navbar-links:
 # Change all these values or delete the ones you don't want.
 # Important: you must keep the "name" parameter, everything else you can remove
 author:
-  name: Bill Petti
-  email: "billpetti@gmail.com"
+  name: Paul Brendel
+  email: "pcbrendel@gmail.com"
   facebook: yourname  # eg. daattali
-  github: BillPetti
-  twitter: BillPetti
+  github: pcbrendel
+  twitter: yourname
   reddit: yourname    # eg. daattali
   google-plus: +yourname   # eg. +DeanAttali or 109424658772469020925
-  linkedin: billpetti
+  linkedin: pcbrendel
   xing: yourname      # eg. daattali
   stackoverflow: yourlink  # eg. "3943160/daattali"
   snapchat: yourname  # eg. daattali
@@ -92,7 +82,7 @@ footer-links-active:
   rss: false
   facebook: false
   email: true
-  twitter: true
+  twitter: false
   google-plus: false
   github: true
   reddit: false
@@ -117,14 +107,14 @@ share-links-active:
 
 # How to display the link to the website in the footer
 # Remove this if you don't want a link in the footer
-url-pretty: "https://billpetti.github.io"
+url-pretty: "https://pcbrendel.github.io"
 
 # --- Misc --- #
 # Fill in your Disqus shortname (NOT the userid) if you want to support Disqus comments
 #disqus: ""
 
 # Fill in your Google Analytics ID to track your website using GA
-google_analytics: "UA-10302451-3"
+#google_analytics: "UA-10302451-3"
 
 # Google Tag Manager ID
 #gtm: ""
