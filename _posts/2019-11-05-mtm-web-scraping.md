@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Making the Model Part 1: Web Scraping Considerations
+title: Making the Model Part 1 - Web Scraping Considerations
 tags: [R]
 ---
 
