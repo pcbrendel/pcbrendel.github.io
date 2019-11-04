@@ -1,12 +1,12 @@
 ---
 title: School Projects
-subtitle: Baseball Projects Completed in Biostatistics Classes 
+subtitle: Projects Completed in Biostatistics Graduate Classes 
 ---
 
-## [Predicting Rookie Batting Value in MLB](pcbrendel.github.io/PDFs/Brendel Predicting BRAA.pdf)
+## [Predicting Rookie Batting Value in MLB](Brendel Predicting BRAA.pdf)
 This was my final project in an Applied Bayesian Inference class. The analysis was performed in R. The code is available [here](https://github.com/pcbrendel/baseballanalysis)
 
-## [Longitudinal Analysis of Isolated Power Before and After the MLB Steroid Era](pcbrendel.github.io/PDFs/Brendel Correlated Data Final.pdf)
+## [Longitudinal Analysis of Isolated Power Before and After the MLB Steroid Era](pcbrendel.github.io/Brendel Correlated Data Final.pdf)
 This was my final project in an Analysis of Correlated Data class. The analysis was performed in SAS.
 
 ## [Examining changes in FIP for starting pitchers throughout the 2015 MLB season](pcbrendel.github.io/PDFs/Brendel Longitudinal Analysis Final.pdf)
