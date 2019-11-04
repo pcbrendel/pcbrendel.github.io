@@ -1,3 +1,7 @@
+---
+title: Baseball Projects Completed in Graduate School 
+---
+
 ## [Predicting Rookie Batting Value in MLB](pcbrendel.github.io/PDFs/Brendel Predicting BRAA.pdf)
 This was my final project in an Applied Bayesian Inference class. The analysis was performed in R. The code is available [here](https://github.com/pcbrendel/baseballanalysis)
 
