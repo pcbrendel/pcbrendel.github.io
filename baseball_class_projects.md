@@ -1,5 +1,6 @@
 ---
-subtitle: Baseball Projects Completed in Graduate School 
+title: School Projects
+subtitle: Baseball Projects Completed in Biostatistics Classes 
 ---
 
 ## [Predicting Rookie Batting Value in MLB](pcbrendel.github.io/PDFs/Brendel Predicting BRAA.pdf)
