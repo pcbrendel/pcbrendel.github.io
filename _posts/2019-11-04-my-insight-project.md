@@ -1,7 +1,7 @@
 ---
 layout: post
 title: My Insight Data Science Project
-tags: [clustering]
+tags: Python, scikitlearn, clustering
 ---
 
 asdf
