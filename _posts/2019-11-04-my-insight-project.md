@@ -4,6 +4,6 @@ title: My Insight Data Science Project
 tags: Python, scikitlearn, clustering
 ---
 
-asdf
+In progress
 
 [zendo-analyzer](https://zendo-analyzer.herokuapp.com/)
