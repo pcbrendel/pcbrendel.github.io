@@ -30,7 +30,7 @@ navbar-links:
   Simple Bias Analysis Tutorials:
     - Uncontrolled Confounding: "UC"
     - Selection Bias: "Sel"
-    - Information Bias: "MC"
+    - Exposure Misclassification: "MC"
   Baseball Class Projects: "baseball_class_projects"
   Other Links:
     - My PhD Dissertation: "https://escholarship.org/uc/item/4c50w909"
