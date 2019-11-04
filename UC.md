@@ -109,7 +109,7 @@ adjust_uc(cU = u_0, cUX = u_x, cUC = u_c, cUY = u_y)
 ```
 we obtain OR<sub>YX</sub> = 2.02 (1.98, 2.06), representing the bias-free effect estimate we expect.  The output also includes a histogram showing the distribution of the OR<sub>YX</sub> estimates from each bootstrap sample:
 
-![UChist](plots/UChist.png)
+![UChist](img/UChist.png)
 
 We can analyze this plot to see how well the odds ratios converge.  If instead we use bias parameters that are each double the correct value:
 
