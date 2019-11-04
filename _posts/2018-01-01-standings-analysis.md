@@ -3,11 +3,10 @@ title: 2017 Fantasy Baseball Standings
 subtitle: by Paul Brendel
 social-share: true
 ---
-### 1. Introduction
 
 I was interested in taking a look at the standings of my fantasy baseball league to see which teams acutally belonged in their respective ranking, as indicated by their expected roto ranking.  I was having a hard time extracting the data from the ESPN Fantasy site into R using the [XML](https://cran.r-project.org/web/packages/XML/index.html) package.  My problems may have occurred due to the fact that ESPN fantasy baseball leagues are password-protected.  Fortunately, I found a way to bypass these data scraping problems - the [datapasta](https://cran.r-project.org/web/packages/datapasta/vignettes/how-to-datapasta.html) package.
 
-The following packages are necessary for this analysis:
+### 1. Load Packages
 
 ```r
 library(tidyverse)
