@@ -2,10 +2,9 @@
 title: Adjustment for Selection Bias
 ---
 
-# Adjustment for Selection Bias
 ### Full code used in this analysis is available [here](https://github.com/pcbrendel/biasanalysis)
 
-Generate a dataset with a sample size of 100,000. The following binary variables are defined:
+First, generate a dataset with a sample size of 100,000. The following binary variables are defined:
 
 * X = Exposure (1 = exposed, 0 = not exposed)
 * Y = Outcome (1 = outcome, 0 = no outcome)
