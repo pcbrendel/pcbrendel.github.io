@@ -1,7 +1,7 @@
 ---
 layout: post
-title: My Insight Project
-tags: [clustering]
+title: Making the Model Part 1: Web Scraping Considerations
+tags: [R]
 ---
 
 asdf
