@@ -27,7 +27,7 @@ navbar-links:
   Simultaneous Multi-bias Analysis: 
     - Shiny App: "https://pcbrendel.shinyapps.io/multibias/"
     - R Package: "https://github.com/pcbrendel/multibias"
-  Baseball Class Projects: "asdf"
+  Baseball Class Projects: "baseball_class_projects"
   Bias Analysis Tutorials: "Crash_course_in_R"
   Other Links:
     - Reading Faces: "https://www.ncbi.nlm.nih.gov/pubmed/24463310"
