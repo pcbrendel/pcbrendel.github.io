@@ -1,4 +1,5 @@
 ---
+layout: post
 title: Analyzing the 2017 Fantasy Baseball Standings
 tags: datapasta ggplot2
 social-share: true
