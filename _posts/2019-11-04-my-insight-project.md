@@ -1,6 +1,6 @@
 ---
 layout: post
-title: My Insight Project
+title: My Insight Data Science Project
 tags: [clustering]
 ---
 
