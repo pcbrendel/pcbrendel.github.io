@@ -24,10 +24,10 @@ description: Personal Homepage of Paul Brendel
 # List of links in the navigation bar
 navbar-links:
   About Me: "aboutme"
-  Simultaneous Multi-bias Analysis: 
+  Multi-bias Analysis: 
     - Shiny App: "https://pcbrendel.shinyapps.io/multibias/"
     - R Package: "https://github.com/pcbrendel/multibias"
-  Simple Bias Analysis Tutorials:
+  Bias Analysis Tutorials:
     - Uncontrolled Confounding: "UC"
     - Selection Bias: "Sel"
     - Exposure Misclassification: "MC"
@@ -52,9 +52,9 @@ title-img: "/img/PB.jpg"
 # By default, the navigation bar and footer have a light gray background, and the main page
 # has a white background. You can specify a different background colour or a background image
 # for the navigation bar, the main page, and the footer.
-navbar-col: "turquoise"
+# navbar-col: "turquoise"
 # navbar-img: "/img/bgimage.png"
-footer-col: "turquoise"
+# footer-col: "turquoise"
 # footer-img: "/img/bgimage.png"
 # page-col: "#FF0000"
 # page-img: "/img/bgimage.png"
