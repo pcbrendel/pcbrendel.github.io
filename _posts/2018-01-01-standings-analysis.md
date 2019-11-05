@@ -2,7 +2,7 @@
 layout: post
 title: Analyzing the 2017 Fantasy Baseball Standings
 tags: datapasta ggplot2
-image: "img/baseball1.jpg"
+bigimg: "img/baseball1.jpg"
 social-share: true
 ---
 
