@@ -33,7 +33,10 @@ h1,h2,h3,h4,h5,h6 {
   font-weight: 800;
 }
 a {
-  color: #008AFF;
+  color: {{ site.link-col }};
+}
+.header_class {
+  color: red;
 }
 a:hover,
 a:focus {
