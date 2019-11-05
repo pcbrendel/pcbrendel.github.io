@@ -8,6 +8,6 @@ In May 2019 I graduated with my PhD in Epidemiology at UCLA. During my PhD, I st
 
 ![dissertation_pic](img/dissertation_pic.jpg)
 
-Upon graduating, I moved to San Francisco participated in the Insight Health Data Science Fellowship through [Insight Data Science](https://www.insightdatascience.com).
+Upon graduating, I moved to San Francisco to participate in the Health Data Science Fellowship through [Insight Data Science](https://www.insightdatascience.com).
 
-Throughout all these experiences, I have been particularly interested in baseball statistics and fantasy baseball.
+Throughout all these experiences, I've had a strong passion for baseball statistics and fantasy baseball.
