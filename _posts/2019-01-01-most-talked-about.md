@@ -81,6 +81,6 @@ final
 dev.off()
 ```
 
-![wordcloud][img/wordcloud.png]
+![wordcloud](img/wordcloud.png)
 
-[link](https://www.reddit.com/r/fantasybaseball/comments/bld8l2/the_most_discussed_players_in_rfantasybaseball/)
+[The discussion on Reddit](https://www.reddit.com/r/fantasybaseball/comments/bld8l2/the_most_discussed_players_in_rfantasybaseball/)
