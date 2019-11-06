@@ -81,6 +81,6 @@ final
 dev.off()
 ```
 
-![wordcloud](img/wordcloud.png)
+![wordcloud](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/wordcloud.png?raw=true "wordcloud")
 
 [The discussion on Reddit](https://www.reddit.com/r/fantasybaseball/comments/bld8l2/the_most_discussed_players_in_rfantasybaseball/)
