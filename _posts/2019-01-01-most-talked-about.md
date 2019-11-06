@@ -4,7 +4,11 @@ title: Who is the most talked about player in r/fantasybaseball?
 tags: [R, wordcloud, RedditExtractoR]
 ---
 
-In progress
+While going through the "Nightly Anything Goes" thread in Reddit's r/fantasybaseball, I noticed one user's comment on the hivemind nature of the community and how every week there's a new player that people won't stop talking about. This got me thinking - who *is* the most talked about player in this community? This seemed to be a fun question worth exploring, while giving me some exposure to scraping from Reddit and working with text analyses.
+
+I started off by exploring my different options for how to extract the data from Reddit. I came across a really cool package, [RedditExtractoR](https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf) that looked to be particularly useful for extracting the nested comments from Reddit via the 'reddit_content' function.
+
+Before I proceeded any farther, I also had to figure out the scope of this analysis. Would I be looking through every post throughout the history of this subreddit? What types of posts or comments would I be examining? Balancing these factors of making it meaningful but also not too time-consuming, I decided to analyze the comments from every Daily Anything Goes and Nightly Anything Goes threads of the current week (Week 5 of the season).  
 
 ```r
 library(tidyverse)
@@ -17,19 +21,7 @@ library(wordcloud2)
 
 ```r
 apr29_1 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/bipdua/daily_anything_goes_april_29_2019")
-apr29_2 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/biw3vm/nightly_anything_goes_april_29_2019")
-apr30_1 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/bj3596/daily_anything_goes_april_30_2019")
-#apr30_2 - NA
-may1_1 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/bjfwbd/daily_anything_goes_may_01_2019")
-may1_2 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/bjnv12/nightly_anything_goes_may_01_2019")
-may2_1 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/bjtp9r/daily_anything_goes_may_02_2019")
-may2_2 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/bk1hc2/nightly_anything_goes_may_02_2019")
-may3_1 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/bk78v7/daily_anything_goes_may_03_2019")
-may3_2 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/bkes4g/nightly_anything_goes_may_03_2019")
-may4_1 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/bkk3bq/daily_anything_goes_may_04_2019")
-may4_2 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/bkr0gq/nightly_anything_goes_may_04_2019")
-may5_1 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/bkwliu/daily_anything_goes_may_05_2019")
-may5_2 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/bl4em9/nightly_anything_goes_may_05_2019")
+# continued for rest of dates
 
 
 df <- bind_rows(apr29_1, apr29_2, apr30_1, may1_1, may1_2, may2_1, may2_1, may2_2, may3_1, may3_2, may4_1, 
@@ -73,13 +65,14 @@ names <- c("smith", "chavis", "paddack", "senzel", "lowe", "winker", "polanco", 
            "vlad", "turner", "alonso", "marte", "segura", "boyd", "domingo", "weaver",
            "degrom", "dozier")
 
+```
+
+```r
 wordcloud(names, term_frequency[names], colors = c("red", "blue"), scale = c(2, .25))
 final <- wordcloud2(wc_df, color = "random-light", backgroundColor = "black", shuffle = F)
-
-png("final.png")
-final
-dev.off()
 ```
+
+
 
 ![wordcloud](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/wordcloud.png?raw=true "wordcloud")
 
