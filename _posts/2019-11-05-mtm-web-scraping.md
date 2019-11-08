@@ -94,6 +94,6 @@ pitcher_season_stats <- function(name, end_month, end_day) {
 }
 ```
 
-```{r eval=True}
-2+2
-```
+So these two steps provide the foundation of how I built my model training data. After several of these functions are created, the next step was to combine these smaller functions into one giant function that takes as input the pitcher's name and outputs a dataframe where each row corresponds to a game started during the 2019 season and has data for the pitcher's stats/info before the game and the pitcher's final DFS points for that game. Lastly, I looped this function through a list of all pitchers with 10 more more Start Innings Pitched.
+
+The final result is a dataframe with 48 predictor variables, 249 pitchers, and X rows (individual starts). 
