@@ -24,13 +24,18 @@ description: Personal Homepage of Paul Brendel
 # List of links in the navigation bar
 navbar-links:
   About Me: "aboutme"
-  Multi-bias Analysis: 
-    - Shiny App: "https://pcbrendel.shinyapps.io/multibias/"
-    - R Package: "https://github.com/pcbrendel/multibias"
+  Introduction to Causal Inference:
+    - What is Causal Inference?: "what_is_ci"
+    - Quantifying Causality: "effect_estimates"
+    - Types of Bias: "types_of_bias"
+    - Methods for Bias Analysis: "methods_for_ba"
   Bias Analysis Tutorials:
     - Uncontrolled Confounding: "UC"
     - Selection Bias: "Sel"
     - Exposure Misclassification: "MC"
+  Multi-bias Analysis Tools: 
+    - Shiny App: "https://pcbrendel.shinyapps.io/multibias/"
+    - R Package: "https://github.com/pcbrendel/multibias"
   Baseball Class Projects: "baseball_class_projects"
   Other Links:
     - My PhD Dissertation: "https://escholarship.org/uc/item/4c50w909"
