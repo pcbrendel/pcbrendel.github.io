@@ -1,6 +1,5 @@
 ---
 title: Quantifying Causality
-subtitle: by Paul Brendel
 ---
 
 A causal effect estimate represents the difference or ratio between an outcome under two different exposure/treatment scenarios.
