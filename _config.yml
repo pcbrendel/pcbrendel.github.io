@@ -24,7 +24,7 @@ description: Personal Homepage of Paul Brendel
 # List of links in the navigation bar
 navbar-links:
   About Me: "aboutme"
-  Introduction to Causal Inference:
+  Causal Inference:
     - What is Causal Inference?: "what_is_ci"
     - Quantifying Causality: "effect_estimates"
     - Types of Bias: "types_of_bias"
