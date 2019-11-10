@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Who is the most talked about player in r/fantasybaseball?
+title: Who is the Most Talked About Player in r/fantasybaseball?
 tags: [R, wordcloud, RedditExtractoR]
 ---
 
