@@ -28,7 +28,7 @@ navbar-links:
     - What is Causal Inference?: "effect_estimates"
     - Types of Bias: "types_of_bias"
     - Methods for Bias Analysis: "methods_for_ba"
-    - Directed Acyclic Graphs: "dags"
+    #- Directed Acyclic Graphs: "dags"
   Bias Analysis:
     - Uncontrolled Confounding Tutorial: "UC"
     - Selection Bias Tutorial: "Sel"
