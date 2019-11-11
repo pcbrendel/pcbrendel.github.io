@@ -39,6 +39,8 @@ plt.title('K-means Elbow Plot')
 plt.xlabel('Number of clusters')
 plt.ylabel('Distortion');
 ```
+![k means plot](kmeans_plot.png)
+
 A
 
 ```python
