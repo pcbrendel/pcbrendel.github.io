@@ -37,10 +37,10 @@ Key:  X = exposure, Y = outcome, U = any variable that is caused by the outcome 
 
 **DAGs representing (A) independent, non-differential misclassification, (B) dependent, non-differential misclassification, (C) independent, differential misclassification, (D) dependent, differential misclassification:**
 
-A. ![Ind_ND_DAG](DAGs/Ind_ND_DAG.png)
-B. ![Dep_ND_DAG](DAGs/Dep_ND_DAG.png)
+A. ![Ind_ND_DAG](img/Ind_ND_DAG.png)
+B. ![Dep_ND_DAG](img/Dep_ND_DAG.png)
 
-C. ![Ind_D_DAG](DAGs/Ind_D_DAG.png)
-D. ![Dep_D_DAG](DAGs/Dep_D_DAG.png)
+C. ![Ind_D_DAG](img/Ind_D_DAG.png)
+D. ![Dep_D_DAG](img/Dep_D_DAG.png)
 
 Key:  X = true exposure, X* = misclassified exposure, U<sub>X</sub> = all factors other than X that determines the value of X*, Y = true outcome, Y* = misclassified outcome, U<sub>Y</sub> = all factors other than Y that determines the value of Y*, U<sub>XY</sub> = factors affecting the measurement of both X and Y.
