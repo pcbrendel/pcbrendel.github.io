@@ -37,12 +37,16 @@ Key:  X = exposure, Y = outcome, U = any variable that is caused by the outcome 
 
 **DAGs representing different types of information bias:**
 
-1) independent, non-differential misclassification ![Ind_ND_DAG](img/Ind_ND_DAG.png)
+![Ind_ND_DAG](img/Ind_ND_DAG.png)
+1. independent, non-differential misclassification
 
-2) dependent, non-differential misclassification ![Dep_ND_DAG](img/Dep_ND_DAG.png)
+![Dep_ND_DAG](img/Dep_ND_DAG.png)
+2. dependent, non-differential misclassification
 
-3) independent, differential misclassification. ![Ind_D_DAG](img/Ind_D_DAG.png)
+![Ind_D_DAG](img/Ind_D_DAG.png)
+3. independent, differential misclassification
 
-4) dependent, differential misclassification. ![Dep_D_DAG](img/Dep_D_DAG.png)
+![Dep_D_DAG](img/Dep_D_DAG.png)
+4. dependent, differential misclassification
 
 Key:  X = true exposure, X* = misclassified exposure, U<sub>X</sub> = all factors other than X that determines the value of X*, Y = true outcome, Y* = misclassified outcome, U<sub>Y</sub> = all factors other than Y that determines the value of Y*, U<sub>XY</sub> = factors affecting the measurement of both X and Y.
