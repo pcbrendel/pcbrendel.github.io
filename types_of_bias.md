@@ -35,12 +35,14 @@ Key:  X = exposure, Y = outcome, U = any variable that is caused by the outcome 
 
 [Information bias](https://academic.oup.com/aje/article/170/8/959/145135) can occur in epidemiological studies when the exposure, outcome, or both are incorrectly classified. This misclassification can be either independent or dependent, depending on whether the measurement error for the exposure is related to the measurement error of the outcome.  Also, the misclassification can be either differential, if the measurement error of the exposure/outcome is affected by the outcome/exposure, or non-differential, if the measurement error of the exposure/outcome is **not** affected by the outcome/exposure.
 
-**DAGs representing (A) independent, non-differential misclassification, (B) dependent, non-differential misclassification, (C) independent, differential misclassification, (D) dependent, differential misclassification:**
+**DAGs representing different types of information bias:**
 
-A. ![Ind_ND_DAG](img/Ind_ND_DAG.png)
-B. ![Dep_ND_DAG](img/Dep_ND_DAG.png)
+1) independent, non-differential misclassification ![Ind_ND_DAG](img/Ind_ND_DAG.png)
 
-C. ![Ind_D_DAG](img/Ind_D_DAG.png)
-D. ![Dep_D_DAG](img/Dep_D_DAG.png)
+2) dependent, non-differential misclassification ![Dep_ND_DAG](img/Dep_ND_DAG.png)
+
+3) independent, differential misclassification. ![Ind_D_DAG](img/Ind_D_DAG.png)
+
+4) dependent, differential misclassification. ![Dep_D_DAG](img/Dep_D_DAG.png)
 
 Key:  X = true exposure, X* = misclassified exposure, U<sub>X</sub> = all factors other than X that determines the value of X*, Y = true outcome, Y* = misclassified outcome, U<sub>Y</sub> = all factors other than Y that determines the value of Y*, U<sub>XY</sub> = factors affecting the measurement of both X and Y.
