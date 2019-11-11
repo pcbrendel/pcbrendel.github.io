@@ -10,7 +10,7 @@ All epidemiological biases are generally subsumed under three categories:  uncon
 
 **Confounding as represented by a directed acyclic graph ([DAG](https://www.ncbi.nlm.nih.gov/pubmed/9888278)):**
 
-![UC_DAG](DAGs/UC_DAG.png)
+![UC_DAG](img/UC_DAG.png)
 
 Key:  X = exposure, Y = outcome, C = confounder.
 
@@ -20,14 +20,14 @@ Key:  X = exposure, Y = outcome, C = confounder.
 
 **DAG representing selection bias in case-control studies:**
 
-![Sel_DAG1](DAGs/Sel_DAG1.png)
+![Sel_DAG1](img/Sel_DAG1.png)
 
 Key:  X = exposure, Y = outcome, U = any variable that is caused by the exposure and affects selection.
 
 **DAGs representing selection bias in cohort studies:**
 
-![Sel_DAG2](DAGs/Sel_DAG2.png)
-![Sel_DAG3](DAGs/Sel_DAG3.png)
+![Sel_DAG2](img/Sel_DAG2.png)
+![Sel_DAG3](img/Sel_DAG3.png)
 
 Key:  X = exposure, Y = outcome, U = any variable that is caused by the outcome and affects (1) participation or (2) follow-up.
 
