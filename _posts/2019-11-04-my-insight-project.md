@@ -34,7 +34,7 @@ for i in df_list:
 ```
 After the data was preprocessed and divided into subsequences, I attempted two different clustering techniques: [K-means Clustering](https://towardsdatascience.com/understanding-k-means-clustering-in-machine-learning-6a6e67336aa1) and [Gaussian Mixture Models](https://towardsdatascience.com/gaussian-mixture-models-explained-6986aaf5a95). K-means clustering seemed like a logical starting point since it is simple and commonly used in this time series application. I also assessed the Gaussian Mixture Models algorithm since it overcomes a key limitation of K-means clustering, which is that clusters must be circular/spherical in shape.
 
-With either method, I found that the clusters were not distinct based on the elbow method and Silhouette analysis (see example below). It also appeared that the clusters were not particularly meaningful based on inspection of their descriptive statistics. 
+With either method, I found that the clusters were not distinct based on the elbow method and Silhouette analysis. It also appeared that the clusters were not particularly meaningful based on inspection of their descriptive statistics. The code and plot below shows that the K-means elbow plot never reaches a clear elbow, indicating that there is no obvious number of distinct clusters.
 
 ```python
 from sklearn.cluster import KMeans
@@ -52,7 +52,15 @@ plt.ylabel('Distortion');
 ```
 ![kmeans_plot](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/kmeans_plot.png?raw=true "kmeans_plot")
 
-A
+So ultimately, the best approach was to create a manual decision rule. I made these rules with guidance from Zendo Tools and based on papers found in the journal [Applied Psychophysiology and Biofeedback](https://link.springer.com/journal/10484). The criteria is as follows:
+
+1. Not in motion
+2. No recent significant motion changes
+3. No recent significant heart rate changes
+4. Heart rate is not significantly elevated
+5. Heart Rate Variability is above baseline
+
+As the code below demonstrates, these criteria are more strict during the early stages of the meditation session and it the meditative state is impossible during the first 12 measurements.
 
 ```python
 df_meditation_list = []
@@ -74,4 +82,6 @@ for index, i in enumerate(df_list):
             df_meditation_list.append(i)
 ```
 
-[zendo-analyzer](https://zendo-analyzer.herokuapp.com/)
+The graph below demonstrates how this criteria would classify an example meditation session:
+
+To wrap it all up, I provided Zendo Tools with my Python code and a [web application](https://zendo-analyzer.herokuapp.com/) that classifies the meditative state. But, perhaps most importantly, I provided some recommendations so that machine learning approaches may be more successful in the future.
