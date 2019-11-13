@@ -17,7 +17,7 @@ Before I began, I knew there would be several challenges:
 
 My plan was to start with an unsupervised learning approach and see if I am able to obtain any meaningful clustering. Due to the limitations of the data noted above, it is reasonable to expect that this method may not succeed. If that is the case, I will instead manually create a decision rule for determining the meditative state.
 
-Some key steps of the data preprocessing involved feature extraction and the creation of subsequences within each of the time series data sets.
+Some key steps of the data preprocessing involved feature extraction and the creation of subsequences within each of the time series data sets. Using the three starting features, new features were created based on (1) the difference from baseline, (2) a rolling mean (e.g. the mean heart rate at a point in time +/- 15 seconds), and (3) a rolling percent change (e.g. the percent change in heart rate relative to 30 seconds ago). The following Python code demonstrates the process of creating the subsequences, in this case continually shifting over 1 measurement and storing a 3-measurement-long window.
 
 ```python
 segment_len = 3
@@ -32,7 +32,9 @@ for i in df_list:
             continue
         segments.append(segment)
 ```
-After the data was preprocessed and divided into subsequences, I attempted two different clustering techniques: [K-means Clustering](https://towardsdatascience.com/understanding-k-means-clustering-in-machine-learning-6a6e67336aa1) and [Gaussian Mixture Models](https://towardsdatascience.com/gaussian-mixture-models-explained-6986aaf5a95).
+After the data was preprocessed and divided into subsequences, I attempted two different clustering techniques: [K-means Clustering](https://towardsdatascience.com/understanding-k-means-clustering-in-machine-learning-6a6e67336aa1) and [Gaussian Mixture Models](https://towardsdatascience.com/gaussian-mixture-models-explained-6986aaf5a95). K-means clustering seemed like a logical starting point since it is simple and commonly used in this time series application. I also assessed the Gaussian Mixture Models algorithm since it overcomes a key limitation of K-means clustering, which is that clusters must be circular/spherical in shape.
+
+With either method, I found that the clusters were not distinct based on the elbow method and Silhouette analysis (see example below). It also appeared that the clusters were not particularly meaningful based on inspection of their descriptive statistics. 
 
 ```python
 from sklearn.cluster import KMeans
