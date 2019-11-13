@@ -85,7 +85,7 @@ for index, i in enumerate(df_list):
             df_meditation_list.append(i)
 ```
 
-The graph below demonstrates how this criteria would classify an example meditation session.
+The graph below shows how this criteria would classify an example meditation session.
 
 ![biometrics](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/biometrics.png?raw=true "biometrics")
 
