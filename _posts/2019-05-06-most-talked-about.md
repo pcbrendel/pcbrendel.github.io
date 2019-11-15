@@ -49,7 +49,7 @@ clean_corpus <- function(corpus){
 clean_corpus <- clean_corpus(corpus)
 ```
 
-
+The clean corpus is then transformed into a table containing the frequency of each word. Among the top words, there were several words that weren't names, such as "fantasy", so I had to manually go through and identify the top names and store these in the "names" vector.
 
 ```r
 tdm <- TermDocumentMatrix(clean_corpus)
@@ -60,19 +60,13 @@ term_frequency <- sort(term_frequency, decreasing = T)
 
 terms_vec <- as.vector(names(term_frequency))
 wc_df <- data.frame(word = terms_vec, freq = term_frequency) %>%
-  filter(freq > 50) %>% 
-  filter(word %in% c("smith", "chavis", "paddack", "senzel", "lowe", "winker", "polanco", "robles",
-                     "snell", "voit", "franmil", "yandy", "santana", "puig", "caleb", "glasnow",
-                     "soroka", "nola", "trout", "joram", "votto", "harper", "kieboom", "shaw",
-                     "vlad", "turner", "alonso", "marte", "segura", "boyd", "domingo", "weaver",
-                     "degrom", "dozier"))
-
+  filter(freq > 50)
+  
 names <- c("smith", "chavis", "paddack", "senzel", "lowe", "winker", "polanco", "robles",
            "snell", "voit", "franmil", "yandy", "santana", "puig", "caleb", "glasnow",
            "soroka", "nola", "trout", "joram", "votto", "harper", "kieboom", "shaw",
            "vlad", "turner", "alonso", "marte", "segura", "boyd", "domingo", "weaver",
            "degrom", "dozier")
-
 ```
 Finally, I represent the frequency of each name with a wordcloud, built with the [wordcloud](https://cran.r-project.org/web/packages/wordcloud/wordcloud.pdf) package. In this visualization, the size of the word is positively related to its frequency. I also attempted using the "wordcloud2" package, but it seemed to be pretty buggy and difficult to work with.
 
