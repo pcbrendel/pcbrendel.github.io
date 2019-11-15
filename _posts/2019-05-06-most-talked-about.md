@@ -27,12 +27,12 @@ I used the 'reddit_content' function from RedditExtractoR to scrape the r/fantas
 apr29_1 <- reddit_content("www.reddit.com/r/fantasybaseball/comments/bipdua/daily_anything_goes_april_29_2019")
 # continued for rest of dates
 
-
 df <- bind_rows(apr29_1, apr29_2, apr30_1, may1_1, may1_2, may2_1, may2_1, may2_2, may3_1, may3_2, may4_1, 
                 may4_2, may5_1, may5_2) %>% 
   select(doc_id = id, text = comment, user) %>% 
   mutate(text = str_replace_all(text, "[^[:graph:]]", " "))
 ```
+Next, I use this dataframe to create a clean corpus. Corpora are special documents containing text. The "tm" package includes convenience functions for cleaning the text in a corpus: putting text in lower case and removing white space, punctuation, and stop words (e.g. that, it, who).  
 
 ```r
 source <- DataframeSource(df)
@@ -47,7 +47,11 @@ clean_corpus <- function(corpus){
 }
 
 clean_corpus <- clean_corpus(corpus)
+```
 
+
+
+```r
 tdm <- TermDocumentMatrix(clean_corpus)
 comment_matrix <- as.matrix(tdm)
 
@@ -70,12 +74,14 @@ names <- c("smith", "chavis", "paddack", "senzel", "lowe", "winker", "polanco", 
            "degrom", "dozier")
 
 ```
-Finally, the word cloud is created.
+Finally, I represent the frequency of each name with a wordcloud, built with the [wordcloud](https://cran.r-project.org/web/packages/wordcloud/wordcloud.pdf) package. In this visualization, the size of the word is positively related to its frequency.
 
 ```r
 wordcloud(names, term_frequency[names], colors = c("red", "blue"), scale = c(2, .25))
 ``` 
 
 ![wordcloud](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/wordcloud.png?raw=true "wordcloud")
+
+It appears that "Smith" was the most talked about player. As you can probably imagine, this doesn't correspond to a single player. It could be in reference to a variety of different Smiths: Mallex, Caleb, Dominic, Will etc. Unfortnately, most of the Reddit comments don't explicitly mention the first name; it is often implied with the rest of the context. Future work will have to consider methods of differentiating within common last names. For starters, the vocabulary in the comment should at least be able to indicate if the player is a batter or pitcher. 
 
 If you'd like to see the post and discussion on Reddit, check it out [here](https://www.reddit.com/r/fantasybaseball/comments/bld8l2/the_most_discussed_players_in_rfantasybaseball/).
