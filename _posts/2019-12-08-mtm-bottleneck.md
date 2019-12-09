@@ -10,5 +10,7 @@ The logical first question was: *what specific parts are causing things to run s
 
 The profiler is a really useful tool for understanding how long R is taking to run the different parts of your code. It conveys this information through a flame graph or the data view.  Using the profvis function on my code helped to shed light on which specific parts were the slowest. It turned out that the rvest scraping functions (e.g. read_html()) were particularly slow, which was not very surprising.
 
+![bottleneck](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/bottleneck.jpg?raw=true "bottleneck")
+
 This raised the next question: *how can I construct my training data in a way that minimizes the number of times these functions need to be used*? 
 
