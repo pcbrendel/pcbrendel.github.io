@@ -1,10 +1,10 @@
 ---
 layout: post
-title: Making the Model Part 1 - Web Scraping Considerations
+title: Making the Model Part 1 - Web Scraping
 tags: R Python rvest
 ---
 
-This is the first post in a series called Making the Model, which documents my journey to building a data set and creating the best model to predict baseball daily fantasy sports (DFS) scores. With the projected performances from such a model, a user can set an optimal lineup in FanDuel or DraftKings and dominate the competition. However, before reaching this goal, there will be many obstacles along the way. This post describes the first obstacle - obtaining the data.
+This is the first post in a series called Making the Model, which documents my journey to building a data set and creating the best model to predict baseball daily fantasy sports (DFS) scores. With the projected performances from such a model, a user can set an optimal lineup in FanDuel or DraftKings and dominate the competition. However, before reaching this goal, there will be many obstacles along the way. This post describes the first obstacle - web scraping.
 
 ![datafunnel](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/datafunnel.jpg?raw=true "datafunnel")
 
