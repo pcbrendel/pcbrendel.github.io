@@ -4,11 +4,13 @@ title: Making the Model Part 2 - Identifying Bottlenecks
 tags: R profvis
 ---
 
+This is the second post in a series called Making the Model, which documents my journey to building a data set and creating the best model to predict baseball daily fantasy sports (DFS) scores. With the projected performances from such a model, a user can set an optimal lineup in FanDuel or DraftKings and dominate the competition. However, before reaching this goal, there will be many obstacles along the way. This post describes the second obstacle - identifying bottlenecks.
+
 As explained in my last post, my vision for compiling my training data was to create a bunch of functions that each scrape from the various data sources, combine these functions into one single function, and then loop through this larger function across the list of all the starting pitchers. However, after I had this set up and running, it eventually became clear to me that this for loop would take way too long to run and wouldn't scale well when I discovered new data sources.
 
 The logical first question was: *what specific parts are causing things to run slowly*? To answer this question I turned to a useful package - [profvis](https://support.rstudio.com/hc/en-us/articles/218221837-Profiling-with-RStudio).
 
-The profiler is a really useful tool for understanding how long R is taking to run the different parts of your code. It conveys this information through a flame graph or the data view.  Using the profvis function on my code helped to shed light on which specific parts were the slowest. It turned out that the rvest scraping functions (e.g. read_html()) were particularly slow, which was not very surprising.
+The profiler is a really useful tool for understanding how long R is taking to run the different parts of your code. It conveys this information through a flame graph or the data view. The flame graph lists the functions that are being called in the vertical direction and shows the time of each function in the horizontal direction. Using the profvis function on my code helped to shed light on which specific parts were the slowest. It turned out that the rvest scraping functions (e.g. read_html()) were particularly slow, which was not very surprising.
 
 ![bottleneck](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/bottleneck.jpg?raw=true "bottleneck")
 
@@ -61,4 +63,6 @@ while (date <= end) {
 
 x <- map_dfr(out, as.list)
 ```
-While this change in approach to building my data was initially motivated by computational speed considerations, it also has the benefit of adding relability to my process. If one of my web sources decided to redo their web design or data arrangement, I would've had to go back and modify each of my scraping functions. Now that I am instead saving all of the necessary data sets, it is no longer a problem if the web source decided to make such modifications. 
+While this change in approach to building my data was initially motivated by computational speed considerations, it also has the benefit of adding relability to my process. If one of my web sources decided to redo their web design or data arrangement, I would've had to go back and modify each of my scraping functions. Now that I am instead saving all of the necessary data sets, it is no longer a problem if the web source decided to make such modifications.
+
+As of right now all my data is able to be saved within the storage limits of Google Drive. I will continue to monitor whether another form of storage or relational database may be necessary. I imagine that a change may be necessary once I start incorporating data from previous seasons.
