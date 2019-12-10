@@ -14,3 +14,51 @@ The profiler is a really useful tool for understanding how long R is taking to r
 
 This raised the next question: *how can I construct my training data in a way that minimizes the number of times these functions need to be used*? 
 
+To demonstrate, let's consider a basic feature - the pitcher's season ERA going into the game. Based on my old plan, I would have a function that scrapes this feature for each row in the data set (>4000 rows). What I decided to do instead is to scrape this data for each potential day in the 2019 season (March 21 - September 30), combine the data from each day, and save this large data set. By doing this, I only have to call the time-consuming bottleneck functions <200 times as opposed to >4000 times. I could then build my training set by successively merging each new scraped dataframe onto my starting data.
+
+The code below demonstrates my proces of going through all the URLs that I have saved based on the day in the season, scraping the data, and then combining the data across the whole season. The "map_dfr" function from purrr is a convenient tool for converting my list of dataframes into a single dataframe.
+
+```r
+start <- as.Date("03-21", format = "%m-%d")
+end <- as.Date("09-30", format = "%m-%d")
+date <- start
+i <- 1
+out <- vector("list", length(as.integer(end - start)))
+
+while (date <= end) {
+  month <- month(date)
+  day <- day(date)
+  url <- paste0("fg_pitching_leaders_dashboard_2019/", sprintf('%02d', month), sprintf('%02d', day), ".htm")
+  
+  if (file.exists(url) == F) {
+    date <- date + 1
+    next
+  }
+  
+  l1 <- url %>% 
+    read_html() %>% 
+    html_nodes('table') %>% 
+    html_table(fill=TRUE)
+  
+  df <- l1[[13]]
+  df <- df[-c(1,3),]
+  
+  columnNames <- as.list(df[1,])
+  columnNames <- gsub("%", ".p", columnNames)
+  columnNames <- gsub("/", "per", columnNames)
+  colnames(df) <- columnNames
+  
+  df <- df[-1,] %>% 
+    mutate(month = month,
+           day = day)
+  
+  out[[i]] <- df
+  
+  date <- date + 1
+  i <- i + 1
+  
+}
+
+x <- map_dfr(out, as.list)
+```
+While this change in approach to building my data was initially motivated by computational speed considerations, it also has the benefit of adding relability to my process. If one of my web sources decided to redo their web design or data arrangement, I would've had to go back and modify each of my scraping functions. Now that I am instead saving all of the necessary data sets, it is no longer a problem if the web source decided to make such modifications. 
