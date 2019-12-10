@@ -10,7 +10,7 @@ As explained in my last post, my vision for compiling my training data was to cr
 
 The logical first question was: *what specific parts are causing things to run slowly*? To answer this question I turned to a useful package - [profvis](https://support.rstudio.com/hc/en-us/articles/218221837-Profiling-with-RStudio).
 
-The profiler is a really useful tool for understanding how long R is taking to run the different parts of your code. It conveys this information through a flame graph or the data view. The flame graph lists the functions that are being called in the vertical direction and shows the time of each function in the horizontal direction. Using the profvis function on my code helped to shed light on which specific parts were the slowest. It turned out that the rvest scraping functions (e.g. read_html()) were particularly slow, which was not very surprising.
+The profiler is a really useful tool for understanding how long R is taking to run the different parts of your code. It conveys this information through a flame graph or the data view. The flame graph lists the functions that are being called in the vertical direction and shows the time of each function in the horizontal direction. Using the profvis function on my code helped to identify a bottleneck, the specific part of my code that was slowing down the entire process. It turned out that the rvest scraping functions (e.g. read_html()) were particularly slow.
 
 ![bottleneck](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/bottleneck.jpg?raw=true "bottleneck")
 
