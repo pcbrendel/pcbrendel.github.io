@@ -1,7 +1,9 @@
 ---
-title: School Projects
-subtitle: Projects Completed in Biostatistics Graduate Classes 
+title: Baseball Projects
 ---
+
+## [Can a Catcher's Defense Impact a Pitcher's Fantasy Value?](https://www.pitcherlist.com/going-deep-can-a-catchers-defense-impact-a-pitchers-fantasy-production/)
+An article for Pitcher List
 
 ## [Predicting Rookie Batting Value in MLB](Brendel Predicting BRAA.pdf)
 This was my final project in an Applied Bayesian Inference class. The analysis was performed in R. The code is available [here](https://github.com/pcbrendel/baseballanalysis)
