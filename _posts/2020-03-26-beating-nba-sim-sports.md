@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Beating Fanduel's NBA Sim Sports
-tags: R datapasta ggplot2
+tags: R simulation
 social-share: true
 ---
 
