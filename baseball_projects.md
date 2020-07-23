@@ -6,7 +6,7 @@ title: Baseball Projects
 
 ### [Can a Catcher's Defense Impact a Pitcher's Fantasy Value?](https://www.pitcherlist.com/going-deep-can-a-catchers-defense-impact-a-pitchers-fantasy-production/)
 
-**Data and graphical assistance**:
+**Data and graphical assistance**:  
 [Injury Prone or Bad Luck?](https://www.pitcherlist.com/injury-prone-or-bad-luck-part-1/)  
 [Bold Predictions](https://www.pitcherlist.com/james-schianos-big-and-bold-predictions/)
 
