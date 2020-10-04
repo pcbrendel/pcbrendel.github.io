@@ -6,9 +6,10 @@ title: Baseball Projects
 
 ### [Can a Catcher's Defense Impact a Pitcher's Fantasy Value?](https://www.pitcherlist.com/going-deep-can-a-catchers-defense-impact-a-pitchers-fantasy-production/)
 
-**Data and graphical assistance**:  
+### Stats and graphics assistance:  
 [Injury Prone or Bad Luck?](https://www.pitcherlist.com/injury-prone-or-bad-luck-part-1/)  
-[Bold Predictions](https://www.pitcherlist.com/james-schianos-big-and-bold-predictions/)
+[2020 Bold Predictions](https://www.pitcherlist.com/james-schianos-big-and-bold-predictions/)  
+[Here's the Case for Shane Bieber as AL MVP](https://www.pitcherlist.com/heres-the-case-for-shane-bieber-as-al-mvp/)
 
 ## Graduate School
 
