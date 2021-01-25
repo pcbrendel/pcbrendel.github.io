@@ -10,6 +10,7 @@ title: Baseball Projects
 [Injury Prone or Bad Luck?](https://www.pitcherlist.com/injury-prone-or-bad-luck-part-1/)  
 [2020 Bold Predictions](https://www.pitcherlist.com/james-schianos-big-and-bold-predictions/)  
 [Here's the Case for Shane Bieber as AL MVP](https://www.pitcherlist.com/heres-the-case-for-shane-bieber-as-al-mvp/)
+[All's Fair in the MLB: Redefining Fairness in a League Without a Salary Cap](https://www.pitcherlist.com/alls-fair-in-mlb-redefining-fairness-in-a-league-without-a-salary-cap/)
 
 ## Graduate School
 
