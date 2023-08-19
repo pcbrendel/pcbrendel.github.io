@@ -1,5 +1,5 @@
 ---
-title: What is Causal Inference?
+title: test
 ---
 
 We are taught in school that correlation does not imply causation. But what about the case in which a correlation does correspond to causation? What exactly does this mean? Scientists and philosophers have been wrapping their heads around this for centuries. For example, an English statistician named Bradford Hill went about creating a list of [rules](https://en.wikipedia.org/wiki/Bradford_Hill_criteria) for determining causality. This and other attempts were eventually found to be insufficient. Much of how we conceptualize the language and statistics of causality today was influenced by the papers of Neyman, Rubin, and Pearl. Thanks in part to their work, we have the field of causal inference, the science of understanding how and with what strength an exposure/treatment influences its outcome. To understand the concept of causality, let's discuss what is meant by a causal effect.
