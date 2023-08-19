@@ -1,5 +1,6 @@
 ---
 title: Types of Bias in Epidemiological Studies
+permalink: /2_types_of_bias.html
 --- 
 
 All epidemiological biases are generally subsumed under three categories:  uncontrolled confounding, selection bias, and information bias:
