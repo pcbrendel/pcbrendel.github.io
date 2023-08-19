@@ -23,25 +23,26 @@ description: The Personal Homepage of Paul Brendel
 
 # List of links in the navigation bar
 navbar-links:
-  About Me: "aboutme"
-  Causal Inference:
+  Publications:
+    - Simultaneous Adjupstment in Multiple-bias Modeling: "https://pubmed.ncbi.nlm.nih.gov/36718093/"
+    - Impact of the COVID-19 Pandemic on Urological Care Delivery: "https://www.auajournals.org/doi/full/10.1097/JU.0000000000002145"
+    - Reading Faces: "https://www.ncbi.nlm.nih.gov/pubmed/24463310"
+    - My PhD Dissertation: "https://escholarship.org/uc/item/4c50w909"
+    - My Masters Thesis: "http://d-scholarship.pitt.edu/23679/"
+  Tools:
+    - Multi-bias Analysis Shiny App: "https://pcbrendel.shinyapps.io/multibias/"
+    - Multi-bias Analysis R Package: "https://github.com/pcbrendel/multibias"
+  Background:
     - What is Causal Inference?: "effect_estimates"
     - Types of Bias: "types_of_bias"
     - Methods for Bias Analysis: "methods_for_bias_analysis"
     #- Directed Acyclic Graphs: "dags"
-  Bias Analysis:
     - Uncontrolled Confounding Tutorial: "UC"
     - Selection Bias Tutorial: "Sel"
-    - Exposure Misclassification Tutorial: "MC" 
-    - Multi-bias Analysis Shiny App: "https://pcbrendel.shinyapps.io/multibias/"
-    - Multi-bias Analysis R Package: "https://github.com/pcbrendel/multibias"
+    - Exposure Misclassification Tutorial: "MC"
+  About Me: "aboutme"
+
   Baseball Projects: "baseball_projects"
-  Other Links:
-    - My PhD Dissertation: "https://escholarship.org/uc/item/4c50w909"
-    - My Masters Thesis: "http://d-scholarship.pitt.edu/23679/"
-    - Reading Faces: "https://www.ncbi.nlm.nih.gov/pubmed/24463310"
-    - Pitcher Luck App: "https://pcbrendel.shinyapps.io/hotel/"
-    - Built with Beautiful Jekyll: "http://deanattali.com/beautiful-jekyll/"
   
 
 # Image to show in the navigation bar - image must be a square (width = height)
