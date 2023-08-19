@@ -12,6 +12,8 @@ All epidemiological biases are generally subsumed under three categories:  uncon
 
 ![UC_DAG](../img/UC_DAG.png)
 
+![UC_DAG]({{ page.url | relative_url }}/img/UC_DAG.png)
+
 Key:  X = exposure, Y = outcome, C = confounder.
 
 ### Selection bias
