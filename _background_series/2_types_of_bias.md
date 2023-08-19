@@ -20,7 +20,7 @@ Key:  X = exposure, Y = outcome, C = confounder.
 
 **DAG representing selection bias in case-control studies:**
 
-![Sel_DAG1](img/Sel_DAG1.png)
+![Sel_DAG1](../img/Sel_DAG1.png)
 
 Key:  X = exposure, Y = outcome, U = any variable that is caused by the exposure and affects selection.
 
