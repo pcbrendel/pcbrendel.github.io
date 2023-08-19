@@ -243,3 +243,7 @@ collections:
   background_series:
     output: true
     permalink: /background_series/:path
+
+navbar-links:
+  NonLinkText:
+    - "": "This is plain text"
