@@ -242,5 +242,4 @@ plugins:
 collections:
   background_series:
     output: true
-  _background_series:
-    output: true
+    permalink: /background_series/:path
