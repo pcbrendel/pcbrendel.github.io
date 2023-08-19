@@ -33,7 +33,7 @@ navbar-links:
     - Multi-bias Analysis Shiny App: "https://pcbrendel.shinyapps.io/multibias/"
     - Multi-bias Analysis R Package: "https://github.com/pcbrendel/multibias"
   Background:
-    - Causal Inference Overview: "/background_series/What%20is%20Causal%20Inference%3F/"
+    - Causal Inference Overview: "/background_series/test/"
     - Types of Bias: "/background_series/2_types_of_bias/"
     - Methods for Bias Analysis: "/background_series/3_bias_analysis_methods/"
     #- Directed Acyclic Graphs: "dags"
