@@ -25,7 +25,7 @@ description: The Personal Homepage of Paul Brendel
 navbar-links:
   Publications:
     - Simultaneous Adjupstment in Multiple-bias Modeling: "https://pubmed.ncbi.nlm.nih.gov/36718093/"
-    - Impact of the COVID-19 Pandemic on Urological Care Delivery: "https://www.auajournals.org/doi/full/10.1097/JU.0000000000002145"
+    - Impact of COVID-19 on Urological Care Delivery: "https://www.auajournals.org/doi/full/10.1097/JU.0000000000002145"
     - Reading Faces: "https://www.ncbi.nlm.nih.gov/pubmed/24463310"
     - My PhD Dissertation: "https://escholarship.org/uc/item/4c50w909"
     - My Masters Thesis: "http://d-scholarship.pitt.edu/23679/"
@@ -40,10 +40,9 @@ navbar-links:
     - Uncontrolled Confounding Tutorial: "UC"
     - Selection Bias Tutorial: "Sel"
     - Exposure Misclassification Tutorial: "MC"
-  About Me: "aboutme"
-
+  Blog: "_posts"
   Baseball Projects: "baseball_projects"
-  
+  About Me: "aboutme"
 
 # Image to show in the navigation bar - image must be a square (width = height)
 # Remove this parameter if you don't want an image in the navbar
