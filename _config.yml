@@ -239,4 +239,7 @@ prose:
 plugins:
   - jekyll-paginate
 
+collections:
+  background_series:
+    output: true
 
