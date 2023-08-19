@@ -33,9 +33,9 @@ navbar-links:
     - Multi-bias Analysis Shiny App: "https://pcbrendel.shinyapps.io/multibias/"
     - Multi-bias Analysis R Package: "https://github.com/pcbrendel/multibias"
   Background:
-    - What is Causal Inference?: "/_background_series/1_causality_intro"
-    - Types of Bias: "/_background_series/2_types_of_bias"
-    - Methods for Bias Analysis: "/_background_series/3_bias_analysis_methods"
+    - What is Causal Inference?: "/_background_series/1_causality_intro/"
+    - Types of Bias: "/_background_series/2_types_of_bias/"
+    - Methods for Bias Analysis: "/_background_series/3_bias_analysis_methods/"
     #- Directed Acyclic Graphs: "dags"
     - Uncontrolled Confounding Tutorial: "/_background_series/4_uc_tutorial/"
     - Selection Bias Tutorial: "/_background_series/5_selection_tutorial/"
