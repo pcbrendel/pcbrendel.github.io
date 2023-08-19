@@ -36,7 +36,7 @@ a {
   color: {{ site.link-col }};
 }
 .header_class {
-  color: gold;
+  color: black;
 }
 a:hover,
 a:focus {
