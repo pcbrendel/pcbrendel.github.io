@@ -29,7 +29,7 @@ navbar-links:
     - Selection Bias Tutorial: "https://www.paulbrendel.com/background_series/5_selection_tutorial/"
     - Exposure Misclassification Tutorial: "https://www.paulbrendel.com/background_series/6_misclassification_tutorial/"
   Blog: "_posts"
-  Baseball: "baseball_projects"
+  Baseball: "baseball"
   About Me: "aboutme"
 
 # Image to show in the navigation bar - image must be a square (width = height)
