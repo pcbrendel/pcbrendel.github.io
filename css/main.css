@@ -36,7 +36,7 @@ a {
   color: {{ site.link-col }};
 }
 .header_class {
-  color: black;
+  color: gold;
 }
 a:hover,
 a:focus {
@@ -132,7 +132,7 @@ img {
 .navbar-custom .navbar-brand,
 .navbar-custom .nav li a {
   font-weight: 800;
-  color: gold;
+  color: black !important;
 }
 
 .navbar-custom .navbar-brand:hover,
