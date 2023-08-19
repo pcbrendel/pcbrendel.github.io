@@ -10,7 +10,7 @@ All epidemiological biases are generally subsumed under three categories:  uncon
 
 **Confounding as represented by a directed acyclic graph ([DAG](https://www.ncbi.nlm.nih.gov/pubmed/9888278)):**
 
-![UC_DAG](img/UC_DAG.png)
+![UC_DAG](../img/UC_DAG.png)
 
 Key:  X = exposure, Y = outcome, C = confounder.
 
@@ -26,8 +26,8 @@ Key:  X = exposure, Y = outcome, U = any variable that is caused by the exposure
 
 **DAGs representing selection bias in cohort studies:**
 
-![Sel_DAG2](img/Sel_DAG2.png)
-![Sel_DAG3](img/Sel_DAG3.png)
+![Sel_DAG2](../img/Sel_DAG2.png)
+![Sel_DAG3](../img/Sel_DAG3.png)
 
 Key:  X = exposure, Y = outcome, U = any variable that is caused by the outcome and affects (1) participation or (2) follow-up.
 
@@ -37,16 +37,16 @@ Key:  X = exposure, Y = outcome, U = any variable that is caused by the outcome 
 
 **DAGs representing different types of information bias:**
 
-![Ind_ND_DAG](img/Ind_ND_DAG.png)
+![Ind_ND_DAG](../img/Ind_ND_DAG.png)
 independent, non-differential misclassification
 
-![Dep_ND_DAG](img/Dep_ND_DAG.png)
+![Dep_ND_DAG](../img/Dep_ND_DAG.png)
 dependent, non-differential misclassification
 
-![Ind_D_DAG](img/Ind_D_DAG.png)
+![Ind_D_DAG](../img/Ind_D_DAG.png)
 independent, differential misclassification
 
-![Dep_D_DAG](img/Dep_D_DAG.png)
+![Dep_D_DAG](../img/Dep_D_DAG.png)
 dependent, differential misclassification
 
 Key:  X = true exposure, X* = misclassified exposure, U<sub>X</sub> = all factors other than X that determines the value of X*, Y = true outcome, Y* = misclassified outcome, U<sub>Y</sub> = all factors other than Y that determines the value of Y*, U<sub>XY</sub> = factors affecting the measurement of both X and Y.
