@@ -13,8 +13,5 @@
   {% capture linkurl %}{{ include.link[1] }}{% endcapture %}
 {% endif %}
 
-{% if include.link[0] == "" %}
-  <span>{{ include.text }}</span>
-{% else %}
-  <a href="{{ linkurl }}">{{ include.link[0] }}</a>
-{% endif %}
+<a href="{{ linkurl }}">{{ include.link[0] }}</a>
+<a href="#">Paul Brendel</a>
