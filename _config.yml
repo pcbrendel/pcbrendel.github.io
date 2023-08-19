@@ -74,7 +74,6 @@ author:
   telephone: yourphone   # eg. +14159998888
   steam: yourname     # eg. daattali
   twitch: yourname    # eg. daattali
-  yelp: yourname      # eg. daattali
 
 # Select which links to show in the footer
 footer-links-active:
@@ -95,7 +94,6 @@ footer-links-active:
   telephone: false
   steam: false
   twitch: false
-  yelp: false
 
 # Select which share links to show in posts
 share-links-active:
@@ -117,9 +115,6 @@ url-pretty: "www.paulbrendel.com"
 
 # Google Tag Manager ID
 #gtm: ""
-
-# Facebook App ID
-# fb_app_id: ""
 
 # Excerpt Word Length
 # Truncates the excerpt to the specified number of words on the index page
