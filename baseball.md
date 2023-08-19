@@ -1,5 +1,5 @@
 ---
-title: Baseball Projects
+title: Baseball Home
 ---
 
 ## Pitcher List
