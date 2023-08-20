@@ -7,9 +7,9 @@ title: Baseball Home
 	iFrameResize({heightCalculationMethod:'taggedElement' }, '#3NPYY7GG44')
 </script>
 
-# PAST PROJECTS
+# <ins>PAST PROJECTS</ins>
 
-## Pitcher List
+## 1. Pitcher List
 
 ### [Can a Catcher's Defense Impact a Pitcher's Fantasy Value?](https://www.pitcherlist.com/going-deep-can-a-catchers-defense-impact-a-pitchers-fantasy-production/)
 
@@ -19,7 +19,7 @@ title: Baseball Home
 [Here's the Case for Shane Bieber as AL MVP](https://www.pitcherlist.com/heres-the-case-for-shane-bieber-as-al-mvp/)  
 [All's Fair in the MLB: Redefining Fairness in a League Without a Salary Cap](https://www.pitcherlist.com/alls-fair-in-mlb-redefining-fairness-in-a-league-without-a-salary-cap/)
 
-## Graduate School
+## 2. Graduate School
 
 ### [Predicting Rookie Batting Value in MLB](Brendel Predicting BRAA.pdf)
 This was my final project in an Applied Bayesian Inference class. The analysis was performed in R. The code is available [here](https://github.com/pcbrendel/baseballanalysis)
