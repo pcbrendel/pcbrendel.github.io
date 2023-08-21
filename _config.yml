@@ -28,7 +28,7 @@ navbar-links:
     - Uncontrolled Confounding Tutorial: "https://www.paulbrendel.com/background_series/4_uc_tutorial/"
     - Selection Bias Tutorial: "https://www.paulbrendel.com/background_series/5_selection_tutorial/"
     - Exposure Misclassification Tutorial: "https://www.paulbrendel.com/background_series/6_misclassification_tutorial/"
-  # Blog:
+  Causality: "causality" 
   Baseball: "baseball"
   About Me: "aboutme"
 
