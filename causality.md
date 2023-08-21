@@ -16,7 +16,7 @@ title: Causality Home
 
 ### [Methods for Bias Analysis](/background_series/3_bias_analysis_methods/)
 
-# <ins>BIAS ANALYSIS: QUICK TUTORIALS</ins>
+# <ins>QUICK TUTORIALS FOR BIAS ANALYSIS</ins>
 
 ### [Uncontrolled Confounding](/background_series/4_uc_tutorial/)
 
