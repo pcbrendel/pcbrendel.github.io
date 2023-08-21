@@ -1,6 +1,5 @@
 ---
-title: Adjustment for Exposure Misclassification 
-subtitle: by Paul Brendel
+title: Adjustment for Exposure Misclassification
 ---
 
 ### Full code used in this analysis is available [here](https://github.com/pcbrendel/biasanalysis)
