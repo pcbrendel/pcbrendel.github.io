@@ -130,7 +130,7 @@ img {
   font-family: 'Lora';
   font-style: 'italic';
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: text-middle;
 }
 
 .navbar-custom .nav li a {
