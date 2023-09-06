@@ -127,10 +127,10 @@ img {
   font-weight: 800;
   color: white;
   font-size: 24px;
-  font-family: 'Lora';
-  font-style: 'italic';
-  display: inline-block;
-  vertical-align: text-middle;
+  font-family: 'Lora', serif;
+  font-style: italic;
+  display: flex;
+  align-items: center;
 }
 
 .navbar-custom .nav li a {
