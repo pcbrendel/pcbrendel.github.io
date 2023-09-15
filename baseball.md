@@ -11,7 +11,7 @@ title: Baseball Home
 
 ## 1. Pitcher List
 
-### [Can a Catcher's Defense Impact a Pitcher's Fantasy Value?](https://www.pitcherlist.com/going-deep-can-a-catchers-defense-impact-a-pitchers-fantasy-production/)
+### <a href="https://www.pitcherlist.com/going-deep-can-a-catchers-defense-impact-a-pitchers-fantasy-production/" target="_blank">Can a Catcher's Defense Impact a Pitcher's Fantasy Value?</a>
 
 ### Stats and graphics assistance:  
 [Injury Prone or Bad Luck?](https://www.pitcherlist.com/injury-prone-or-bad-luck-part-1/)  
