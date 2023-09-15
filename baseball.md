@@ -14,10 +14,10 @@ title: Baseball Home
 ### <a href="https://www.pitcherlist.com/going-deep-can-a-catchers-defense-impact-a-pitchers-fantasy-production/" target="_blank">Can a Catcher's Defense Impact a Pitcher's Fantasy Value?</a>
 
 ### Stats and graphics assistance:  
-[Injury Prone or Bad Luck?](https://www.pitcherlist.com/injury-prone-or-bad-luck-part-1/)  
-[2020 Bold Predictions](https://www.pitcherlist.com/james-schianos-big-and-bold-predictions/)  
-[Here's the Case for Shane Bieber as AL MVP](https://www.pitcherlist.com/heres-the-case-for-shane-bieber-as-al-mvp/)  
-[All's Fair in the MLB: Redefining Fairness in a League Without a Salary Cap](https://www.pitcherlist.com/alls-fair-in-mlb-redefining-fairness-in-a-league-without-a-salary-cap/)
+<a href="https://www.pitcherlist.com/injury-prone-or-bad-luck-part-1/" target="_blank">Injury Prone or Bad Luck?</a>  
+<a href="https://www.pitcherlist.com/james-schianos-big-and-bold-predictions/" target="_blank">2020 Bold Predictions</a>  
+<a href="https://www.pitcherlist.com/heres-the-case-for-shane-bieber-as-al-mvp/" target="_blank">Here's the Case for Shane Bieber as AL MVP</a>  
+<a href="https://www.pitcherlist.com/alls-fair-in-mlb-redefining-fairness-in-a-league-without-a-salary-cap/" target="_blank">All's Fair in the MLB: Redefining Fairness in a League Without a Salary Cap</a>
 
 ## 2. Graduate School
 
