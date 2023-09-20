@@ -73,28 +73,28 @@ Now that values for the bias parameters have been obtained, use these values in 
 We'll nest the analysis within a function so that values of the bias parameters can easily be changed. Bootstrapping will be used in order to obtain a confidence interval for the OR<sub>YX</sub> estimate. For the purposes of demonstration, we will only have 10 bootstrap samples, but more samples will be needed in practice. The steps in this analysis are as follows:
 
 1. Sample with replacement from the dataset.
-2. Predict the probability of X by combining the bias parameters with the data for X, C, and Y in an expit function.
-3. Duplicate the sampled dataset (bdf) and merge these two copies. The new dataset is named 'combined'.
+2. Predict the probability of X via the inverse logit function by combining the bias parameters with the data for X, C, and Y.
+3. Duplicate the bootstrap dataset (bdf) and merge these two copies. The new dataset is named 'combined'.
 4. Assign variable Xbar, which equals 1 in the first data copy and equals 0 in the second data copy.
 5. Create variable pX, which equals the probability of X in the first copy and equals 1 minus the probability of X in the second copy.
-6. Using the combined dataset, model the weighted logistic outcome regression \[P(Y=1)\| Xsim, C]. The weight used in this regression is pX, obtained in the previous step.
+6. Using the combined dataset, model the weighted logistic outcome regression \[P(Y=1)\| Xbar, C]. The weight used in this regression is pX, obtained in the previous step.
 
 ```r
-adjust_mc <- function (cX, cXXstar, cXC, cXY) {
+adjust_emc <- function (coef_0, coef_xstar, coef_c, coef_y) {
   set.seed(1234)
   est <- vector()
-  nreps <- 10 #can vary number of bootstrap samples
+  nreps <- 10 # can vary number of bootstrap samples
   
   for(i in 1:nreps){
-    bdf <- df[sample(1:nrow(df), n, replace = TRUE), ] #random samping with replacement
+    bdf <- df[sample(seq_len(n), n, replace = TRUE), ] # bootstrap sample
     
-    pX <- plogis(cX + cXXstar * bdf$Xstar + cXC * bdf$C + cXY * bdf$Y) #model the probability of X
+    pX <- plogis(coef_0 + coef_xstar * bdf$Xstar + coef_c * bdf$C + coef_y * bdf$Y) # model the probability of X
     
-    combined <- bdf[rep(seq_len(nrow(bdf)), 2), ] #duplicate data
-    combined$Xbar <- rep(c(1, 0), each = n) #Xsim=1 in first copy, Xsim=0 in second copy
-    combined$pX <- c(pX, 1 - pX) #when Xsim=1, pX is prob of X=1; when Xsim=0, pX is prob of X=0
+    combined <- bind_rows(bdf, bdf) # duplicate data
+    combined$Xbar <- rep(c(1, 0), each = n) # Xbar = 1 in first copy, Xbar = 0 in second copy
+    combined$pX <- c(pX, 1 - pX) # when Xsim=1, pX is prob of X=1; when Xsim=0, pX is prob of X=0
     
-    final <- glm(Y ~ Xsim + C, family = binomial(link = "logit"), weights = pX, data = combined)
+    final <- glm(Y ~ Xbar + C, family = binomial(link = "logit"), weights = pX, data = combined)
     est[i] <- coef(final)[2]
   }
   
@@ -105,7 +105,7 @@ adjust_mc <- function (cX, cXXstar, cXC, cXY) {
 We can run the analysis using different values of the bias parameters.  When we use the known, correct values for the bias parameters that we obtained earlier...
 
 ```r
-adjust_mc(cX = x_0, cXXstar = x_xstar, cXC = x_c, cXY = x_y)
+adjust_emc(coef_0 = x_0, coef_xstar = x_xstar, coef_c = x_c, coef_y = x_y)
 ```
 we obtain OR<sub>YX</sub> = 2.04 (2.03, 2.05), representing the bias-free effect estimate we expect.  The output also includes a histogram showing the distribution of the OR<sub>YX</sub> estimates from each bootstrap sample:
 
@@ -114,6 +114,6 @@ we obtain OR<sub>YX</sub> = 2.04 (2.03, 2.05), representing the bias-free effect
 We can analyze this plot to see how well the odds ratios converge.  If instead we use bias parameters that are each double the correct value...
 
 ```r
-adjust_mc(cX = 2*x_0, cXXstar = 2*x_xstar, cXC = 2*x_c, cXY = 2*x_y)
+adjust_emc(coef_0 = 2*x_0, coef_xstar = 2*x_xstar, coef_c = 2*x_c, coef_y = 2*x_y)
 ```
 we obtain OR<sub>YX</sub> = 2.69 (2.67, 2.71), an incorrect estimate of effect.
