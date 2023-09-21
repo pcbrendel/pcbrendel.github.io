@@ -2,9 +2,7 @@
 title: Adjustment for Uncontrolled Confounding
 ---
 
-**Full code used in this analysis is available [here](https://github.com/pcbrendel/bias_analysis/blob/master/uc_tutorial.R)**
-
-First, generate a dataset with a sample size of 100,000. The following binary variables are defined:
+This tutorial will demonstrate how to adjust for an uncontrolled confounder. First, generate a dataset of 100,000 rows with the following binary variables:
 
 * X = Exposure (1 = exposed, 0 = not exposed)
 * Y = Outcome (1 = outcome, 0 = no outcome)
@@ -117,4 +115,6 @@ We can analyze this plot to see how well the odds ratios converge.  If instead w
 adjust_uc(cU = 2*u_0, cUX = 2*u_x, cUC = 2*u_c, cUY = 2*u_y)
 ```
 we obtain OR<sub>YX</sub> = 0.80 (0.79, 0.82), an incorrect estimate of effect.
+
+<a href="https://github.com/pcbrendel/bias_analysis/blob/master/uc_tutorial.R" target="_blank">The full code for this analysis is available here</a>
 
