@@ -20,6 +20,6 @@ title: Causality Home
 
 ### [Uncontrolled Confounding](/background_series/4_uc_tutorial/)
 
-### [Selection Bias](/background_series/5_selection_tutorial/)
+### [Selection Bias](/background_series/5_sel_tutorial/)
 
-### [Exposure Misclassification](/background_series/6_misclassification_tutorial/)
+### [Exposure Misclassification](/background_series/6_emc_tutorial/)
