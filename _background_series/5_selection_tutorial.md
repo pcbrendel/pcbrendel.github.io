@@ -2,9 +2,7 @@
 title: Adjustment for Selection Bias
 ---
 
-### Full code used in this analysis is available [here](https://github.com/pcbrendel/biasanalysis)
-
-First, generate a dataset with a sample size of 100,000. The following binary variables are defined:
+This tutorial will demonstrate how to adjust for selection bias. First, generate a dataset of 100,000 rows with the following binary variables:
 
 * X = Exposure (1 = exposed, 0 = not exposed)
 * Y = Outcome (1 = outcome, 0 = no outcome)
@@ -111,3 +109,5 @@ We can analyze this plot to see how well the odds ratios converge.  If instead w
 adjust_sel(cS = 2*s_0, cSX = 2*s_x, cSY = 2*s_y)
 ```
 we obtain OR<sub>YX</sub> = 3.91 (3.84, 3.96), an incorrect estimate of effect.
+
+<a href="https://github.com/pcbrendel/bias_analysis/blob/master/sel_tutorial.R" target="_blank">The full code for this analysis is available here</a>
