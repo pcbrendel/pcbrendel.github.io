@@ -2,9 +2,7 @@
 title: Adjustment for Exposure Misclassification
 ---
 
-### Full code used in this analysis is available [here](https://github.com/pcbrendel/biasanalysis)
-
-First, generate a dataset with a sample size of 100,000. The following binary variables are defined:
+This tutorial will demonstrate how to adjust for exposure misclassification. First, generate a dataset of 100,000 rows with the following binary variables:
 
 * X = Exposure (1 = exposed, 0 = not exposed)
 * Y = Outcome (1 = outcome, 0 = no outcome)
@@ -117,3 +115,5 @@ We can analyze this plot to see how well the odds ratios converge.  If instead w
 adjust_emc(coef_0 = 2*x_0, coef_xstar = 2*x_xstar, coef_c = 2*x_c, coef_y = 2*x_y)
 ```
 we obtain OR<sub>YX</sub> = 2.69 (2.67, 2.71), an incorrect estimate of effect.
+
+<a href="https://github.com/pcbrendel/bias_analysis/blob/master/emc_tutorial.R" target="_blank">The full code for this analysis is available here</a>
