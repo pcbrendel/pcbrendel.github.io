@@ -2,7 +2,7 @@
 title: Adjustment for Uncontrolled Confounding
 ---
 
-### Full code used in this analysis is available [here](https://github.com/pcbrendel/biasanalysis)
+**Full code used in this analysis is available [here](https://github.com/pcbrendel/bias_analysis/blob/master/uc_tutorial.R)**
 
 First, generate a dataset with a sample size of 100,000. The following binary variables are defined:
 
