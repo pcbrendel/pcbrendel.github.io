@@ -17,9 +17,10 @@ navbar-links:
     - Reading Faces: "https://www.ncbi.nlm.nih.gov/pubmed/24463310"
     - My PhD Dissertation: "https://escholarship.org/uc/item/4c50w909"
     - My Masters Thesis: "http://d-scholarship.pitt.edu/23679/"
-  Tools:
-    - Multi-bias Analysis Shiny App: "https://pcbrendel.shinyapps.io/multibias/"
-    - Multi-bias Analysis R Package: "https://github.com/pcbrendel/multibias"
+  Multibias:
+    - R Package: "https://github.com/pcbrendel/multibias"
+    - Web App: "https://pcbrendel.shinyapps.io/multibias/"
+    
   #Background:
   #  - Causal Inference Overview: "https://www.paulbrendel.com/background_series/1_causality_intro/"
   #  - Types of Bias: "https://www.paulbrendel.com/background_series/2_types_of_bias/"
