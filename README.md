@@ -1,7 +1,3 @@
-# The Official Paul Brendel Website
+# The Personal Website of Paul Brendel
 
-## Epidemiology / Data Science Content:
-
-## Baseball Content
-
-
+Home of the multibias tools, publications, and more
