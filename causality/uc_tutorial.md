@@ -23,7 +23,7 @@ rm(C, U, X, Y)
 ```
 This data reflects the following causal relationship:
 
-![UCdemo](/background_series/UCdemo.png)
+![UCdemo](/img/UCdemo.png)
 
 From this dataset note that P(Y=1\|X=1, C=c, U=u) / P(Y=1\|X=0, C=c, U=u) should equal expit(log(2)).
 Therefore, odds(Y=1\|X=1, C=c, U=u) / odds(Y=1\|X=0, C=c, U=u) = odds ratio (OR<sub>YX</sub>) = exp(log(2)) = 2.
@@ -140,7 +140,7 @@ correct_results$ci
 ```
 we obtain OR<sub>YX</sub> = 2.03 (1.98, 2.07), representing the bias-adjusted effect estimate we expect. The output can also include a histogram showing the distribution of the OR<sub>YX</sub> estimates from each bootstrap sample:
 
-![UChist](/background_series/UChist.png)
+![UChist](/img/UChist.png)
 
 We can analyze this plot to see how well the odds ratios converge. If instead we use bias parameters that are each double the correct value:
 
