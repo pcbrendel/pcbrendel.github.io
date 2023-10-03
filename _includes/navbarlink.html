@@ -7,7 +7,11 @@
   {% endif %}
 {% endif %}
 
-{% capture linkurl %}{{ include.link[1] }}{% endcapture %}
+{% if internal %}
+  {% capture linkurl %}{{ site.baseurl }}/{{ include.link[1] }}{% endcapture %}
+{% else %}
+  {% capture linkurl %}{{ include.link[1] }}{% endcapture %}
+{% endif %}
 
 {% if internal %}
   <a href="./{{ linkurl }}">{{ include.link[0] }}</a>
