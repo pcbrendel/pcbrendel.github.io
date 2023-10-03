@@ -10,7 +10,7 @@
 {% capture linkurl %}{{ include.link[1] }}{% endcapture %}
 
 {% if internal %}
-  <a href="{{ include.link[1] }}">{{ include.link[0] }}</a>
+  <a href="./{{ linkurl }}">{{ include.link[0] }}</a>
 {% else %}
   <a href="{{ include.link[1] }}" target="_blank">{{ include.link[0] }}</a>
 {% endif %}
