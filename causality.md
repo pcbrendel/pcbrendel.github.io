@@ -10,16 +10,16 @@ title: Causality Home
 
 # <ins>BACKGROUND</ins>
 
-### [Causal Inference Overview](/background_series/1_causality_intro/)
+### [Causal Inference Overview](/causality/causal_overview/)
 
-### [Types of Bias](/background_series/2_types_of_bias/)
+### [Types of Bias](/causality/types_of_bias/)
 
-### [Methods for Bias Analysis](/background_series/3_bias_analysis_methods/)
+### [Methods for Bias Analysis](/causality/bias_analysis_methods/)
 
 # <ins>QUICK TUTORIALS FOR BIAS ANALYSIS</ins>
 
-### [Uncontrolled Confounding](/background_series/4_uc_tutorial/)
+### [Uncontrolled Confounding](/causality/uc_tutorial/)
 
-### [Selection Bias](/background_series/5_sel_tutorial/)
+### [Selection Bias](/causality/sel_tutorial/)
 
-### [Exposure Misclassification](/background_series/6_emc_tutorial/)
+### [Exposure Misclassification](/causality/emc_tutorial/)
