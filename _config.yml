@@ -20,7 +20,7 @@ navbar-links:
   Multibias:
     - R Package: "https://github.com/pcbrendel/multibias"
     - Web App: "https://pcbrendel.shinyapps.io/multibias/"
-  Causality: "causality" 
+  Causality: "causality"
   Baseball: "baseball"
   About Me: "aboutme"
 
