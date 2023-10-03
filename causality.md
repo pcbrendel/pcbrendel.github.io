@@ -14,7 +14,7 @@ title: Causality Home
 
 ### [Types of Bias](/causality/types_of_bias/)
 
-### [Methods for Bias Analysis](/causality/bias_analysis_methods/)
+### [Methods for Bias Analysis](/causal/bias_analysis_methods/)
 
 # <ins>QUICK TUTORIALS FOR BIAS ANALYSIS</ins>
 
