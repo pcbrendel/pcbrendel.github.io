@@ -23,7 +23,7 @@ rm(C, X, Y, S)
 ```
 This data reflects the following causal relationship:
 
-![Seldemo](/background_series/Seldemo.png)
+![Seldemo](/img/Seldemo.png)
 
 From this dataset note that P(Y=1\|X=1, C=c, U=u) / P(Y=1\|X=0, C=c, U=u) should equal expit(log(2)).
 Therefore, odds(Y=1\|X=1, C=c, U=u) / odds(Y=1\|X=0, C=c, U=u) = odds ratio (OR<sub>YX</sub>) = exp(log(2)) = 2
@@ -101,7 +101,7 @@ adjust_sel(cS = s_0, cSX = s_x, cSY = s_y)
 ```
 we obtain OR<sub>YX</sub> = 2.05 (2.01, 2.07), representing the bias-free effect estimate we expect.  The output also includes a histogram showing the distribution of the OR<sub>YX</sub> estimates from each bootstrap sample:
 
-![Selhist](/background_series/Selhist.png)
+![Selhist](/img/Selhist.png)
 
 We can analyze this plot to see how well the odds ratios converge.  If instead we use bias parameters that are each double the correct value:
 
