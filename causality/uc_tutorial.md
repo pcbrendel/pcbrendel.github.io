@@ -26,8 +26,8 @@ This data reflects the following causal relationships:
 
 ![UCdemo](/img/UCdemo.png)
 
-From this dataset note that P(Y=1\|X=1, C=c, U=u) / P(Y=1\|X=0, C=c, U=u) should equal expit(log(2)).
-Therefore, odds(Y=1\|X=1, C=c, U=u) / odds(Y=1\|X=0, C=c, U=u) = odds ratio (OR<sub>YX</sub>) = exp(log(2)) = 2.
+From this dataset note that P(*Y*=1\|*X*=1, *C*=*c*, *U*=*u*) / P(*Y*=1\|*X*=0, *C*=*c*, *U*=*u*) should equal *expit*(log(2)).
+Therefore, odds(*Y*=1\|*X*=1, *C*=*c*, *U*=*u*) / odds(*Y*=1\|*X*=0, *C*=*c*, *U*=*u*) = *OR<sub>YX</sub>* = *exp*(log(2)) = 2.
 
 Compare the biased (confounded) model to the bias-free model.
 
@@ -41,7 +41,7 @@ c(exp(coef(nobias_model)[2]) + summary(nobias_model)$coef[2, 2] * qnorm(.025)),
 ```
 *OR<sub>YX</sub>* = 2.02 (1.96, 2.09)
 
-This estimate corresponds to the odds ratio we would expect based off of the derivation of Y.
+This estimate corresponds to the odds ratio we would expect based off of the derivation of *Y*.
 
 ```r
 biased_model <- glm(Y ~ X + C,
@@ -64,10 +64,10 @@ u_model <- glm(U ~ X + Y + C,
 summary(u_model)
 ```
 These parameters can be interpreted as follows:
-* Intercept: log\[odds(U=1\|X=0, C=0, Y=0)]
-* *X* coefficient: log\[odds(U=1\|X=1, C=0, Y=0)] / log\[odds(U=1\|X=0, C=0, Y=0)] i.e. the log odds ratio denoting the amount by which the log odds of U=1 changes for every 1 unit increase in X among the C=0, Y=0 subgroup.
-* *Y* coefficient: log\[odds(U=1\|X=0, C=0, Y=1)] / log\[odds(U=1\|X=0, C=0, Y=0)]
-* *C* coefficient: log\[odds(U=1\|X=0, C=1, Y=0)] / log\[odds(U=1\|X=0, C=0, Y=0)]
+* Intercept: log\[odds(*U*=1\|*X*=0, *C*=0, *Y*=0)]
+* *X* coefficient: log\[odds(*U*=1\|*X*=1, *C*=0, *Y*=0)] / log\[odds(*U*=1\|*X*=0, *C*=0, *Y*=0)] i.e. the log odds ratio denoting the amount by which the log odds of *U*=1 changes for every 1 unit increase in *X* among the *C*=0, *Y*=0 subgroup.
+* *Y* coefficient: log\[odds(*U*=1\|*X*=0, *C*=0, *Y*=1)] / log\[odds(*U*=1\|*X*=0, *C*=0, *Y*=0)]
+* *C* coefficient: log\[odds(*U*=1\|*X*=0, *C*=1, *Y*=0)] / log\[odds(*U*=1\|*X*=0, *C*=0, *Y*=0)]
 
 Now that values for the bias parameters have been obtained, we'll use these values to perform the bias adjustment with two different approaches. In both cases, we'll build the analysis within a function for quick reiteration. Bootstrapping will be used in order to obtain a confidence interval for the OR<sub>YX</sub> estimate.
 
