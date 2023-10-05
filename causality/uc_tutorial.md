@@ -2,12 +2,13 @@
 title: Adjustment for Uncontrolled Confounding
 ---
 
+## Overview
 This tutorial will demonstrate how to adjust for an uncontrolled confounder. First, generate a dataset of 100,000 rows with the following binary variables:
 
-* X = Exposure (1 = exposed, 0 = not exposed)
-* Y = Outcome (1 = outcome, 0 = no outcome)
-* C = Known Confounder (1 = present, 0 = absent)
-* U = Uncontrolled Confounder (1 = present, 0 = absent)
+* *X* = Exposure (1 = exposed, 0 = not exposed)
+* *Y* = Outcome (1 = outcome, 0 = no outcome)
+* *C* = Known Confounder (1 = present, 0 = absent)
+* *U* = Uncontrolled Confounder (1 = present, 0 = absent)
 
 ```r
 set.seed(1234)
@@ -79,7 +80,7 @@ The steps for the weighting approach are as follows:
 3. Duplicate the bootstrap sample and merge these two copies.
 4. In the combined data, assign variable *Ubar*, which equals 1 in the first data copy and equals 0 in the second data copy.
 5. Create variable *u_weight*, which equals the probability of *U*=1 in the first copy and equals 1 minus the probability of *U*=1 in the second copy.
-6. With the combined dataset, model the weighted logistic outcome regression \[P(Y=1)\| X, C, Ubar]. The weights used in the regression come from *u_weight*.
+6. With the combined dataset, model the weighted logistic outcome regression \[P(*Y*=1)\| *X*, *C*, *Ubar*]. The weights used in the regression come from *u_weight*.
 7. Save the exponentiated *X* coefficient, corresponding to the odds ratio estimate of *X* on *Y*.
 8. Repeat the above steps with a new bootstrap sample.
 9. With the resulting vector of odds ratio estimates, obtain the final estimate and confidence interval from the median and 2.5, 97.5 quantiles, respectively.
@@ -131,7 +132,7 @@ The steps for the imputation approach are as follows:
 1. Sample with replacement from the dataset to get the bootstrap sample.
 2. Predict the probability of *U* by combining the bias parameters with the data for *X*, *C*, and *Y* via the inverse logit transformation.
 3. Impute the value of the uncontrolled confounder, *Upred*, across Bernoulli trials where the probability of each trial corresponds to the probability of *U* determined above.
-4. With the bootstrap sample, model the logistic outcome regression \[P(Y=1)\| X, C, Upred].
+4. With the bootstrap sample, model the logistic outcome regression \[P(*Y*=1)\| *X*, *C*, *Upred*].
 5. Save the exponentiated *X* coefficient, corresponding to the odds ratio estimate of *X* on *Y*.
 6. Repeat the above steps with a new bootstrap sample.
 7. With the resulting vector of odds ratio estimates, obtain the final estimate and confidence interval from the median and 2.5, 97.5 quantiles, respectively. 
@@ -172,7 +173,7 @@ adjust_uc_imp_loop <- function(
 
 ## Evaluate
 
-We can run the analysis using different values of the bias parameters.  When we use the known, correct values for the bias parameters that we obtained earlier:
+We can run the analysis using different values of the bias parameters.  When we use the known, correct values for the bias parameters that we obtained earlier, we obtain *OR<sub>YX</sub>* = 2.03 (1.98, 2.07), representing the bias-adjusted effect estimate we expect based on the derivation of the data.
 
 ```r
 set.seed(1234)
@@ -187,11 +188,11 @@ correct_results <- adjust_uc_wgt_loop(
 correct_results$estimate
 correct_results$ci
 ```
-we obtain OR<sub>YX</sub> = 2.03 (1.98, 2.07), representing the bias-adjusted effect estimate we expect. The output can also include a histogram showing the distribution of the OR<sub>YX</sub> estimates from each bootstrap sample:
+The output can also include a histogram showing the distribution of the OR<sub>YX</sub> estimates from each bootstrap sample. We can analyze this plot to see how well the odds ratios converge.
 
 ![UChist](/img/UChist.png)
 
-We can analyze this plot to see how well the odds ratios converge. If instead we use bias parameters that are each double the correct value:
+If instead we use bias parameters that are each double the correct value, we obtain *OR<sub>YX</sub>* = 0.81 (0.79, 0.82), an incorrect estimate of effect.
 
 ```r
 set.seed(1234)
@@ -206,7 +207,5 @@ incorrect_results <- adjust_uc_wgt_loop(
 incorrect_results$estimate
 incorrect_results$ci
 ```
-we obtain OR<sub>YX</sub> = 0.81 (0.79, 0.82), an incorrect estimate of effect.
 
-<a href="https://github.com/pcbrendel/bias_analysis/blob/master/uc_tutorial.R" target="_blank">The full code for this analysis is available here</a>
-
+Very similar results are obtained from using the imputation approach. But don't take my word for it, see for yourself! <a href="https://github.com/pcbrendel/bias_analysis/blob/master/uc_tutorial.R" target="_blank">The full code for this analysis is available here</a>
