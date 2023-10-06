@@ -55,7 +55,7 @@ c(exp(coef(biased_model)[2] + summary(biased_model)$coef[2, 2] * qnorm(.025)),
 
 The odds ratio of the effect of *X* on *Y* increases from ~2 to ~3 when adjustment for the confounder *U* is absent in the model.  In a perfect world, an investigator would simply make sure to control for all confounding variables in the analysis.  However, it may not be feasible or possible to collect data on certain variables.  This bias analysis will allow for the adjustment of uncontrolled confounders even when data for *U* is unavailable.  We will instead rely on assumptions of how the exposure, outcome, and known confounder(s) affect the unknown confounder. These assumptions are quantified in bias parameters used in the analysis.  Using these bias parameters, we can predict the probability of *U* for each observation and use the probabilities for bias adjustment by either imputing the value of *U* or by using a regression weighting approach.
 
-Normally, the values of the bias parameters are obtained externally from the literature or from an internal validation sub-study.  However, for the purposes of this proof of concept, we can obtain the exact values of the uncertainty parameters.  We will perform the final regression of *Y* on *X* as if we don't have data on *U*, but since we have the values of *U* in our data we can model how *U* is affected by *X*, *Y*, and *C* to obtain accurate bias parameters. 
+Normally, the values of the bias parameters are obtained externally from the literature or from an internal validation sub-study.  However, for the purposes of this proof of concept, we can obtain the exact values of the parameters.  We will perform the final regression of *Y* on *X* as if we don't have data on *U*, but since we have the values of *U* in our data we can model how *U* is affected by *X*, *Y*, and *C* to obtain accurate bias parameters. 
 
 ```r
 u_model <- glm(U ~ X + Y + C,
@@ -69,7 +69,7 @@ These parameters can be interpreted as follows:
 * *Y* coefficient: log\[odds(*U*=1\|*X*=0, *C*=0, *Y*=1)] / log\[odds(*U*=1\|*X*=0, *C*=0, *Y*=0)]
 * *C* coefficient: log\[odds(*U*=1\|*X*=0, *C*=1, *Y*=0)] / log\[odds(*U*=1\|*X*=0, *C*=0, *Y*=0)]
 
-Now that values for the bias parameters have been obtained, we'll use these values to perform the bias adjustment with two different approaches. In both cases, we'll build the analysis within a function for quick reiteration. Bootstrapping will be used in order to obtain a confidence interval for the OR<sub>YX</sub> estimate.
+Now that values for the bias parameters have been obtained, we'll use these values to perform the bias adjustment with two different approaches. In both cases, we'll build the analysis within a function for quick reiteration. Bootstrapping will be used in order to obtain a confidence interval for the *OR<sub>YX</sub>* estimate.
 
 ## 1. Weighting Approach
 
