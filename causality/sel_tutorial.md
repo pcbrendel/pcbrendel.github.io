@@ -69,15 +69,17 @@ These parameters can be interpreted as follows:
 * *X* coefficient = log\[odds(*S*=1\|*X*=1, *Y*=0)] / log\[odds(*S*=1\|*X*=0, *Y*=0)] i.e. the log odds ratio denoting the amount by which the log odds of *S*=1 changes for every 1 unit increase in *X* among the *Y*=0 subgroup.
 * *Y* coefficient = log\[odds(*S*=1\|*X*=0, *Y*=1)] / log\[odds(*S*=1\|*X*=0, *Y*=0)]
 
-Now that values for the bias parameters have been obtained, we'll use these values to perform the bias adjustment.
+Now that values for the bias parameters have been obtained, we'll use these values to perform the bias adjustment. We'll build the analysis within a function for quick reiteration. Bootstrapping will be used in order to obtain a confidence interval for the *OR<sub>YX</sub>* estimate.
 
 ## Bias Adjustment
 
-We'll nest the analysis within a function so that values of the bias parameters can easily be changed. Bootstrapping will be used in order to obtain a confidence interval for the OR<sub>YX</sub> estimate. For the purposes of demonstration, we will only have 10 bootstrap samples, but more samples will be needed in practice. The steps in this analysis are as follows:
+The steps to adjust for selection bias are as follows:
 
-1. Sample with replacement from the dataset among rows with with S=1.
-2. Predict the probability of S (pS) by combining the bias parameters with the data for X and Y in an expit function.
+1. Sample with replacement from the dataset among rows with with S=1 to get a bootstrap sample.
+2. Predict the probability of *S* by combining the bias parameters with the data for *X* and *Y* via the inverse logit transformation.
 3. Using the sampled dataset (bdf), model the weighted logistic outcome regression \[P(Y=1)\| X, C]. The weight used in this regression is 1/pS, obtained in the previous step.
+4. Repeat the above steps with a new bootstrap sample.
+5. With the resulting vector of odds ratio estimates, obtain the final estimate and confidence interval from the median and 2.5, 97.5 quantiles, respectively.
 
 ```r
 adjust_sel <- function (cS, cSX, cSY) {
