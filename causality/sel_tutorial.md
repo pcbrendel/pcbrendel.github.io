@@ -75,45 +75,64 @@ Now that values for the bias parameters have been obtained, we'll use these valu
 
 The steps to adjust for selection bias are as follows:
 
-1. Sample with replacement from the dataset among rows with with S=1 to get a bootstrap sample.
+1. Sample with replacement from the dataset among rows with with *S*=1 to get a bootstrap sample.
 2. Predict the probability of *S* by combining the bias parameters with the data for *X* and *Y* via the inverse logit transformation.
-3. Using the sampled dataset (bdf), model the weighted logistic outcome regression \[P(Y=1)\| X, C]. The weight used in this regression is 1/pS, obtained in the previous step.
-4. Repeat the above steps with a new bootstrap sample.
-5. With the resulting vector of odds ratio estimates, obtain the final estimate and confidence interval from the median and 2.5, 97.5 quantiles, respectively.
+3. Using the sampled dataset (bdf), model the weighted logistic outcome regression \[P(*Y*=1)\| *X*, *C*]. The weight used in this regression is the inverse probability of selection, obtained in the previous step.
+4. Save the exponentiated *X* coefficient, corresponding to the odds ratio effect estimate of *X* on *Y*.
+5. Repeat the above steps with a new bootstrap sample.
+6. With the resulting vector of odds ratio estimates, obtain the final estimate and confidence interval from the median and 2.5, 97.5 quantiles, respectively.
 
 ```r
-adjust_sel <- function (cS, cSX, cSY) {
-  set.seed(1234)
+adjust_sel_loop <- function(
+  coef_0, coef_x, coef_y, nreps, plot = FALSE
+) {
   est <- vector()
-  nreps <- 10 #can vary number of bootstrap samples
-  
-  for(i in 1:nreps){
-    bdf <- df[sample(1:nrow(df), n, replace = TRUE, df$S), ] #random samping with replacement among S=1
-    
-    pS <- plogis(cS + cSX * bdf$X + cSY * bdf$Y) #model the probability of S
-    
-    final <- glm(Y ~ X + C, family = binomial(link = "logit"), weights = (1/pS), data = bdf)
-    est[i] <- coef(final)[2]
+  for (i in 1:nreps){
+    bdf <- df[sample(seq_len(n), n, replace = TRUE, df$S), ]
+    prob_s <- plogis(coef_0 + coef_x * bdf$X + coef_y * bdf$Y)
+    final_model <- glm(Y ~ X + C,
+                       family = binomial(link = "logit"),
+                       weights = (1 / prob_s),
+                       data = bdf)
+    est[i] <- exp(coef(final_model)[2])
   }
-  
-  out <- list(exp(median(est)), exp(quantile(est, c(.025, .975))), hist(exp(est)))
+  out <- list(
+    estimate = round(median(est), 2),
+    ci = round(quantile(est, c(.025, .975)), 2)
+  )
+  if (plot) {
+    out$hist <- hist(exp(est))
+  }
   return(out)
 }
 ```
-We can run the analysis using different values of the bias parameters.  When we use the known, correct values for the bias parameters that we obtained earlier...
+We can run the analysis using different values of the bias parameters.  When we use the known, correct values for the bias parameters that we obtained earlier we obtain *OR<sub>YX</sub>* = 2.05 (2.01, 2.07), representing the bias-free effect estimate we expect based on the derivation of the data.
 
 ```r
-adjust_sel(cS = s_0, cSX = s_x, cSY = s_y)
+set.seed(1234)
+correct_results <- adjust_sel_loop(
+  coef_0 = coef(s_model)[1],
+  coef_x = coef(s_model)[2],
+  coef_y = coef(s_model)[3],
+  nreps = 10
+)
+
+correct_results$estimate
+correct_results$ci
 ```
-we obtain OR<sub>YX</sub> = 2.05 (2.01, 2.07), representing the bias-free effect estimate we expect.  The output also includes a histogram showing the distribution of the OR<sub>YX</sub> estimates from each bootstrap sample:
+The output can also include a histogram showing the distribution of the *OR<sub>YX</sub>* estimates from each bootstrap sample. We can analyze this plot to see how well the odds ratios converge.
 
 ![Selhist](/img/Selhist.png)
 
-We can analyze this plot to see how well the odds ratios converge.  If instead we use bias parameters that are each double the correct value:
+If instead we use bias parameters that are each double the correct value, we obtain *OR<sub>YX</sub>* = 3.92 (3.84, 3.96), an incorrect estimate of effect.
 
 ```r
-adjust_sel(cS = 2*s_0, cSX = 2*s_x, cSY = 2*s_y)
+set.seed(1234)
+incorrect_results <- adjust_sel_loop(
+  coef_0 = coef(s_model)[1] * 2,
+  coef_x = coef(s_model)[2] * 2,
+  coef_y = coef(s_model)[3] * 2,
+  nreps = 10
+)
 ```
-we obtain OR<sub>YX</sub> = 3.91 (3.84, 3.96), an incorrect estimate of effect.
-
 <a href="https://github.com/pcbrendel/bias_analysis/blob/master/sel_tutorial.R" target="_blank">The full code for this analysis is available here</a>
