@@ -53,24 +53,23 @@ c(exp(coef(biased_model)[2] + summary(biased_model)$coef[2, 2] * qnorm(.025)),
 
 The odds ratio of the effect of *X* on *Y* decreases from ~2 to ~1.3 when the exposure *X* is misclassified in the model.  Misclassification is sometimes inevitable due to inaccurate measurement tools or human error.  This bias analysis will allow for correct inference when *Xstar* is used instead of *X*.  We will rely on assumptions of how the misclassified exposure, outcome, and known confounder(s) affect the true exposure (each assumption corresponding to a bias parameter).  Using these assumptions, we will create a model to predict the probability of X, which will then be incorporated as a weight in the outcome regression.  This regression weight provides the bias adjustment.
 
-Normally, the values of the bias parameters are obtained externally from the literature or from an internal validation sub-study.  However, for this proof of concept, we can obtain the exact values of the parameters.  We will perform the final regression of *Y* on *Xstar* instead of *X*, but since we know the values of *X* we can model how *X* is affected by *Xstar*, *C*, and *Y* to obtain accurate bias parameters.
+Normally, the values of the bias parameters are obtained externally from the literature or from an internal validation sub-study.  However, for this proof of concept, we can obtain the exact values of the parameters. We will perform the final regression of *Y* on *Xstar* instead of *X*. Since we know the values of *X*, we can model how *X* is affected by *Xstar*, *C*, and *Y* to obtain accurate bias parameters.
 
 ```r
-x_model <- glm(X ~ Xstar + C + Y, family = binomial(link = "logit"), data = df)
-x_0     <- coef(x_model)[1]
-x_xstar <- coef(x_model)[2]
-x_c     <- coef(x_model)[3]
-x_y     <- coef(x_model)[4]
+x_model <- glm(X ~ Xstar + Y + C, family = binomial(link = "logit"), data = df)
+summary(x_model)
 ```
 These parameters can be interpreted as follows:
-* x_0 = log\[odds(X=1\|Xstar=0, C=0, Y=0)]
-* x_xstar = log\[odds(X=1\|Xstar=1, C=0, Y=0)] / log\[odds(X=1\|Xstar=0, C=0, Y=0)] i.e. the log odds ratio denoting the amount by which the log odds of X=1 changes for every 1 unit increase in Xstar among the C=0, Y=0 subgroup.
-* x_c = log\[odds(X=1\|Xstar=0, C=1, Y=0)] / log\[odds(X=1\|Xstar=0, C=0, Y=0)]
-* x_y = log\[odds(X=1\|Xstar=0, C=0, Y=1)] / log\[odds(X=1\|Xstar=0, C=0, Y=0)]
+* Intercept = log\[odds(*X*=1\|*Xstar*=0, *C*=0, *Y*=0)]
+* *Xstar* coefficient = log\[odds(*X*=1\|*Xstar*=1, *C*=0, *Y*=0)] / log\[odds(*X*=1\|*Xstar*=0, *C*=0, *Y*=0)] i.e. the log odds ratio denoting the amount by which the log odds of *X*=1 changes for every 1 unit increase in *Xstar* among the *C*=0, *Y*=0 subgroup.
+* *Y* coefficient = log\[odds(*X*=1\|*Xstar*=0, *C*=0, *Y*=1)] / log\[odds(*X*=1\|*Xstar*=0, *C*=0, *Y*=0)]
+* *C* coefficient = log\[odds(*X*=1\|*Xstar*=0, *C*=1, *Y*=0)] / log\[odds(*X*=1\|*Xstar*=0, *C*=0, *Y*=0)]
 
-Now that values for the bias parameters have been obtained, use these values in the weight for the outcome regression.
+Now that values for the bias parameters have been obtained, we'll use these values to perform the bias adjustment with two different approaches. In both cases, we'll build the analysis within a function for quick reiteration. Bootstrapping will be used in order to obtain a confidence interval for the *OR<sub>YX</sub>* estimate.
 
-We'll nest the analysis within a function so that values of the bias parameters can easily be changed. Bootstrapping will be used in order to obtain a confidence interval for the OR<sub>YX</sub> estimate. For the purposes of demonstration, we will only have 10 bootstrap samples, but more samples will be needed in practice. The steps in this analysis are as follows:
+## 1. Weighting Approach
+
+The steps in this analysis are as follows:
 
 1. Sample with replacement from the dataset.
 2. Predict the probability of X via the inverse logit function by combining the bias parameters with the data for X, C, and Y.
