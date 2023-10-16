@@ -2,12 +2,13 @@
 title: Adjustment for Exposure Misclassification
 ---
 
+## Overview
 This tutorial will demonstrate how to adjust for exposure misclassification. First, generate a dataset of 100,000 rows with the following binary variables:
 
-* X = Exposure (1 = exposed, 0 = not exposed)
-* Y = Outcome (1 = outcome, 0 = no outcome)
-* C = Known Confounder (1 = present, 0 = absent)
-* Xstar = Misclassified exposure (1 = exposed, 0 = not exposed)
+* *X* = Exposure (1 = exposed, 0 = not exposed)
+* *Y* = Outcome (1 = outcome, 0 = no outcome)
+* *C* = Known Confounder (1 = present, 0 = absent)
+* *Xstar* = Misclassified exposure (1 = exposed, 0 = not exposed)
 
 ```r
 set.seed(1234)
@@ -23,35 +24,36 @@ Xstar <- ifelse(X == 1 & Y == 1, rbinom(n, 1, .75),
 df <- data.frame(X, Xstar, Y, C)
 rm(C, X, Y, Xstar)                     
 ```
-This data reflects the following causal relationship:
+This data reflects the following causal relationships:
 
 ![EMCdemo](/img/EMCdemo.png)
 
-From this dataset note that P(Y=1\|X=1, C=c, U=u) / P(Y=1\|X=0, C=c, U=u) should equal expit(log(2)).
-Therefore, odds(Y=1\|X=1, C=c, U=u) / odds(Y=1\|X=0, C=c, U=u) = odds ratio (OR<sub>YX</sub>) = exp(log(2)) = 2.
+From this dataset note that P(*Y*=1\|*X*=1, *C*=*c*, *U*=*u*) / P(*Y*=1\|*X*=0, *C*=*c*, *U*=*u*) should equal *expit*(log(2)).
+Therefore, odds(*Y*=1\|*X*=1, *C*=*c*, *U*=*u*) / odds(*Y*=1\|*X*=0, *C*=*c*, *U*=*u*) = *OR<sub>YX</sub>* = *exp*(log(2)) = 2.
 
 Compare the biased (exposure misclassified) model to the bias-free model.
 
 ```r
-no_bias <- glm(Y ~ X + C, family = binomial(link = "logit"), data = df)
-exp(coef(no_bias)[2])
-exp(coef(no_bias)[2] + summary(no_bias)$coef[2, 2] * qnorm(.025))
-exp(coef(no_bias)[2] + summary(no_bias)$coef[2, 2] * qnorm(.975))
+nobias_model <- glm(Y ~ X + C, family = binomial(link = "logit"), data = df)
+exp(coef(nobias_model)[2])
+c(exp(coef(nobias_model)[2] + summary(nobias_model)$coef[2, 2] * qnorm(.025)),
+  exp(coef(nobias_model)[2] + summary(nobias_model)$coef[2, 2] * qnorm(.975)))
 ```
-OR<sub>YX</sub> = 2.04 (1.99, 2.10)
+*OR<sub>YX</sub>* = 2.04 (1.99, 2.10)
 
-This is the value we would expect based off of the derivation of Y.
+This estimate corresponds to the odds ratio we would expect based off of the derivation of *Y*.
+
 ```r
-mc_bias <- glm(Y ~ Xstar + C, family = binomial(link = "logit"), data = df)
-exp(coef(mc_bias)[2])
-exp(coef(mc_bias)[2] + summary(mc_bias)$coef[2, 2] * qnorm(.025))
-exp(coef(mc_bias)[2] + summary(mc_bias)$coef[2, 2] * qnorm(.975))
+biased_model <- glm(Y ~ Xstar + C, family = binomial(link = "logit"), data = df)
+exp(coef(biased_model)[2])
+c(exp(coef(biased_model)[2] + summary(biased_model)$coef[2, 2] * qnorm(.025)),
+  exp(coef(biased_model)[2] + summary(biased_model)$coef[2, 2] * qnorm(.975)))
 ```
-OR<sub>YX</sub> = 1.27 (1.24, 1.31)
+*OR<sub>YX</sub>* = 1.27 (1.24, 1.31)
 
-The odds ratio relating X to Y decreases from ~2 to ~1.3 when the exposure (X) is misclassified (Xstar) in the model.  Misclassification is sometimes inevitable due to inaccurate measurement tools or human error.  This bias analysis will allow for correct inference even when Xstar is used instead of X.  We will rely on assumptions of how the misclassified exposure, outcome, and known confounder(s) affect the true exposure (each assumption corresponding to a bias parameter).  Using these assumptions, we will create a model to predict the probability of X, which will then be incorporated as a weight in the outcome regression.  This regression weight provides the bias adjustment.
+The odds ratio of the effect of *X* on *Y* decreases from ~2 to ~1.3 when the exposure *X* is misclassified in the model.  Misclassification is sometimes inevitable due to inaccurate measurement tools or human error.  This bias analysis will allow for correct inference when *Xstar* is used instead of *X*.  We will rely on assumptions of how the misclassified exposure, outcome, and known confounder(s) affect the true exposure (each assumption corresponding to a bias parameter).  Using these assumptions, we will create a model to predict the probability of X, which will then be incorporated as a weight in the outcome regression.  This regression weight provides the bias adjustment.
 
-Normally, the values of the bias parameters are obtained externally from the literature or from an internal validation sub-study.  However, for the purposes of this proof of concept, we can obtain the exact values of the uncertainty parameters.  We will perform the final regression of Y on Xstar instead of X, but since we know the values of X we can model how X is affected by Xstar, C, and Y to obtain perfectly accurate bias parameters.
+Normally, the values of the bias parameters are obtained externally from the literature or from an internal validation sub-study.  However, for this proof of concept, we can obtain the exact values of the parameters.  We will perform the final regression of *Y* on *Xstar* instead of *X*, but since we know the values of *X* we can model how *X* is affected by *Xstar*, *C*, and *Y* to obtain accurate bias parameters.
 
 ```r
 x_model <- glm(X ~ Xstar + C + Y, family = binomial(link = "logit"), data = df)
