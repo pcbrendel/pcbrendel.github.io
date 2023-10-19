@@ -77,7 +77,7 @@ The steps for the weighting approach are as follows:
 4. In the combined data, assign variable *Xbar*, which equals 1 in the first data copy and equals 0 in the second data copy.
 5. Create variable *x_weight*, which equals the probability of *X*=1 in the first copy and equals 1 minus the probability of *X*=1 in the second copy.
 6. With the combined dataset, model the weighted logistic outcome regression \[P(*Y*=1)\| *Xbar*, C]. The weight used in this regression comes from *x_weight*.
-7. Save the exponentiated *X* coefficient, corresponding to the odds ratio effect estimate of *X* on *Y*.
+7. Save the exponentiated *Xbar* coefficient, corresponding to the odds ratio effect estimate of *X* on *Y*.
 8. Repeat the above steps with a new bootstrap sample.
 9. With the resulting vector of odds ratio estimates, obtain the final estimate and confidence interval from the median and 2.5, 97.5 quantiles, respectively.
 
