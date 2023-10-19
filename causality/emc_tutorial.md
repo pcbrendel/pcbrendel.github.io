@@ -111,22 +111,46 @@ adjust_emc_wgt_loop <- function(
 
 ## 2. Imputation Approach 
 
+The steps for the imputation approach are as follows:
+
+```
+```
+
 ## Evaluate
 
-We can run the analysis using different values of the bias parameters.  When we use the known, correct values for the bias parameters that we obtained earlier...
+We can run the analysis using different values of the bias parameters.  When we use the known, correct values for the bias parameters that we obtained earlier we obtain *OR<sub>YX</sub>* = 2.05 (2.04, 2.06), representing the bias-adjusted effect estimate we expect based on the derivation of the data.
 
 ```r
-adjust_emc(coef_0 = x_0, coef_xstar = x_xstar, coef_c = x_c, coef_y = x_y)
+set.seed(1234)
+correct_results <- adjust_emc_imp_loop(
+  coef_0 =     coef(x_model)[1],
+  coef_xstar = coef(x_model)[2],
+  coef_y =     coef(x_model)[3],
+  coef_c =     coef(x_model)[4],
+  nreps = 10
+)
+
+correct_results$estimate
+correct_results$ci
 ```
-we obtain OR<sub>YX</sub> = 2.04 (2.03, 2.05), representing the bias-free effect estimate we expect.  The output also includes a histogram showing the distribution of the OR<sub>YX</sub> estimates from each bootstrap sample:
+The output can also include a histogram showing the distribution of the OR<sub>YX</sub> estimates from each bootstrap sample. We can analyze this plot to see how well the odds ratios converge.
 
 ![EMChist](/img/EMChist.png)
 
-We can analyze this plot to see how well the odds ratios converge.  If instead we use bias parameters that are each double the correct value...
+If instead we use bias parameters that are each double the correct value, we obtain OR<sub>YX</sub> = 2.85 (2.84, 2.88), an incorrect estimate of effect.
 
 ```r
-adjust_emc(coef_0 = 2*x_0, coef_xstar = 2*x_xstar, coef_c = 2*x_c, coef_y = 2*x_y)
-```
-we obtain OR<sub>YX</sub> = 2.69 (2.67, 2.71), an incorrect estimate of effect.
+set.seed(1234)
+incorrect_results <- adjust_emc_imp_loop(
+  coef_0 =     coef(x_model)[1] * 2,
+  coef_xstar = coef(x_model)[2] * 2,
+  coef_y =     coef(x_model)[3] * 2,
+  coef_c =     coef(x_model)[4] * 2,
+  nreps = 10
+)
 
-<a href="https://github.com/pcbrendel/bias_analysis/blob/master/emc_tutorial.R" target="_blank">The full code for this analysis is available here</a>
+incorrect_results$estimate
+incorrect_results$ci
+```
+
+Very similar results are obtained from using the imputation approach. But don't take my word for it, see for yourself! <a href="https://github.com/pcbrendel/bias_analysis/blob/master/emc_tutorial.R" target="_blank">The full code for this analysis is available here.</a>
