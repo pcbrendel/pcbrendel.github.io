@@ -69,7 +69,7 @@ Now that values for the bias parameters have been obtained, we'll use these valu
 
 ## 1. Weighting Approach
 
-The steps in this analysis are as follows:
+The steps for the weighting approach are as follows:
 
 1. Sample with replacement from the dataset to get the bootstrap sample.
 2. Predict the probability of *X* by combining the bias parameters with the data for *Xstar*, *Y*, and *C* via the inverse logit transformation.
@@ -113,7 +113,39 @@ adjust_emc_wgt_loop <- function(
 
 The steps for the imputation approach are as follows:
 
-```
+1. Sample with replacement from the dataset to get the bootstrap sample.
+2. Predict the probability of *X* by combining the bias parameters with the data for *Xstar*, *Y*, and *C* via the inverse logit transformation.
+3. Impute the value of the exposure, *Xpred*, across Bernoulli trials where the probability of each trial corresponds to the probability of *X* determined above.
+4. With the bootstrap sample, model the logistic outcome regression \[P(*Y*=1)\| *Xpred*, *C*].
+5. Save the exponentiated *Xpred* coefficient, corresponding to the odds ratio effect estimate of *X* on *Y*.
+6. Repeat the above steps with a new bootstrap sample.
+7. With the resulting vector of odds ratio estimates, obtain the final estimate and confidence interval from the median and 2.5, 97.5 quantiles, respectively.
+
+```r
+adjust_emc_imp_loop <- function(
+  coef_0, coef_xstar, coef_y, coef_c, nreps, plot = FALSE
+) {
+  est <- vector()
+  for (i in 1:nreps) {
+    bdf <- df[sample(seq_len(n), n, replace = TRUE), ]
+    bdf$Xpred <- rbinom(
+      n, 1, plogis(coef_0 + coef_xstar * bdf$Xstar +
+                     coef_y * bdf$Y + coef_c * bdf$C)
+    )
+    final_model <- glm(Y ~ Xpred + C,
+                       family = binomial(link = "logit"),
+                       data = bdf)
+    est[i] <- exp(coef(final_model)[2])
+  }
+  out <- list(
+    estimate = round(median(est), 2),
+    ci = round(quantile(est, c(.025, .975)), 2)
+  )
+  if (plot) {
+    out$hist <- hist(exp(est))
+  }
+  return(out)
+}
 ```
 
 ## Evaluate
