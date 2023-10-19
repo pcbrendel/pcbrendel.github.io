@@ -76,7 +76,7 @@ Now that values for the bias parameters have been obtained, we'll use these valu
 The steps for the weighting approach are as follows:
 
 1. Sample with replacement from the dataset to get the bootstrap sample.
-2. Predict the probability of *U* by combining the bias parameters with the data for *X*, *C*, and *Y* via the inverse logit transformation.
+2. Predict the probability of *U* by combining the bias parameters with the data for *X*, *Y*, and *C* via the inverse logit transformation.
 3. Duplicate the bootstrap sample and merge these two copies.
 4. In the combined data, assign variable *Ubar*, which equals 1 in the first data copy and equals 0 in the second data copy.
 5. Create variable *u_weight*, which equals the probability of *U*=1 in the first copy and equals 1 minus the probability of *U*=1 in the second copy.
@@ -116,7 +116,7 @@ adjust_uc_wgt_loop <- function(
 The steps for the imputation approach are as follows:
 
 1. Sample with replacement from the dataset to get the bootstrap sample.
-2. Predict the probability of *U* by combining the bias parameters with the data for *X*, *C*, and *Y* via the inverse logit transformation.
+2. Predict the probability of *U* by combining the bias parameters with the data for *X*, *Y*, and *C* via the inverse logit transformation.
 3. Impute the value of the uncontrolled confounder, *Upred*, across Bernoulli trials where the probability of each trial corresponds to the probability of *U* determined above.
 4. With the bootstrap sample, model the logistic outcome regression \[P(*Y*=1)\| *X*, *C*, *Upred*].
 5. Save the exponentiated *X* coefficient, corresponding to the odds ratio effect estimate of *X* on *Y*.
@@ -185,4 +185,4 @@ incorrect_results$estimate
 incorrect_results$ci
 ```
 
-Very similar results are obtained from using the imputation approach. But don't take my word for it, see for yourself! <a href="https://github.com/pcbrendel/bias_analysis/blob/master/uc_tutorial.R" target="_blank">The full code for this analysis is available here</a>
+Very similar results are obtained from using the imputation approach. But don't take my word for it, see for yourself! <a href="https://github.com/pcbrendel/bias_analysis/blob/master/uc_tutorial.R" target="_blank">The full code for this analysis is available here.</a>
