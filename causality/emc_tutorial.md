@@ -71,36 +71,48 @@ Now that values for the bias parameters have been obtained, we'll use these valu
 
 The steps in this analysis are as follows:
 
-1. Sample with replacement from the dataset.
-2. Predict the probability of X via the inverse logit function by combining the bias parameters with the data for X, C, and Y.
-3. Duplicate the bootstrap dataset (bdf) and merge these two copies. The new dataset is named 'combined'.
-4. Assign variable Xbar, which equals 1 in the first data copy and equals 0 in the second data copy.
-5. Create variable pX, which equals the probability of X in the first copy and equals 1 minus the probability of X in the second copy.
-6. Using the combined dataset, model the weighted logistic outcome regression \[P(Y=1)\| Xbar, C]. The weight used in this regression is pX, obtained in the previous step.
+1. Sample with replacement from the dataset to get the bootstrap sample.
+2. Predict the probability of *X* by combining the bias parameters with the data for *Xstar*, *Y*, and *C* via the inverse logit transformation.
+3. Duplicate the bootstrap dataset and merge these two copies.
+4. In the combined data, assign variable *Xbar*, which equals 1 in the first data copy and equals 0 in the second data copy.
+5. Create variable *x_weight*, which equals the probability of *X*=1 in the first copy and equals 1 minus the probability of *X*=1 in the second copy.
+6. With the combined dataset, model the weighted logistic outcome regression \[P(*Y*=1)\| *Xbar*, C]. The weight used in this regression comes from *x_weight*.
+7. Save the exponentiated *X* coefficient, corresponding to the odds ratio effect estimate of *X* on *Y*.
+8. Repeat the above steps with a new bootstrap sample.
+9. With the resulting vector of odds ratio estimates, obtain the final estimate and confidence interval from the median and 2.5, 97.5 quantiles, respectively.
 
 ```r
-adjust_emc <- function (coef_0, coef_xstar, coef_c, coef_y) {
-  set.seed(1234)
+adjust_emc_wgt_loop <- function(
+  coef_0, coef_xstar, coef_y, coef_c, nreps, plot = FALSE
+) {
   est <- vector()
-  nreps <- 10 # can vary number of bootstrap samples
-  
-  for(i in 1:nreps){
-    bdf <- df[sample(seq_len(n), n, replace = TRUE), ] # bootstrap sample
-    
-    pX <- plogis(coef_0 + coef_xstar * bdf$Xstar + coef_c * bdf$C + coef_y * bdf$Y) # model the probability of X
-    
-    combined <- bind_rows(bdf, bdf) # duplicate data
-    combined$Xbar <- rep(c(1, 0), each = n) # Xbar = 1 in first copy, Xbar = 0 in second copy
-    combined$pX <- c(pX, 1 - pX) # when Xsim=1, pX is prob of X=1; when Xsim=0, pX is prob of X=0
-    
-    final <- glm(Y ~ Xbar + C, family = binomial(link = "logit"), weights = pX, data = combined)
-    est[i] <- coef(final)[2]
+  for (i in 1:nreps) {
+    bdf <- df[sample(seq_len(n), n, replace = TRUE), ]
+    x_probability <- plogis(
+      coef_0 + coef_xstar * bdf$Xstar + coef_y * bdf$Y + coef_c * bdf$C
+    )
+    combined <- dplyr::bind_rows(bdf, bdf)
+    combined$Xbar <- rep(c(1, 0), each = n)
+    combined$x_weight <- c(x_probability, 1 - x_probability)
+    final_model <- glm(Y ~ Xbar + C, family = binomial(link = "logit"),
+                       data = combined, weights = combined$x_weight)
+    est[i] <- exp(coef(final_model)[2])
   }
-  
-  out <- list(exp(median(est)), exp(quantile(est, c(.025, .975))), hist(exp(est)))
+  out <- list(
+    estimate = round(median(est), 2),
+    ci = round(quantile(est, c(.025, .975)), 2)
+  )
+  if (plot) {
+    out$hist <- hist(exp(est))
+  }
   return(out)
 }
 ```
+
+## 2. Imputation Approach 
+
+## Evaluate
+
 We can run the analysis using different values of the bias parameters.  When we use the known, correct values for the bias parameters that we obtained earlier...
 
 ```r
