@@ -18,7 +18,7 @@ navbar-links:
     - My PhD Dissertation: "https://escholarship.org/uc/item/4c50w909"
     - My Masters Thesis: "http://d-scholarship.pitt.edu/23679/"
   Multibias:
-    - R Package: "https://github.com/pcbrendel/multibias"
+    - R Package: "https://www.paulbrendel.com/multibias/"
     - Web App: "https://pcbrendel.shinyapps.io/multibias/"
   Causality: "causality"
   Baseball: "baseball"
