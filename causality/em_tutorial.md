@@ -17,12 +17,12 @@ n <- 100000
 C <- rbinom(n, 1, .5)
 X <- rbinom(n, 1, plogis(-.5 + .5 * C))
 Y <- rbinom(n, 1, plogis(-.5 + log(2) * X + .5 * C))
-Xstar <- ifelse(X == 1 & Y == 1, rbinom(n, 1, .75), 
+Xstar <- ifelse(X == 1 & Y == 1, rbinom(n, 1, .75),
                 (ifelse(X == 1 & Y == 0, rbinom(n, 1, .65),
                         (ifelse(X == 0 & Y == 1, rbinom(n, 1, .25), rbinom(n, 1, .35))))))
-                        
+
 df <- data.frame(X, Xstar, Y, C)
-rm(C, X, Y, Xstar)                     
+rm(C, X, Y, Xstar)
 ```
 This data reflects the following causal relationships:
 
@@ -109,7 +109,7 @@ adjust_emc_wgt_loop <- function(
 }
 ```
 
-## 2. Imputation Approach 
+## 2. Imputation Approach
 
 The steps for the imputation approach are as follows:
 
@@ -185,4 +185,4 @@ incorrect_results$estimate
 incorrect_results$ci
 ```
 
-Very similar results are obtained from using the imputation approach. But don't take my word for it, see for yourself! <a href="https://github.com/pcbrendel/bias_analysis/blob/master/emc_tutorial.R" target="_blank">The full code for this analysis is available here.</a>
+You can find the full code for this analysis on my <a href="https://github.com/pcbrendel/causal/blob/master/bias_analysis_em.R" target="_blank">github</a>.

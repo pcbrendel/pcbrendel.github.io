@@ -55,7 +55,7 @@ c(exp(coef(biased_model)[2] + summary(biased_model)$coef[2, 2] * qnorm(.025)),
 
 The odds ratio of the effect of *X* on *Y* increases from ~2 to ~3 when adjustment for the confounder *U* is absent in the model.  In a perfect world, an investigator would simply make sure to control for all confounding variables in the analysis.  However, it may not be feasible or possible to collect data on certain variables.  This bias analysis will allow for the adjustment of uncontrolled confounders even when data for *U* is unavailable.  We will instead rely on assumptions of how the exposure, outcome, and known confounder(s) affect the unknown confounder. These assumptions are quantified in bias parameters used in the analysis.  Using these bias parameters, we can predict the probability of *U* for each observation and use the probabilities for bias adjustment by either imputing the value of *U* or by using a regression weighting approach.
 
-Normally, the values of the bias parameters are obtained externally from the literature or from an internal validation sub-study.  However, for this proof of concept, we can obtain the exact values of the parameters.  We will perform the final regression of *Y* on *X* as if we don't have data on *U*. Since we have the values of *U* in our data we can model how *U* is affected by *X*, *Y*, and *C* to obtain accurate bias parameters. 
+Normally, the values of the bias parameters are obtained externally from the literature or from an internal validation sub-study.  However, for this proof of concept, we can obtain the exact values of the parameters.  We will perform the final regression of *Y* on *X* as if we don't have data on *U*. Since we have the values of *U* in our data we can model how *U* is affected by *X*, *Y*, and *C* to obtain accurate bias parameters.
 
 ```r
 u_model <- glm(U ~ X + Y + C,
@@ -121,7 +121,7 @@ The steps for the imputation approach are as follows:
 4. With the bootstrap sample, model the logistic outcome regression \[P(*Y*=1)\| *X*, *C*, *Upred*].
 5. Save the exponentiated *X* coefficient, corresponding to the odds ratio effect estimate of *X* on *Y*.
 6. Repeat the above steps with a new bootstrap sample.
-7. With the resulting vector of odds ratio estimates, obtain the final estimate and confidence interval from the median and 2.5, 97.5 quantiles, respectively. 
+7. With the resulting vector of odds ratio estimates, obtain the final estimate and confidence interval from the median and 2.5, 97.5 quantiles, respectively.
 
 ```r
 adjust_uc_imp_loop <- function(
@@ -185,4 +185,4 @@ incorrect_results$estimate
 incorrect_results$ci
 ```
 
-Very similar results are obtained from using the imputation approach. But don't take my word for it, see for yourself! <a href="https://github.com/pcbrendel/bias_analysis/blob/master/uc_tutorial.R" target="_blank">The full code for this analysis is available here.</a>
+You can find the full code for this analysis on my <a href="https://github.com/pcbrendel/causal/blob/master/bias_analysis_uc.R" target="_blank">github</a>.
