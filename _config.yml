@@ -30,7 +30,7 @@ navbar-links:
 
 # If you want to have an image logo in the top-left corner instead of the title text,
 # then specify the following parameter
-title-img: "/img/pb_logo3.png"
+title-img: "/img/site/pb_logo3.png"
 
 # --- Background colour/image options --- #
 

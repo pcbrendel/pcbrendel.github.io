@@ -24,7 +24,7 @@ rm(c, x, y, s)
 ```
 This data reflects the following causal relationship:
 
-![Seldemo](/img/Seldemo.png)
+![sel_dag](/img/causal/sel_dag.png)
 
 From this dataset note that P(*Y*=1\|*X*=1, *C*=*c*, *U*=*u*) / P(*Y*=1\|*X*=0, *C*=*c*, *U*=*u*) should equal *expit*(log(2)).
 Therefore, odds(*Y*=1\|*X*=1, *C*=*c*, *U*=*u*) / odds(*Y*=1\|*X*=0, *C*=*c*, *U*=*u*) = *OR<sub>YX</sub>* = *exp*(log(2)) = 2
@@ -122,7 +122,7 @@ correct_results$ci
 ```
 The output can also include a histogram showing the distribution of the *OR<sub>YX</sub>* estimates from each bootstrap sample. We can analyze this plot to see how well the odds ratios converge.
 
-![Selhist](/img/Selhist.png)
+![sel_demo_hist](/img/causal/sel_demo_hist.png)
 
 If instead we use bias parameters that are each double the correct value, we obtain *OR<sub>YX</sub>* = 3.92 (3.84, 3.96), an incorrect estimate of effect.
 
