@@ -4,9 +4,9 @@ title: My Insight Data Science Project
 tags: [Python, 'K-means clustering', 'Gaussian mixture model']
 ---
 
-While at Insight, I had the opportunity to create a data science project that demonstrates my ability to perform an analysis that creates business value within a short timeframe (about three weeks), simulating how data science operates in an industry setting. For this project I consulted with [Zendo Tools](http://zendo.tools/), a company with an app that helps to track a user's meditation progress. 
+While at Insight, I had the opportunity to create a data science project that demonstrates my ability to perform an analysis that creates business value within a short timeframe (about three weeks), simulating how data science operates in an industry setting. For this project I consulted with [Zendo Tools](http://zendo.tools/), a company with an app that helps to track a user's meditation progress.
 
-![meditate](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/meditate.png?raw=true "meditate")
+![meditate](/img/posts/2019-11-04-meditate.png)
 
 The Zendo Tools app is used in conjunction with an Apple watch to record the user's meditation session. Afterwards, the app shows how the person's heart rate, heart rate variability, and motion changed throughout the session. It also compares these metrics across all of the meditation sessions over time. [Heart rate variability](http://zendo.tools/research) is a metric of particular interest because it is known to be associated with a variety of measures of health and well-being and can potentially be improved with meditation.
 
@@ -52,9 +52,9 @@ plt.title('K-means Elbow Plot')
 plt.xlabel('Number of clusters')
 plt.ylabel('Distortion');
 ```
-![kmeans_plot](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/kmeans_plot.png?raw=true "kmeans_plot")
+![kmeans-plot](/img/posts/2019-11-04-kmeans-plot.png)
 
-So ultimately, the best approach was to create a manual decision rule. I made these rules with guidance from Zendo Tools and based on papers found in the journal [Applied Psychophysiology and Biofeedback](https://link.springer.com/journal/10484). The criteria is as follows: 
+So ultimately, the best approach was to create a manual decision rule. I made these rules with guidance from Zendo Tools and based on papers found in the journal [Applied Psychophysiology and Biofeedback](https://link.springer.com/journal/10484). The criteria is as follows:
 
 During the time window, the user must:
 1. Not be in motion
@@ -72,13 +72,13 @@ for index, i in enumerate(df_list):
     if index < 13:
         continue
     if index > 120:
-        if ((i.motion > .2).any() or (i.motion_change > .2).any() or (i.sdnn_diff_bl < 0).any() 
+        if ((i.motion > .2).any() or (i.motion_change > .2).any() or (i.sdnn_diff_bl < 0).any()
             or (i.hr_diff_bl > .95).any() or (i.hr_pct_change > .95).any() or (i.hr_pct_change < .05).any()):
             continue
         else:
             df_meditation_list.append(i)
     else:
-        if ((i.motion > .2).any() or (i.motion_change > .2).any() or (i.sdnn_diff_bl < 10).any() 
+        if ((i.motion > .2).any() or (i.motion_change > .2).any() or (i.sdnn_diff_bl < 10).any()
             or (i.hr_diff_bl > .75).any() or (i.hr_pct_change > .75).any() or (i.hr_pct_change < .25).any()):
             continue
         else:
@@ -87,6 +87,6 @@ for index, i in enumerate(df_list):
 
 The graph below shows how this criteria would classify an example meditation session.
 
-![biometrics](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/biometrics.png?raw=true "biometrics")
+![biometrics](/img/posts/2019-11-04-biometrics.png)
 
-To wrap it all up, I provided Zendo Tools with my Python code and a [web application](https://zendo-analyzer.herokuapp.com/) that classifies the meditative state. But, perhaps most importantly, I provided some recommendations so that machine learning approaches may be more successful in the future. For example, I suggested an approach to acquiring labeled data. This would involve recruiting a sample of meditators, having them complete a survey before meditating (to get demographics, info on their current mental state, etc.), have them meditate with the Zendo Tools app, then have them complete another survey where they describe their meditation experience and when they may have reached peak meditation. Having this labeled data and some additional time-fixed covariates could allow for more impactful analyses with supervised machine learning methods. 
+To wrap it all up, I provided Zendo Tools with my Python code and a [web application](https://zendo-analyzer.herokuapp.com/) that classifies the meditative state. But, perhaps most importantly, I provided some recommendations so that machine learning approaches may be more successful in the future. For example, I suggested an approach to acquiring labeled data. This would involve recruiting a sample of meditators, having them complete a survey before meditating (to get demographics, info on their current mental state, etc.), have them meditate with the Zendo Tools app, then have them complete another survey where they describe their meditation experience and when they may have reached peak meditation. Having this labeled data and some additional time-fixed covariates could allow for more impactful analyses with supervised machine learning methods.

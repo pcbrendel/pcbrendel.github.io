@@ -18,7 +18,7 @@ library(ggthemes)
 ```
 ### 2. Data Extraction
 
-The datapasta package is really convenient because it allows you to copy-paste tables from the internet straight into R.     The table will appear in R as a tribble (or transported tibble), which is a nice readable format.  I used a custom keyboard shortcut for the tribble paste, as the package authors recommend.  After copy-tribble pasting my league's fantasy standings into R, the cursor shows:
+The datapasta package is really convenient because it allows you to copy-paste tables from the internet straight into R.  The table will appear in R as a tribble (or transported tibble), which is a nice readable format.  I used a custom keyboard shortcut for the tribble paste, as the package authors recommend.  After copy-tribble pasting my league's fantasy standings into R, the cursor shows:
 
 ```r
 df <- tibble::tribble(
@@ -46,7 +46,7 @@ Our league is setup such that each week there are 12 categories (6 pitching, 6 h
 First, every category (except for ERA and WHIP) needs to be ranked in descending order (high values correspond to lower ranks). ERA and WHIP are unique in that lower values win you the category.
 
 ```r
-ranked <- 
+ranked <-
   df %>% mutate(
     R = rank(-R),
     HR = rank(-HR),
@@ -61,7 +61,7 @@ ranked <-
     ERA = rank(ERA),
     WHIP = rank(WHIP))
 ```
-The apply function will be used to sum over the rows (i.e. the teams).  Lastly, these row totals will be ranked in ascending order. 
+The apply function will be used to sum over the rows (i.e. the teams).  Lastly, these row totals will be ranked in ascending order.
 
 ```r
 ranked$ranktotal <- apply(ranked[, 3:15], 1, sum)
@@ -97,12 +97,12 @@ Plotting the data:
 ggplot(plotdata, aes(fill = Type, x = team, y = value)) +
   theme_fivethirtyeight() +
   geom_bar(position="dodge", stat="identity") +
-  labs(title="Regular Season Final Rank Vs Expected Roto Rank", 
+  labs(title="Regular Season Final Rank Vs Expected Roto Rank",
        subtitle="Ordered & Grouped Bar Chart") +
   scale_y_continuous(breaks = 1:12)
 ```
 
-![Standings](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/Standings.png?raw=true "Standings")
+![standings](/img/posts/2018-01-31-standings.png)
 
 ### 5. Conclusions
 

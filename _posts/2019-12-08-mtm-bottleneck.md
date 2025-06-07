@@ -12,9 +12,9 @@ The logical first question was: *what specific parts are causing things to run s
 
 The profiler is a really useful tool for understanding how long R is taking to run the different parts of your code. It conveys this information through a flame graph or the data view. The flame graph lists the functions that are being called in the vertical direction and shows the time of each function in the horizontal direction. Using the profvis function on my code helped to identify a bottleneck, the specific part of my code that was slowing down the entire process. It turned out that the rvest scraping functions (e.g. read_html()) were particularly slow.
 
-![bottleneck](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/bottleneck.jpg?raw=true "bottleneck")
+![bottleneck](/img/posts/2019-12-08-bottleneck.jpg)
 
-This raised the next question: *how can I construct my training data in a way that minimizes the number of times these functions need to be used*? 
+This raised the next question: *how can I construct my training data in a way that minimizes the number of times these functions need to be used*?
 
 To demonstrate, let's consider a basic feature - the pitcher's season ERA going into the game. Based on my old plan, I would have a function that scrapes this feature for each row in the data set (>4000 rows). What I decided to do instead is to scrape this data for each potential day in the 2019 season (March 21 - September 30), combine the data from each day, and save this large data set. By doing this, I only have to call the time-consuming bottleneck functions <200 times as opposed to >4000 times. I could then build my training set by successively merging each new scraped dataframe onto my starting data.
 
@@ -31,34 +31,34 @@ while (date <= end) {
   month <- month(date)
   day <- day(date)
   url <- paste0("fg_pitching_leaders_dashboard_2019/", sprintf('%02d', month), sprintf('%02d', day), ".htm")
-  
+
   if (file.exists(url) == F) {
     date <- date + 1
     next
   }
-  
-  l1 <- url %>% 
-    read_html() %>% 
-    html_nodes('table') %>% 
+
+  l1 <- url %>%
+    read_html() %>%
+    html_nodes('table') %>%
     html_table(fill=TRUE)
-  
+
   df <- l1[[13]]
   df <- df[-c(1,3),]
-  
+
   columnNames <- as.list(df[1,])
   columnNames <- gsub("%", ".p", columnNames)
   columnNames <- gsub("/", "per", columnNames)
   colnames(df) <- columnNames
-  
-  df <- df[-1,] %>% 
+
+  df <- df[-1,] %>%
     mutate(month = month,
            day = day)
-  
+
   out[[i]] <- df
-  
+
   date <- date + 1
   i <- i + 1
-  
+
 }
 
 x <- map_dfr(out, as.list)

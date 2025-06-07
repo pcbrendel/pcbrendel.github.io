@@ -6,7 +6,7 @@ tags: R Python rvest
 
 This is the first post in a series called Making the Model, which documents my journey to building a data set and creating the best model to predict baseball daily fantasy sports (DFS) scores. With the projected performances from such a model, a user can set an optimal lineup in FanDuel or DraftKings and dominate the competition. However, before reaching this goal, there will be many obstacles along the way. This post describes the first obstacle - web scraping.
 
-![datafunnel](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/datafunnel.jpg?raw=true "datafunnel")
+![data-funnel](/img/posts/2019-11-05-funnell.jpg)
 
 To bulid my data set, I plan on using data from a variety of sources. But what is the best way to get the data from all these sources? At first, I thought there were two options: (1) scraping directly from the website and (2) downloading all the data. However, both of these options present some key disadvantages. The first option is probably going to be too slow; in order to scrape from the website and not get blacklisted or disrupt their server I would, at the very least, need to add a time delay between each iteration. With lots of iterations, these small delays add up and lead to very slow results. The downside of the second option is the memory demand. My computer doesn't have the space to store all of the data, so I would instead have to rely on external data storage such as an Apache Spark cluster. Based on my understanding, this would cost money, so I also ruled out this option.
 
@@ -49,26 +49,26 @@ Next, I needed to figure out a way to go through these HTMLs and scrape the nece
 
 ```r
 pitcher_season_stats <- function(name, end_month, end_day) {
-  
+
   url <- paste0("fangraphs_pitching_leaders_dashboard/", end_month, end_day, ".htm")
-  
+
   if (file.exists(url)) {
-    
+
     l1 <- read_html(url)
     l1 <- html_nodes(l1, 'table')
-    
+
     fangraphs <- html_table(l1, fill = TRUE)[[13]]
     fangraphs <- fangraphs[-c(1,3),]
-    
+
     # Extract column names
     columnNames <- as.list(fangraphs[1,])
     # Take care of symbols in column names
     columnNames <- gsub("%", ".p", columnNames)
     columnNames <- gsub("/", "per", columnNames)
-    
+
     # Rename data frame and remove row with column names
     colnames(fangraphs) <- columnNames
-    fangraphs <- data.frame(fangraphs[-1,]) %>% 
+    fangraphs <- data.frame(fangraphs[-1,]) %>%
       filter(Name == name) %>%
       mutate_at(c('W', 'G', 'IP', 'Kper9', 'BBper9', 'HRper9', 'BABIP', 'ERA', 'FIP', 'xFIP'), as.numeric) %>%
       mutate(LOB.p = parse_number(LOB.p),
@@ -76,22 +76,22 @@ pitcher_season_stats <- function(name, end_month, end_day) {
              HRperFB = parse_number(HRperFB),
              month = end_month,
              day = end_day)
-  
+
   # Create NA row if no data available
   if(nrow(fangraphs) == 0) {
     df <- data.frame(matrix(NA, nrow = 1, ncol = length(fangraphs)))
     names(df) <- names(fangraphs)
     fangraphs <- df}
-  
+
   }
-    
+
   # Create NA row if no URL available
   else if(!file.exists(url)) {
     fangraphs <- data.frame(matrix(NA, nrow = 1, ncol = 22))
-    names(fangraphs) <- c('X.', 'Name', 'Team', 'W', 'L', 'SV', 'G', 'GS', 'IP', 'Kper9', 'BBper9', 'HRper9', 
+    names(fangraphs) <- c('X.', 'Name', 'Team', 'W', 'L', 'SV', 'G', 'GS', 'IP', 'Kper9', 'BBper9', 'HRper9',
                           'BABIP', 'LOB.p', 'GB.p', 'HRperFB', 'ERA', 'FIP', 'xFIP', 'WAR', 'month', 'day')
     }
-  
+
   return(fangraphs)
 }
 ```

@@ -11,7 +11,7 @@ While (currently) not much of a gambler, I can commiserate in the desire to fill
 
 My first reaction was about on par with getting an e-mail that I could enter for a chance to earn a $25 Starbucks gift card. But, I later realized that this game can be entirely optimized through a statistical simulation. Since there will be tens of thousands of other people in the tournament, it will ultimately still be a lottery, but at least I could give myself a better lottery ticket than my competitors.
 
-![Simulation](https://github.com/pcbrendel/pcbrendel.github.io/blob/master/_posts/simulation.jpg?raw=true "Simulation")
+![simulation](/img/posts/2020-03-26-simulation.jpg)
 
 The first step in tackling this problem was to obtain data for all the game logs from the 2020 NBA season. For that, I turned to the [nbastatr](https://github.com/abresler/nbastatR) R package. This package comes with a *game_logs()* function that provides the game logs for all players for a given year. Using these game logs, I calculated how many fantasy points each NBA player scored in each game. I also downloaded the CSV from Fanduel that shows each of the eligible NBA players and their salaries for the day.
 
@@ -19,9 +19,9 @@ Next, I needed to figure out each potential combination of players I wanted to t
 
 ```r
 get_name_combos <- function(i) {
-  
+
   set.seed(i)
-  
+
   PG1 <- sample(filter(df3, Position=="PG", Salary>6000)$namePlayer, 1)
   PG2 <- sample(filter(df3, Position=="PG", namePlayer!=PG1)$namePlayer, 1)
   SG1 <- sample(filter(df3, Position=="SG", Salary>6000)$namePlayer, 1)
@@ -31,17 +31,17 @@ get_name_combos <- function(i) {
   PF1 <- sample(filter(df3, Position=="PF", Salary>6000)$namePlayer, 1)
   PF2 <- sample(filter(df3, Position=="PF", namePlayer!=PF1)$namePlayer, 1)
   C <- sample(filter(df3, Position=="C")$namePlayer, 1)
-  
+
   players <- c(PG1, PG2, SG1, SG2, SF1, SF2, PF1, PF2, C)
-  
+
   sal_total <- sum(filter(df3, namePlayer %in% players)$Salary)
-  
+
   # $60000 is the max salary, <$55000 is probably not optimal
-  if(sal_total < 55000 | sal_total > 60000) 
-    {return(NULL)} 
-  
+  if(sal_total < 55000 | sal_total > 60000)
+    {return(NULL)}
+
   return(players)
-  
+
 }
 ```
 
@@ -49,7 +49,7 @@ Now that I had a list of each roster combination, my goal was to see how each ro
 
 ```r
 get_one_score <- function(players) {
-  
+
   # dataframes filtered by each player
   p1 <- df2[which(df2$namePlayer == players[1]),]
   p2 <- df2[which(df2$namePlayer == players[2]),]
@@ -60,7 +60,7 @@ get_one_score <- function(players) {
   p7 <- df2[which(df2$namePlayer == players[7]),]
   p8 <- df2[which(df2$namePlayer == players[8]),]
   p9 <- df2[which(df2$namePlayer == players[9]),]
-  
+
   # vector from 1 to number of games played
   r1 <- 1:max(p1$count)
   r2 <- 1:max(p2$count)
@@ -71,7 +71,7 @@ get_one_score <- function(players) {
   r7 <- 1:max(p7$count)
   r8 <- 1:max(p8$count)
   r9 <- 1:max(p9$count)
-  
+
   # sample the day's points for each player
   c1 <- sample(r1, 1)
   c2 <- sample(r2, 1)
@@ -81,20 +81,20 @@ get_one_score <- function(players) {
   c6 <- sample(r6, 1)
   c7 <- sample(r7, 1)
   c8 <- sample(r8, 1)
-  c9 <- sample(r9, 1)  
-  
+  c9 <- sample(r9, 1)
+
   final_points <- p1[which(p1$count==c1),]$fd_points +
     p2[which(p2$count==c2),]$fd_points +
     p3[which(p3$count==c3),]$fd_points +
     p4[which(p4$count==c4),]$fd_points +
     p5[which(p5$count==c5),]$fd_points +
-    p6[which(p6$count==c6),]$fd_points + 
-    p7[which(p7$count==c7),]$fd_points + 
-    p8[which(p8$count==c8),]$fd_points + 
+    p6[which(p6$count==c6),]$fd_points +
+    p7[which(p7$count==c7),]$fd_points +
+    p8[which(p8$count==c8),]$fd_points +
     p9[which(p9$count==c9),]$fd_points
-  
+
   return(final_points)
-  
+
 }
 ```
 
@@ -102,12 +102,12 @@ Using the newly created *get_one_score()* function, I then created a new functio
 
 ```r
 get_mean_score <- function(n, players) {
-  
+
   x <- replicate(n, get_one_score(players))
   final <- list(roster=players, score_mean=mean(x), score_sd=sd(x), score_max=max(x))
-  
+
   return(final)
-  
+
 }
 ```
 
@@ -115,4 +115,4 @@ Finally, I ran each of the potential roster combinations through the *get_mean_s
 
 Then came the fun part. I was able to see which roster had the best average score across the 500 simulations. However, there's a reason I also included the standard deviation and maximum value of the simulations. Looking at the competition structure, with its thousands of competitors and significant prize money for only the top few, it doesn't pay to have a "safe but good" roster. I need a roster with high upside if my lottery ticket is going to beat out thousands of other rosters. So instead of choosing my roster exclusively on the mean score, I will want to ensure that the combination of players has sufficient upside to place highly in the tournament.
 
-I don't think anybody knows how long this competition will be running for, but I plan on using this code to give myself the best chance possible for each tournament. I'll post an update if I ever place in the money. Taking a peak at my lineups each day may just be enough to distract myself from the fact that these aren't real (or *real* fantasy) NBA games being played. 
+I don't think anybody knows how long this competition will be running for, but I plan on using this code to give myself the best chance possible for each tournament. I'll post an update if I ever place in the money. Taking a peak at my lineups each day may just be enough to distract myself from the fact that these aren't real (or *real* fantasy) NBA games being played.
