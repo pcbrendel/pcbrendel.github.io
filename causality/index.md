@@ -5,19 +5,23 @@ title: Causality Home
 
 ### [Causal Inference Overview](/causality/causal_overview/)
 
-### [Types of Bias](/causality/types_of_bias/)
+### [Causal Inference Toolkit](/causality/causal_toolkit/)
+
+### [Types of Causal Bias](/causality/types_of_bias/)
 
 ### [Methods for Bias Analysis](/causality/bias_analysis_methods/)
 
 <br>
 
-# <ins>TUTORIALS</ins>
+# <ins>R TUTORIALS</ins>
 
-### [Adjust for Uncontrolled Confounding](/causality/uc_tutorial/)
+### [G-computation](/causality/gcomp/)
 
-### [Adjust for Selection Bias](/causality/sel_tutorial/)
+### [Bias Adjustment: Uncontrolled Confounding](/causality/uc_tutorial/)
 
-### [Adjust for Exposure Misclassification](/causality/em_tutorial/)
+### [Bias Adjustment: Selection Bias](/causality/sel_tutorial/)
+
+### [Bias Adjustment: Exposure Misclassification](/causality/em_tutorial/)
 
 <br>
 
