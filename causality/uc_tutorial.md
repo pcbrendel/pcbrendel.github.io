@@ -172,6 +172,8 @@ The output can also include a histogram showing the distribution of the OR<sub>Y
 If instead we use bias parameters that are each double the correct value, we obtain *OR<sub>YX</sub>* = 0.81 (0.79, 0.82), an incorrect estimate of effect.
 
 ```r
+library(dplyr)
+
 set.seed(1234)
 incorrect_results <- adjust_uc_wgt_loop(
   coef_0 = coef(u_model)[1] * 2,

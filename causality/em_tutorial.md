@@ -11,6 +11,8 @@ This tutorial will demonstrate how to adjust for exposure misclassification. Fir
 * *Xstar* = Misclassified exposure (1 = exposed, 0 = not exposed)
 
 ```r
+library(dplyr)
+
 set.seed(1234)
 n <- 100000
 
@@ -82,7 +84,7 @@ The steps for the weighting approach are as follows:
 9. With the resulting vector of odds ratio estimates, obtain the final estimate and confidence interval from the median and 2.5, 97.5 quantiles, respectively.
 
 ```r
-adjust_emc_wgt_loop <- function(
+adjust_em_wgt_loop <- function(
   coef_0, coef_xstar, coef_y, coef_c, nreps, plot = FALSE
 ) {
   est <- vector()
@@ -122,7 +124,7 @@ The steps for the imputation approach are as follows:
 7. With the resulting vector of odds ratio estimates, obtain the final estimate and confidence interval from the median and 2.5, 97.5 quantiles, respectively.
 
 ```r
-adjust_emc_imp_loop <- function(
+adjust_em_imp_loop <- function(
   coef_0, coef_xstar, coef_y, coef_c, nreps, plot = FALSE
 ) {
   est <- vector()
@@ -154,7 +156,7 @@ We can run the analysis using different values of the bias parameters.  When we 
 
 ```r
 set.seed(1234)
-correct_results <- adjust_emc_imp_loop(
+correct_results <- adjust_em_imp_loop(
   coef_0 =     coef(x_model)[1],
   coef_xstar = coef(x_model)[2],
   coef_y =     coef(x_model)[3],
@@ -173,7 +175,7 @@ If instead we use bias parameters that are each double the correct value, we obt
 
 ```r
 set.seed(1234)
-incorrect_results <- adjust_emc_imp_loop(
+incorrect_results <- adjust_em_imp_loop(
   coef_0 =     coef(x_model)[1] * 2,
   coef_xstar = coef(x_model)[2] * 2,
   coef_y =     coef(x_model)[3] * 2,
