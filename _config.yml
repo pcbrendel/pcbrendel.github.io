@@ -11,17 +11,18 @@ description: ""
 
 # List of links in the navigation bar
 navbar-links:
+  Blog: "blog"
+  Multibias:
+    - R Package: "https://www.paulbrendel.com/multibias/"
+    - Web App: "https://pcbrendel.shinyapps.io/multibias/"
+  Causality: "causality"
+  Baseball: "baseball"
   Publications:
     - Simultaneous Adjustment in Multiple-bias Modeling: "https://pubmed.ncbi.nlm.nih.gov/36718093/"
     - Impact of COVID-19 on Urological Care Delivery: "https://www.auajournals.org/doi/full/10.1097/JU.0000000000002145"
     - Reading Faces: "https://www.ncbi.nlm.nih.gov/pubmed/24463310"
     - My PhD Dissertation: "https://escholarship.org/uc/item/4c50w909"
     - My Masters Thesis: "http://d-scholarship.pitt.edu/23679/"
-  Multibias:
-    - R Package: "https://www.paulbrendel.com/multibias/"
-    - Web App: "https://pcbrendel.shinyapps.io/multibias/"
-  Causality: "causality"
-  Baseball: "baseball"
   About Me: "aboutme"
 
 # Image to show in the navigation bar - image must be a square (width = height)
@@ -52,30 +53,21 @@ author:
   name: Paul Brendel
   email: "pcbrendel@gmail.com"
   github: pcbrendel
-  twitter: yourname
   linkedin: pcbrendel
-  stackoverflow: yourlink  # eg. "3943160/daattali"
-  instagram: yourname # eg. daattali
-  youtube: yourlink   # eg. user/daattali or channel/daattali
-  spotify: yourname   # eg. daattali
 
 # Select which links to show in the footer
 footer-links-active:
   rss: false
   facebook: false
   email: true
-  twitter: false
   google-plus: false
   github: true
   reddit: false
   linkedin: true
   stackoverflow: false
-  youtube: false
-  spotify: false
 
 # Select which share links to show in posts
 share-links-active:
-  twitter: false
   facebook: true
   google: true
   linkedin: true
@@ -110,6 +102,13 @@ markdown: kramdown
 highlighter: rouge
 permalink: /:year-:month-:day-:title/
 paginate: 5
+paginate_path: "blog/page:num/"
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /:year-:month-:day-:title/
 
 kramdown:
   input: GFM
