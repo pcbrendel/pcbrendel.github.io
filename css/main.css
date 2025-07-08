@@ -251,7 +251,7 @@ img {
 
 footer {
   padding: 30px 0;
-  background: #FFD700;
+  background: #dea661;
   border-top: 1px #EAEAEA solid;
   margin-top: 50px;
   font-size: 14px;
@@ -566,19 +566,29 @@ footer .theme-by {
   display: none;
 }
 
-@media only screen and (max-width: 365px) {
+@media only screen and (max-width: 500px) {
   .header-section.has-img .intro-header.no-img {
     display: block;
   }
 
   .intro-header.big-img {
     width: 100%;
-    height: 220px;
+    height: 300px;
   }
 
   .intro-header.big-img .page-heading,
   .intro-header.big-img .post-heading {
-    display: none;
+    display: block;
+    padding: 60px 0 30px 0;
+  }
+
+  .intro-header .page-heading h1,
+  .intro-header .post-heading h1 {
+    font-size: 36px;
+    padding: 0 5px;
+    margin-top: 0;
+    line-height: 1.1;
+    border: unset;
   }
 
   .header-section.has-img .big-img {
@@ -755,4 +765,10 @@ pre code {
 .gist,
 .gist-file table tr td {
   border: unset;
+}
+
+@media only screen and (max-width: 767px) {
+  .intro-header {
+    margin-top: 60px;
+  }
 }
