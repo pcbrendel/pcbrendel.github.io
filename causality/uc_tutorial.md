@@ -187,4 +187,4 @@ incorrect_results$estimate
 incorrect_results$ci
 ```
 
-You can find the full code for this analysis on my <a href="https://github.com/pcbrendel/causal/blob/master/bias_analysis_uc.R" target="_blank">github</a>.
+You can find the full code for this analysis <a href="https://github.com/pcbrendel/causal/blob/master/bias_analysis_uc.R" target="_blank">here</a>.

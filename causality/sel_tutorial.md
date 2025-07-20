@@ -135,4 +135,4 @@ incorrect_results <- adjust_sel_loop(
   nreps = 10
 )
 ```
-You can find the full code for this analysis on my <a href="https://github.com/pcbrendel/causal/blob/master/bias_analysis_sel.R" target="_blank">github</a>.
+You can find the full code for this analysis <a href="https://github.com/pcbrendel/causal/blob/master/bias_analysis_sel.R" target="_blank">here</a>.
