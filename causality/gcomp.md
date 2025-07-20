@@ -2,17 +2,15 @@
 title: G-computation
 ---
 
-```{r}
-library(multibias)
-library(broom)
-library(boot)
-```
-
 Standardization (or marginalization over the covariate distribution) is conceptually very similar to g-computation and is, in fact, the core idea behind it. If you fit an outcome regression model and then use it to predict outcomes for everyone under different exposure levels, averaging these predictions across the observed distribution of confounders, you are performing standardization to get a marginal effect. G-computation essentially operationalizes this.
 
 For some sample data to work with, load `df_em_source` from `multibias` package. This data has a misspecified exposure, Xstar, which we'll ignore for this analysis.
 
 ```{r}
+library(multibias)
+library(broom)
+library(boot)
+
 head(df_em_source)
 summary(df_em_source)
 ```
@@ -190,3 +188,5 @@ hist(boot_results$t[, 3],
 abline(v = median_ate, col = "red", lwd = 2)
 abline(v = boot_ci$percent[4:5], col = "blue", lty = 2)
 ```
+
+You can find the full code for this analysis <a href="https://github.com/pcbrendel/causal/blob/master/gcomp.Rmd" target="_blank">here</a>.
