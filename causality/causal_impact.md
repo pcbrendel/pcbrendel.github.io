@@ -24,7 +24,8 @@ The crux of these analyses comes down to predicting the **counterfactual**
 (what would have happened without the intervention) post-event data to
 compare against the **observed** post-event data in order to quantify the
 effect of the intervention. To this end, Google created a useful R package
-called `CausalImpact`. This tool leverages Bayesian Structural Time Series
+called [CausalImpact](https://github.com/google/CausalImpact).
+This tool leverages Bayesian Structural Time Series
 models to predict the post-intervention counterfactual. To arrive at this
 counterfactual, it requires one or more "control" time series that are highly
 correlated with the "treated" time series during the pre-intervention
@@ -86,7 +87,7 @@ post_period <- c(event + 1, index(df)[nrow(df)])
 head(df)
 ```
 
-Now we'll fit the `CausalImpact()` model.
+Now we'll fit the `CausalImpact` model.
 
 ```{r}
 set.seed(123)
