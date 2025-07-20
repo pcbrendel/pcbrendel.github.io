@@ -1,6 +1,13 @@
 ---
 title: Causality Home
 ---
+<br>
+
+<div id="deployment-d476a4db-2c3b-448d-8069-37281d9f215a"></div>
+<script src="https://studio.pickaxe.co/api/embed/bundle.js" defer></script>
+
+<br>
+
 # <ins>BACKGROUND</ins>
 
 ### [Causal Inference Overview](/causality/causal_overview/)
@@ -24,11 +31,3 @@ title: Causality Home
 ### [Bias Adjustment: Selection Bias](/causality/sel_tutorial/)
 
 ### [Bias Adjustment: Exposure Misclassification](/causality/em_tutorial/)
-
-<br>
-
-<script src="https://embed.pickaxeproject.com/axe/scripts/masterpage.js"></script>
-<iframe id=B2Y9PD092W loading="eager" src="https://embed.pickaxeproject.com/axe?id=Epidemiology_Summarizer_0AGAX&mode=embed_gold&theme=light&opacity=100&font_header=Real+Head+Pro&font_body=Real+Head+Pro&font_labels=Real+Head+Pro&font_button=Real+Head+Pro&host=beta" width="100%" height="500px" onMouseOver="this.style.boxShadow='0 2px 2px 1px rgba(0,0,0,0.2)'" onMouseOut="this.style.boxShadow='none'" style="border:0;transition:.3s;" frameBorder="0"></iframe>
-<script>
-	iFrameResize({heightCalculationMethod:'taggedElement' }, '#B2Y9PD092W')
-</script>
