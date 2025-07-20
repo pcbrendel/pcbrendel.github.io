@@ -17,6 +17,8 @@ title: Causality Home
 
 ### [G-computation](/causality/gcomp/)
 
+### [Causal Impact (Bayesian Structural Time Series)](/causality/causal_impact)
+
 ### [Bias Adjustment: Uncontrolled Confounding](/causality/uc_tutorial/)
 
 ### [Bias Adjustment: Selection Bias](/causality/sel_tutorial/)
