@@ -8,7 +8,7 @@ title: Causality Home
 
 <br>
 
-# <ins>BACKGROUND</ins>
+# Background
 
 ### [Causal Inference Overview](/causality/causal_overview/)
 
@@ -20,7 +20,7 @@ title: Causality Home
 
 <br>
 
-# <ins>R TUTORIALS</ins>
+# R Tutorials
 
 ### [G-computation](/causality/gcomp/)
 
