@@ -48,8 +48,8 @@ event <- ymd("2015-08-10")
 
 On August 10, 2015 Google changed its corporate structure with the creation of
 parent company Alphabet. We'll quantify how this intervention impacted Google's
-stock price by forming a counterfactual using the price of the S&P500 as a
-"control".
+stock price by forming a counterfactual using the price of the S&P500 index as a
+control time series.
 
 ```{r}
 event <- ymd("2015-08-10")
@@ -129,8 +129,8 @@ Interpretation:
 
 Overall, it appears that there is *some* evidence of a causal effect, but
 it really isn't strong enough evidence to confidently claim a causal impact.
-`CausalImpact` also has a plotting function we can inspect. Each of the
-reported effects has a confidence interval that goes through the Null.
+Each of the reported effects has a confidence interval that goes through
+the Null. Next, let's check out the plotting in `CausalImpact`.
 
 ```{r}
 plot(impact)

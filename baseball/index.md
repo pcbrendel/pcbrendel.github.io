@@ -1,8 +1,12 @@
 ---
 title: Baseball Home
 ---
+<br>
+
 <div id="deployment-50bbf6f8-7d4d-4ce2-a27b-7cf148174a42"></div>
 <script src="https://studio.pickaxe.co/api/embed/bundle.js" defer></script>
+
+<br>
 
 # Pitcher List
 
