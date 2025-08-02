@@ -1,0 +1,332 @@
+---
+layout: page
+title: The Collatz Conjecture Game
+---
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+      <p>Try to predict how many steps it takes to reach 1! Start with any positive integer and follow these rules:</p>
+      <ul>
+        <li>If the number is even, divide by 2</li>
+        <li>If the number is odd, multiply by 3 and add 1</li>
+      </ul>
+      <p>The conjecture states that you'll always reach 1 eventually. Try to correctly guess the number of steps from
+        the starting number that produces the longest sequence!</p>
+
+      <div class="game-container">
+        <div class="input-section">
+          <label for="startNumber">Enter a starting number:</label>
+          <input type="number" id="startNumber" min="1" value="7" class="form-control"
+            style="width: 200px; display: inline-block; margin-left: 10px;">
+          <br><br>
+          <label for="guessSteps">Guess the number of steps to reach 1:</label>
+          <input type="number" id="guessSteps" min="1" placeholder="Enter your guess" class="form-control"
+            style="width: 200px; display: inline-block; margin-left: 10px;">
+          <br><br>
+          <button id="startGame" class="btn btn-primary" style="margin-left: 10px;">Start Game</button>
+          <button id="resetGame" class="btn btn-default" style="margin-left: 10px;">Reset</button>
+        </div>
+
+        <div class="game-stats" style="margin: 20px 0;">
+          <span id="guessDisplay" style="color: #666;"></span>
+          <br>
+          <span id="stepsCount" style="color: #666;"></span>
+        </div>
+
+        <div class="sequence-container">
+          <h4>Sequence:</h4>
+          <div id="sequence"
+            style="background: #f8f9fa; padding: 15px; border-radius: 5px; max-height: 200px; overflow-y: auto; font-family: monospace;">
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="leaderboard" style="margin-top: 30px;">
+        <h4>🏆 Perfect Guess Leaderboard</h4>
+        <p>Best scores: Longest sequences with perfect guesses</p>
+        <div id="leaderboardList" style="background: #f8f9fa; padding: 15px; border-radius: 5px;">
+          <p style="color: #666; font-style: italic;">No perfect guesses yet. Be the first!</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .game-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+  }
+
+  .input-section {
+    margin-bottom: 20px;
+  }
+
+  .game-stats {
+    text-align: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 5px;
+  }
+
+  .sequence-container {
+    margin: 20px 0;
+  }
+
+  #sequence {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .btn {
+    margin-right: 5px;
+  }
+
+  @media (max-width: 768px) {
+
+    .input-section input,
+    .input-section button {
+      display: block;
+      margin: 5px 0;
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  class CollatzGame {
+    constructor() {
+      this.currentNumber = 0;
+      this.sequence = [];
+      this.steps = 0;
+      this.maxNumber = 0;
+      this.playerGuess = 0;
+      this.leaderboard = this.loadLeaderboard();
+
+      this.initializeElements();
+      this.bindEvents();
+      this.updateLeaderboardDisplay();
+    }
+
+    initializeElements() {
+      this.startNumberInput = document.getElementById('startNumber');
+      this.guessStepsInput = document.getElementById('guessSteps');
+      this.startGameBtn = document.getElementById('startGame');
+      this.resetGameBtn = document.getElementById('resetGame');
+      this.stepsCountSpan = document.getElementById('stepsCount');
+      this.guessDisplaySpan = document.getElementById('guessDisplay');
+      this.sequenceDiv = document.getElementById('sequence');
+      this.leaderboardDiv = document.getElementById('leaderboardList');
+    }
+
+    bindEvents() {
+      this.startGameBtn.addEventListener('click', () => this.startGame());
+      this.resetGameBtn.addEventListener('click', () => this.resetGame());
+
+      // Allow Enter key to start game
+      this.startNumberInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          this.startGame();
+        }
+      });
+
+      // Allow Enter key in guess input to start game
+      this.guessStepsInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          this.startGame();
+        }
+      });
+    }
+
+    startGame() {
+      const startNum = parseInt(this.startNumberInput.value);
+      const guess = parseInt(this.guessStepsInput.value);
+
+      if (startNum < 1) {
+        alert('Please enter a positive integer!');
+        return;
+      }
+
+      if (isNaN(guess) || guess < 1) {
+        alert('Please enter a valid guess for the number of steps!');
+        return;
+      }
+
+      this.currentNumber = startNum;
+      this.sequence = [startNum];
+      this.steps = 0;
+      this.maxNumber = startNum;
+      this.playerGuess = guess;
+
+      // Run the full sequence automatically
+      this.runFullSequence();
+    }
+
+    resetGame() {
+      this.currentNumber = 0;
+      this.sequence = [];
+      this.steps = 0;
+      this.maxNumber = 0;
+      this.playerGuess = 0;
+
+      this.updateDisplay();
+    }
+
+    runFullSequence() {
+      // Run the complete Collatz sequence
+      while (this.currentNumber !== 1) {
+        if (this.currentNumber % 2 === 0) {
+          // Even number - divide by 2
+          this.currentNumber = this.currentNumber / 2;
+        } else {
+          // Odd number - multiply by 3 and add 1
+          this.currentNumber = this.currentNumber * 3 + 1;
+        }
+
+        this.sequence.push(this.currentNumber);
+        this.steps++;
+        this.maxNumber = Math.max(this.maxNumber, this.currentNumber);
+      }
+
+      // Show the final result
+      this.updateDisplay();
+      this.showVictory();
+    }
+
+
+
+    updateDisplay() {
+      if (this.currentNumber === 0) {
+        this.stepsCountSpan.textContent = '';
+        this.guessDisplaySpan.textContent = '';
+        this.sequenceDiv.innerHTML = '';
+      } else {
+        this.stepsCountSpan.textContent = `Actual steps: ${this.steps}`;
+        this.guessDisplaySpan.textContent = `Your guess: ${this.playerGuess} steps`;
+
+        // Display sequence with highlighting
+        this.sequenceDiv.innerHTML = this.sequence.map((num, index) => {
+          const isCurrent = index === this.sequence.length - 1;
+          const isOne = num === 1;
+          let className = '';
+          if (isCurrent) className = 'font-weight-bold text-primary';
+          if (isOne) className = 'font-weight-bold text-success';
+
+          return `<span class="${className}">${num}</span>${index < this.sequence.length - 1 ? ' → ' : ''}`;
+        }).join('');
+      }
+    }
+
+    showVictory() {
+      // Compare guess with actual steps
+      const difference = Math.abs(this.steps - this.playerGuess);
+      let resultMessage = '';
+      let alertClass = '';
+
+      if (this.steps === this.playerGuess) {
+        resultMessage = `<strong>🎉 Perfect Guess!</strong> You correctly predicted ${this.steps} steps!`;
+        alertClass = 'alert-success';
+
+        // Check if this is a new leaderboard entry
+        const startingNumber = parseInt(this.startNumberInput.value);
+        this.checkLeaderboard(startingNumber, this.steps);
+      } else if (difference <= 2) {
+        resultMessage = `<strong>🎯 Great Guess!</strong> You were off by only ${difference} step${difference === 1 ? '' : 's'}! Actual: ${this.steps}, Your guess: ${this.playerGuess}`;
+        alertClass = 'alert-info';
+      } else if (difference <= 5) {
+        resultMessage = `<strong>👍 Good Guess!</strong> You were off by ${difference} steps. Actual: ${this.steps}, Your guess: ${this.playerGuess}`;
+        alertClass = 'alert-warning';
+      } else {
+        resultMessage = `<strong>🤔 Nice Try!</strong> You were off by ${difference} steps. Actual: ${this.steps}, Your guess: ${this.playerGuess}`;
+        alertClass = 'alert-danger';
+      }
+
+      // Add result message
+      const victoryMsg = document.createElement('div');
+      victoryMsg.innerHTML = `<br><div class="alert ${alertClass}">${resultMessage}</div>`;
+      this.sequenceDiv.appendChild(victoryMsg);
+    }
+
+    loadLeaderboard() {
+      const saved = localStorage.getItem('collatzLeaderboard');
+      return saved ? JSON.parse(saved) : [];
+    }
+
+    saveLeaderboard() {
+      localStorage.setItem('collatzLeaderboard', JSON.stringify(this.leaderboard));
+    }
+
+    checkLeaderboard(startingNumber, steps) {
+      // Check if this would be a new leaderboard entry
+      // Allow multiple entries with same starting number if steps are different
+      const existingEntry = this.leaderboard.find(entry => entry.number === startingNumber && entry.steps === steps);
+
+      if (!existingEntry) {
+        // Check if this would make it into the top 10
+        const wouldMakeTop10 = this.leaderboard.length < 10 || steps > this.leaderboard[this.leaderboard.length - 1]?.steps;
+
+        if (wouldMakeTop10) {
+          // Prompt for username
+          const username = prompt(`🎉 Congratulations! You made a perfect guess for starting number ${startingNumber} with ${steps} steps!\n\nEnter your name for the leaderboard:`);
+
+          if (username && username.trim()) {
+            // New entry - add to leaderboard
+            this.leaderboard.push({
+              number: startingNumber,
+              steps: steps,
+              username: username.trim(),
+              date: new Date().toLocaleDateString()
+            });
+
+            // Sort by steps (highest first)
+            this.leaderboard.sort((a, b) => b.steps - a.steps);
+
+            // Keep only top 10 entries
+            this.leaderboard = this.leaderboard.slice(0, 10);
+
+            this.saveLeaderboard();
+            this.updateLeaderboardDisplay();
+
+            // Show special message for new leaderboard entry
+            const leaderboardMsg = document.createElement('div');
+            leaderboardMsg.innerHTML = `<br><div class="alert alert-success"><strong>🏆 New Leaderboard Entry!</strong> ${username.trim()} guessed starting number ${startingNumber} with ${steps} steps!</div>`;
+            this.sequenceDiv.appendChild(leaderboardMsg);
+          }
+        }
+      }
+    }
+
+    updateLeaderboardDisplay() {
+      if (this.leaderboard.length === 0) {
+        this.leaderboardDiv.innerHTML = '<p style="color: #666; font-style: italic;">No perfect guesses yet. Be the first!</p>';
+        return;
+      }
+
+      const leaderboardHTML = this.leaderboard.map((entry, index) => {
+        const rank = index + 1;
+        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
+        const username = entry.username || 'Anonymous';
+        return `<div style="margin: 5px 0; padding: 5px; background: white; border-radius: 3px;">
+          <strong>${medal}</strong> <strong>${username}</strong> - <strong>${entry.steps} steps</strong> (starting from ${entry.number})
+          <small style="color: #666;">(${entry.date})</small>
+        </div>`;
+      }).join('');
+
+      this.leaderboardDiv.innerHTML = leaderboardHTML;
+    }
+
+
+  }
+
+  // Initialize the game when the page loads
+  document.addEventListener('DOMContentLoaded', () => {
+    new CollatzGame();
+  });
+</script>

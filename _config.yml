@@ -17,6 +17,7 @@ navbar-links:
     - Web App: "https://pcbrendel.shinyapps.io/multibias/"
   Causality: "causality"
   Baseball: "baseball"
+  Games: "games"
   Publications:
     - Simultaneous Adjustment in Multiple-bias Modeling: "https://pubmed.ncbi.nlm.nih.gov/36718093/"
     - Impact of COVID-19 on Urological Care Delivery: "https://www.auajournals.org/doi/full/10.1097/JU.0000000000002145"
