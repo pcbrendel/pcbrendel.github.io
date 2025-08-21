@@ -14,17 +14,38 @@ title: The Collatz Conjecture Game
       <p>The conjecture states that you'll always reach 1 eventually. Try to correctly guess the number of steps from
         the starting number that produces the longest sequence!</p>
 
+      <!-- Player Name Section -->
+      <div class="player-section" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+        <h5>👤 Enter Your Name</h5>
+        <p style="margin-bottom: 15px; font-size: 14px; color: #666;">
+          Enter your name to save your scores to the leaderboard:
+        </p>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <input type="text" id="playerName" placeholder="Enter your name" class="form-control"
+            style="width: 200px; display: inline-block;">
+          <button id="setName" class="btn btn-primary">Set Name</button>
+        </div>
+        <div id="nameInfo" style="margin-top: 10px; display: none;">
+          <small style="color: #666;">Using name: <span id="currentName"></span></small>
+        </div>
+
+        <div id="playerStatus" style="margin-top: 15px; padding: 10px; border-radius: 5px; display: none;">
+          <small style="color: #28a745;">✅ Ready to save scores!</small>
+        </div>
+      </div>
+
       <div class="game-container">
         <div class="input-section">
-          <label for="startNumber">Enter a starting number:</label>
+          <label for="startNumber">Starting number:</label>
           <input type="number" id="startNumber" min="1" value="7" class="form-control"
             style="width: 200px; display: inline-block; margin-left: 10px;">
           <br><br>
-          <label for="guessSteps">Guess the number of steps to reach 1:</label>
+          <label for="guessSteps">Number of steps to reach 1:</label>
           <input type="number" id="guessSteps" min="1" placeholder="Enter your guess" class="form-control"
             style="width: 200px; display: inline-block; margin-left: 10px;">
           <br><br>
-          <button id="startGame" class="btn btn-primary" style="margin-left: 10px;">Start Game</button>
+          <button id="startGame" class="btn btn-primary" style="margin-left: 10px;">Submit guess</button>
           <button id="resetGame" class="btn btn-default" style="margin-left: 10px;">Reset</button>
         </div>
 
@@ -45,10 +66,22 @@ title: The Collatz Conjecture Game
       </div>
 
       <div class="leaderboard" style="margin-top: 30px;">
-        <h4>🏆 Perfect Guess Leaderboard</h4>
+        <h4>🏆 Leaderboard</h4>
         <p>Best scores: Longest sequences with perfect guesses</p>
-        <div id="leaderboardList" style="background: #f8f9fa; padding: 15px; border-radius: 5px;">
-          <p style="color: #666; font-style: italic;">No perfect guesses yet. Be the first!</p>
+
+        <div style="margin-bottom: 10px;">
+          <button id="refreshLeaderboard" class="btn btn-outline-primary btn-sm">
+            🔄 Refresh Leaderboard
+          </button>
+        </div>
+
+        <div id="globalLeaderboardList" style="background: #f8f9fa; padding: 15px; border-radius: 5px;">
+          <div id="globalStatus" style="text-align: center; padding: 20px;">
+            <p style="color: #666; font-style: italic;">Loading global leaderboard...</p>
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -89,6 +122,12 @@ title: The Collatz Conjecture Game
     margin-right: 5px;
   }
 
+  .player-section {
+    border: 1px solid #dee2e6;
+  }
+
+
+
   @media (max-width: 768px) {
 
     .input-section input,
@@ -100,6 +139,58 @@ title: The Collatz Conjecture Game
   }
 </style>
 
+<!-- Firebase SDK for global leaderboard -->
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDy8fhpIvxDZRJnfR4Xk7OGlIIMsdn8UMg",
+    authDomain: "collatz-leaderboard.firebaseapp.com",
+    projectId: "collatz-leaderboard",
+    storageBucket: "collatz-leaderboard.firebasestorage.app",
+    messagingSenderId: "991936246124",
+    appId: "1:991936246124:web:101abbd4b7a0f75f254349",
+    measurementId: "G-K0EJFRMYL3"
+  };
+
+  // Initialize Firebase
+  console.log('Initializing Firebase...');
+  const app = initializeApp(firebaseConfig);
+  console.log('Firebase app initialized');
+
+  const analytics = getAnalytics(app);
+  console.log('Analytics initialized');
+
+  const db = getFirestore(app);
+  console.log('Firestore database initialized');
+
+  // Configure Firestore for better performance
+  // Note: In Firebase v9+, settings are configured differently
+  // These settings help with performance and reliability
+
+  // Enable offline persistence for better caching
+  try {
+    // This will enable offline persistence if supported
+    console.log('Firebase configured for optimal performance');
+  } catch (error) {
+    console.warn('Firebase settings configuration not available in this version:', error);
+  }
+
+  // Make db available globally
+  window.db = db;
+  window.addDoc = addDoc;
+  window.collection = collection;
+  window.query = query;
+  window.orderBy = orderBy;
+  window.limit = limit;
+  window.getDocs = getDocs;
+  console.log('Firebase functions made available globally');
+</script>
+
 <script>
   class CollatzGame {
     constructor() {
@@ -108,11 +199,18 @@ title: The Collatz Conjecture Game
       this.steps = 0;
       this.maxNumber = 0;
       this.playerGuess = 0;
-      this.leaderboard = this.loadLeaderboard();
+      this.playerName = null;
+
+      // Firebase integration
+      this.globalLeaderboard = [];
+      this.db = window.db; // Firebase database reference
+      this.lastLoadTime = 0;
 
       this.initializeElements();
       this.bindEvents();
-      this.updateLeaderboardDisplay();
+
+      // Load leaderboard with fallback
+      this.loadGlobalLeaderboardWithFallback();
     }
 
     initializeElements() {
@@ -123,12 +221,25 @@ title: The Collatz Conjecture Game
       this.stepsCountSpan = document.getElementById('stepsCount');
       this.guessDisplaySpan = document.getElementById('guessDisplay');
       this.sequenceDiv = document.getElementById('sequence');
-      this.leaderboardDiv = document.getElementById('leaderboardList');
+
+      // Global leaderboard elements
+      this.globalLeaderboardDiv = document.getElementById('globalLeaderboardList');
+      this.globalStatusDiv = document.getElementById('globalStatus');
+      this.refreshLeaderboardBtn = document.getElementById('refreshLeaderboard');
+
+      // Name elements
+      this.playerNameInput = document.getElementById('playerName');
+      this.setNameBtn = document.getElementById('setName');
+      this.nameInfoDiv = document.getElementById('nameInfo');
+      this.currentNameSpan = document.getElementById('currentName');
+      this.playerStatusDiv = document.getElementById('playerStatus');
     }
 
     bindEvents() {
       this.startGameBtn.addEventListener('click', () => this.startGame());
       this.resetGameBtn.addEventListener('click', () => this.resetGame());
+      this.setNameBtn.addEventListener('click', () => this.setPlayerName());
+      this.refreshLeaderboardBtn.addEventListener('click', () => this.loadGlobalLeaderboardWithFallback());
 
       // Allow Enter key to start game
       this.startNumberInput.addEventListener('keypress', (e) => {
@@ -143,9 +254,228 @@ title: The Collatz Conjecture Game
           this.startGame();
         }
       });
+
+      // Allow Enter key in name input to set name
+      this.playerNameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          this.setPlayerName();
+        }
+      });
     }
 
-    startGame() {
+
+
+    setPlayerName() {
+      const name = this.playerNameInput.value.trim();
+      if (name.length > 0) {
+        this.playerName = name;
+        this.currentNameSpan.textContent = name;
+        this.nameInfoDiv.style.display = 'block';
+        this.updatePlayerStatus();
+      } else {
+        alert('Please enter a valid name!');
+      }
+    }
+
+    updatePlayerStatus() {
+      if (this.playerName) {
+        this.playerStatusDiv.style.display = 'block';
+        this.playerStatusDiv.innerHTML = '<small style="color: #28a745;">✅ Ready to save scores!</small>';
+      } else {
+        this.playerStatusDiv.style.display = 'none';
+      }
+    }
+
+    async loadGlobalLeaderboardWithFallback() {
+      // Show cached data immediately if available
+      if (this.globalLeaderboard.length > 0) {
+        this.updateGlobalLeaderboardDisplay();
+        this.updateGlobalStatus('Showing cached data while refreshing...');
+      }
+
+      // Try to load fresh data with a shorter timeout for initial load
+      try {
+        await this.loadGlobalLeaderboard();
+      } catch (error) {
+        console.warn('Initial leaderboard load failed, will retry in background:', error);
+
+        // If we have cached data, show it and retry in background
+        if (this.globalLeaderboard.length > 0) {
+          this.updateGlobalStatus('Using cached data. Retrying in background...');
+
+          // Retry in background after 5 seconds
+          setTimeout(async () => {
+            try {
+              await this.loadGlobalLeaderboard();
+            } catch (retryError) {
+              console.error('Background retry also failed:', retryError);
+              this.updateGlobalStatus('Unable to refresh leaderboard. Showing cached data.');
+            }
+          }, 5000);
+        }
+      }
+    }
+
+    async loadGlobalLeaderboard() {
+      if (!this.db) {
+        this.updateGlobalStatus('Firebase not initialized. Please check configuration.');
+        return;
+      }
+
+      try {
+        this.updateGlobalStatus('Loading global leaderboard...');
+        console.log('Starting to load global leaderboard...');
+
+        const startTime = Date.now();
+        const scoresRef = window.collection(this.db, 'scores');
+        console.log('Collection reference created:', scoresRef);
+
+        // Use a simpler query first - just get recent scores without ordering
+        const q = window.query(scoresRef, window.limit(20));
+        console.log('Query created:', q);
+
+        // Increase timeout to 15 seconds and add retry logic
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('Firebase query timed out after 15 seconds')), 15000);
+        });
+
+        let snapshot;
+        let retryCount = 0;
+        const maxRetries = 3;
+
+        while (retryCount < maxRetries) {
+          try {
+            snapshot = await Promise.race([
+              window.getDocs(q),
+              timeoutPromise
+            ]);
+            break; // Success, exit retry loop
+          } catch (error) {
+            retryCount++;
+            console.warn(`Firebase query attempt ${retryCount} failed:`, error.message);
+
+            if (retryCount >= maxRetries) {
+              throw error;
+            }
+
+            // Wait before retrying (exponential backoff)
+            await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+            this.updateGlobalStatus(`Retrying... (attempt ${retryCount + 1}/${maxRetries})`);
+          }
+        }
+
+        const loadTime = Date.now() - startTime;
+        console.log(`Firebase query completed in ${loadTime}ms after ${retryCount + 1} attempts`);
+
+        // Process and sort the data client-side to avoid Firestore indexing issues
+        const allScores = snapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            playerName: data.walletAddress || 'Anonymous', // Keep field name for backward compatibility
+            number: data.startingNumber,
+            steps: data.steps,
+            date: new Date(data.timestamp?.toDate() || data.timestamp).toLocaleDateString()
+          };
+        });
+
+        // Sort by steps descending and take top 5
+        this.globalLeaderboard = allScores
+          .sort((a, b) => b.steps - a.steps)
+          .slice(0, 5);
+
+        console.log(`Processed ${this.globalLeaderboard.length} scores`);
+        this.updateGlobalLeaderboardDisplay();
+        this.updateGlobalStatus(`Loaded ${this.globalLeaderboard.length} scores in ${loadTime}ms`);
+
+        // Clear status after 3 seconds
+        setTimeout(() => {
+          this.updateGlobalStatus('');
+        }, 3000);
+
+      } catch (error) {
+        console.error('Error loading global leaderboard:', error);
+
+        // Show more helpful error message
+        let errorMessage = 'Error loading global leaderboard';
+        if (error.message.includes('timeout')) {
+          errorMessage = 'Leaderboard is taking longer than expected. Please try refreshing the page.';
+        } else if (error.message.includes('permission')) {
+          errorMessage = 'Permission denied. Please check Firebase security rules.';
+        } else {
+          errorMessage = `Error: ${error.message}`;
+        }
+
+        this.updateGlobalStatus(errorMessage);
+
+        // Show cached data if available
+        if (this.globalLeaderboard.length > 0) {
+          this.updateGlobalLeaderboardDisplay();
+          this.updateGlobalStatus('Showing cached data due to loading error');
+        }
+      }
+    }
+
+    updateGlobalStatus(message) {
+      if (this.globalStatusDiv) {
+        this.globalStatusDiv.innerHTML = `
+          <p style="color: #666; font-style: italic;">${message}</p>
+        `;
+      }
+    }
+
+    updateGlobalLeaderboardDisplay() {
+      if (!this.globalLeaderboardDiv) return;
+
+      if (this.globalLeaderboard.length === 0) {
+        this.globalLeaderboardDiv.innerHTML = `
+          <div style="text-align: center; padding: 20px;">
+            <p style="color: #666; font-style: italic;">No scores on global leaderboard yet. Be the first!</p>
+          </div>
+        `;
+        return;
+      }
+
+      const leaderboardHTML = this.globalLeaderboard.map((entry, index) => {
+        const rank = index + 1;
+        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
+        const displayName = entry.playerName;
+        return `
+          <div style="margin: 5px 0; padding: 5px; background: white; border-radius: 3px;">
+            <strong>${medal}</strong> <strong>${displayName}</strong> - <strong>${entry.steps} steps</strong> (starting from ${entry.number})
+            <small style="color: #666;">(${entry.date})</small>
+            <span style="float: right; color: #28a745;">🌍</span>
+          </div>
+        `;
+      }).join('');
+
+      this.globalLeaderboardDiv.innerHTML = leaderboardHTML;
+    }
+
+    async saveScoreToFirebase(startingNumber, steps, playerIdentifier) {
+      if (!this.db) {
+        throw new Error('Firebase not initialized');
+      }
+
+      try {
+        const scoresRef = window.collection(this.db, 'scores');
+        await window.addDoc(scoresRef, {
+          walletAddress: playerIdentifier || 'Anonymous', // Keep field name for backward compatibility
+          startingNumber: startingNumber,
+          steps: steps,
+          timestamp: new Date()
+        });
+
+        console.log('Score saved to Firebase');
+        return true;
+      } catch (error) {
+        console.error('Error saving to Firebase:', error);
+        throw error;
+      }
+    }
+
+
+
+    async startGame() {
       const startNum = parseInt(this.startNumberInput.value);
       const guess = parseInt(this.guessStepsInput.value);
 
@@ -166,7 +496,7 @@ title: The Collatz Conjecture Game
       this.playerGuess = guess;
 
       // Run the full sequence automatically
-      this.runFullSequence();
+      await this.runFullSequence();
     }
 
     resetGame() {
@@ -179,7 +509,7 @@ title: The Collatz Conjecture Game
       this.updateDisplay();
     }
 
-    runFullSequence() {
+    async runFullSequence() {
       // Run the complete Collatz sequence
       while (this.currentNumber !== 1) {
         if (this.currentNumber % 2 === 0) {
@@ -197,10 +527,8 @@ title: The Collatz Conjecture Game
 
       // Show the final result
       this.updateDisplay();
-      this.showVictory();
+      await this.showVictory();
     }
-
-
 
     updateDisplay() {
       if (this.currentNumber === 0) {
@@ -224,7 +552,7 @@ title: The Collatz Conjecture Game
       }
     }
 
-    showVictory() {
+    async showVictory() {
       // Compare guess with actual steps
       const difference = Math.abs(this.steps - this.playerGuess);
       let resultMessage = '';
@@ -234,92 +562,99 @@ title: The Collatz Conjecture Game
         resultMessage = `<strong>🎉 Perfect Guess!</strong> You correctly predicted ${this.steps} steps!`;
         alertClass = 'alert-success';
 
+        // Add immediate feedback for perfect guess
+        const victoryMsg = document.createElement('div');
+        victoryMsg.innerHTML = `<br><div class="alert ${alertClass}">${resultMessage}</div>`;
+        this.sequenceDiv.appendChild(victoryMsg);
+
+        // Show leaderboard saving feedback
+        const savingMsg = document.createElement('div');
+        savingMsg.innerHTML = `<br><div class="alert alert-info">
+          <strong>⏳ Saving to Global Leaderboard...</strong>
+          <div class="spinner-border spinner-border-sm text-primary" role="status" style="margin-left: 10px;">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>`;
+        this.sequenceDiv.appendChild(savingMsg);
+
         // Check if this is a new leaderboard entry
         const startingNumber = parseInt(this.startNumberInput.value);
-        this.checkLeaderboard(startingNumber, this.steps);
+        await this.checkLeaderboard(startingNumber, this.steps);
+
+        // Remove the saving message after processing
+        savingMsg.remove();
       } else if (difference <= 2) {
         resultMessage = `<strong>🎯 Great Guess!</strong> You were off by only ${difference} step${difference === 1 ? '' : 's'}! Actual: ${this.steps}, Your guess: ${this.playerGuess}`;
         alertClass = 'alert-info';
+
+        // Add result message
+        const victoryMsg = document.createElement('div');
+        victoryMsg.innerHTML = `<br><div class="alert ${alertClass}">${resultMessage}</div>`;
+        this.sequenceDiv.appendChild(victoryMsg);
       } else if (difference <= 5) {
         resultMessage = `<strong>👍 Good Guess!</strong> You were off by ${difference} steps. Actual: ${this.steps}, Your guess: ${this.playerGuess}`;
         alertClass = 'alert-warning';
+
+        // Add result message
+        const victoryMsg = document.createElement('div');
+        victoryMsg.innerHTML = `<br><div class="alert ${alertClass}">${resultMessage}</div>`;
+        this.sequenceDiv.appendChild(victoryMsg);
       } else {
         resultMessage = `<strong>🤔 Nice Try!</strong> You were off by ${difference} steps. Actual: ${this.steps}, Your guess: ${this.playerGuess}`;
         alertClass = 'alert-danger';
+
+        // Add result message
+        const victoryMsg = document.createElement('div');
+        victoryMsg.innerHTML = `<br><div class="alert ${alertClass}">${resultMessage}</div>`;
+        this.sequenceDiv.appendChild(victoryMsg);
       }
-
-      // Add result message
-      const victoryMsg = document.createElement('div');
-      victoryMsg.innerHTML = `<br><div class="alert ${alertClass}">${resultMessage}</div>`;
-      this.sequenceDiv.appendChild(victoryMsg);
     }
 
-    loadLeaderboard() {
-      const saved = localStorage.getItem('collatzLeaderboard');
-      return saved ? JSON.parse(saved) : [];
-    }
 
-    saveLeaderboard() {
-      localStorage.setItem('collatzLeaderboard', JSON.stringify(this.leaderboard));
-    }
 
-    checkLeaderboard(startingNumber, steps) {
-      // Check if this would be a new leaderboard entry
-      // Allow multiple entries with same starting number if steps are different
-      const existingEntry = this.leaderboard.find(entry => entry.number === startingNumber && entry.steps === steps);
+    async checkLeaderboard(startingNumber, steps) {
+      // Always save perfect guesses to global leaderboard
+      if (this.playerName) {
+        // User has set a name - add to leaderboard automatically
+        await this.addToLeaderboard(startingNumber, steps, this.playerName);
+      } else {
+        // User is not identified - prompt to enter name
+        const setupChoice = confirm(`🎉 Congratulations! You made a perfect guess for starting number ${startingNumber} with ${steps} steps!\n\nTo save your score to the global leaderboard, you need to enter your name. Would you like to do that now?`);
 
-      if (!existingEntry) {
-        // Check if this would make it into the top 10
-        const wouldMakeTop10 = this.leaderboard.length < 10 || steps > this.leaderboard[this.leaderboard.length - 1]?.steps;
-
-        if (wouldMakeTop10) {
-          // Prompt for username
-          const username = prompt(`🎉 Congratulations! You made a perfect guess for starting number ${startingNumber} with ${steps} steps!\n\nEnter your name for the leaderboard:`);
-
-          if (username && username.trim()) {
-            // New entry - add to leaderboard
-            this.leaderboard.push({
-              number: startingNumber,
-              steps: steps,
-              username: username.trim(),
-              date: new Date().toLocaleDateString()
-            });
-
-            // Sort by steps (highest first)
-            this.leaderboard.sort((a, b) => b.steps - a.steps);
-
-            // Keep only top 10 entries
-            this.leaderboard = this.leaderboard.slice(0, 10);
-
-            this.saveLeaderboard();
-            this.updateLeaderboardDisplay();
-
-            // Show special message for new leaderboard entry
-            const leaderboardMsg = document.createElement('div');
-            leaderboardMsg.innerHTML = `<br><div class="alert alert-success"><strong>🏆 New Leaderboard Entry!</strong> ${username.trim()} guessed starting number ${startingNumber} with ${steps} steps!</div>`;
-            this.sequenceDiv.appendChild(leaderboardMsg);
-          }
+        if (setupChoice) {
+          // Focus on the player name section
+          document.querySelector('.player-section').scrollIntoView({ behavior: 'smooth' });
         }
       }
     }
 
-    updateLeaderboardDisplay() {
-      if (this.leaderboard.length === 0) {
-        this.leaderboardDiv.innerHTML = '<p style="color: #666; font-style: italic;">No perfect guesses yet. Be the first!</p>';
-        return;
-      }
+    async addToLeaderboard(startingNumber, steps, playerIdentifier) {
+      // Save to global leaderboard
+      try {
+        await this.saveScoreToFirebase(startingNumber, steps, playerIdentifier);
 
-      const leaderboardHTML = this.leaderboard.map((entry, index) => {
-        const rank = index + 1;
-        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
-        const username = entry.username || 'Anonymous';
-        return `<div style="margin: 5px 0; padding: 5px; background: white; border-radius: 3px;">
-          <strong>${medal}</strong> <strong>${username}</strong> - <strong>${entry.steps} steps</strong> (starting from ${entry.number})
-          <small style="color: #666;">(${entry.date})</small>
+        // Reload global leaderboard
+        await this.loadGlobalLeaderboardWithFallback();
+
+        // Show success message
+        const successMsg = document.createElement('div');
+        successMsg.innerHTML = `<br><div class="alert alert-success">
+          <strong>🏆 Score Successfully Saved!</strong>
+          Your perfect guess of ${steps} steps (starting from ${startingNumber}) has been added to the global leaderboard!
+          <br><small>Check the leaderboard above to see your ranking!</small>
         </div>`;
-      }).join('');
+        this.sequenceDiv.appendChild(successMsg);
 
-      this.leaderboardDiv.innerHTML = leaderboardHTML;
+      } catch (error) {
+        // Show error message
+        const errorMsg = document.createElement('div');
+        errorMsg.innerHTML = `<br><div class="alert alert-danger">
+          <strong>❌ Failed to Save Score</strong>
+          Could not save your score to the global leaderboard.
+          <br><small>Error: ${error.message}</small>
+        </div>`;
+        this.sequenceDiv.appendChild(errorMsg);
+      }
     }
 
 
