@@ -2,13 +2,13 @@
 title: Causal ML: S-Learner
 ---
 
-Causal machine learning integrates the flexible, non-parametric power of machine learning algorithms—such as random forests or neural networks—into rigorous causal inference frameworks (like the potential outcomes model) to estimate treatment effects. For epidemiologists, this approach offers two distinct advantages over traditional regression: it handles high-dimensional confounding and complex non-linearities without requiring manual model specification, and it excels at identifying Heterogeneous Treatment Effects (HTE) to determine which specific subgroups benefit most from an intervention.
+Causal machine learning (ML) integrates the flexible, non-parametric power of machine learning algorithms, such as random forests or neural networks, into rigorous causal inference frameworks (like the potential outcomes model) to estimate treatment effects. For epidemiologists, this approach offers two distinct advantages over traditional regression: it handles high-dimensional confounding and complex non-linearities without requiring manual model specification, and it excels at identifying heterogeneous treatment effects to determine which specific subgroups benefit most from an intervention.
 
-The core estimators in CausalML are called "meta-learners." They're "meta" because they don't invent a new algorithm from scratch. Instead, they use standard machine learning models as building blocks to estimate the Conditional Average Treatment Effect (CATE). The CATE measures how a treatment's average impact changes across different subgroups.
+The core estimators in causal ML are called "meta-learners." They're "meta" because they don't invent a new algorithm from scratch. Instead, they use standard machine learning models as building blocks to estimate the Conditional Average Treatment Effect (CATE). The CATE helps measure how a treatment's average impact changes across different subgroups.
 
 The most straightforward learner is the S-Learner (Single Learner). As the name implies, the S-Learner uses a single machine learning model to estimate causal effects. This model treats the treatment variable and relevant covariates as predictors of the outcome. Once the model is fit, individual treatment effects are calculated by: (1) predicting the outcome for each observation assuming treatment=1, (2) predicting the outcome for each observation assuming treatment=0, and (3) taking the difference between these two predictions for each individual. The final CATE estimate is the average of all these individual treatment effect differences. Bootstrapping is necessary to obtain a valid confidence interval of this estimate.
 
-In this tutorial, we will first perform this analysis "from scratch" in R then again by leveraging Uber's `causalml` package in python. We'll conclude by commenting on any differences between the two approaches and showcasing some of the additional capabilities of `causalml`. The analysis will work with the `df_uc_source` dataset from multibias (see [documentation](https://www.paulbrendel.com/multibias/reference/df_uc_source.html)).
+In this tutorial, we will start by performing a causal ML analysis "from scratch" in R then repeat the analysis by leveraging Uber's `causalml` package in python. We'll conclude by commenting on any differences between the two approaches and showcasing some of the additional capabilities of `causalml`. The analysis will work with the `df_uc_source` dataset from multibias (see [documentation](https://www.paulbrendel.com/multibias/reference/df_uc_source.html)).
 
 First we load the data and apply a 80-20 train-test split.
 
@@ -100,12 +100,12 @@ print(paste(
 ```
 We arrive at the following estimates:
 
-* Train CATE = 0.1017 (95% CI: 0.0958 to 0.1080)
-* Test CATE = 0.1024 (95% CI: 0.0913 to 0.1157)
+* Train CATE = 0.102 (95% CI: 0.096 to 0.108)
+* Test CATE = 0.102 (95% CI: 0.091 to 0.116)
 
-[intrepretation]
-[similarity - no overfitting]
-Normally, in a CausalML analysis, next steps would be to plot the distribution of individual effects and investigate the heterogeneity of the treatment effect across different covariates. We'll revisit this shortly.
+For observations with a treatment of X=1, receiving the treatment increases their probability of Y by 10 percentage points. The strong similarity in these estimates between the train and test data makes it unlikely that we're dealing with any concerns of overfitting.
+
+Normally, in a causal ML analysis, next steps would be to plot the distribution of individual effects and investigate the heterogeneity of the treatment effect across different covariates. We'll revisit this shortly.
 
 In python, these analyses can be performed with the `causalml` package. Let's see if these we can confirm the above results in `causalml` and explore some of its other functionalities.
 
@@ -129,6 +129,7 @@ X_train, X_test, T_train, T_test, Y_train, Y_test = train_test_split(X, T, Y, te
 ```
 
 ```{python}
+random.seed(123)
 learner = LogisticRegression(penalty=None, solver='lbfgs')
 slearner = BaseSClassifier(learner=learner)
 slearner.fit(X=X_train, treatment=T_train, y=Y_train)
@@ -140,7 +141,7 @@ slearner.estimate_ate(
   y=Y_train,
   return_ci=True,
   bootstrap_ci=True,
-  bootstrap_size=1000
+  bootstrap_size=len(X_train)
 )
 
 # cate in test
@@ -150,13 +151,15 @@ slearner.estimate_ate(
   y=Y_test,
   return_ci=True,
   bootstrap_ci=True,
-  bootstrap_size=1000
+  bootstrap_size=len(X_test)
 )
 ```
-Train CATE = x (95% CI: x to x)
-Test CATE = x (95% CI: x to x)
+Train CATE = 0.101 (95% CI: 0.095 to 0.107)
+Test CATE = 0.106 (95% CI: 0.094 to 0.117)
 
-These estimates are very similar to those obtained in the R demonstration, however the confidence intervals are significantly wider. What is leading to this difference?
+These estimates are very similar to those obtained in the R demonstration, demonstrating an average treatment effect of 10%, conditional on the covariates.
+
+We'll proceed with plotting the density of each of the train/test CATE distributions.
 
 ```{python}
 cate_train = slearner.predict(X_train)
@@ -167,6 +170,8 @@ cate_test = slearner.predict(X_test)
 sns.kdeplot(data=pd.DataFrame({'cate': cate_test.reshape(-1)}), x="cate")
 plt.title("Distribution of CATE in Test Data");
 ```
+
+We observe several notable spikes in CATE across the distribution, each corresponding to a different sub-group in the population. Let's further analyze this heterogeneity in the treatment effect. XXX
 
 ```{python}
 # covariate differences by high vs low cate
@@ -191,5 +196,9 @@ slearner.plot_importance(
     features=X_test.columns.tolist()
 )
 ```
+
+INTERPRET
+
+Comment on logistic regression / interaction / benefit of tree-based model
 
 The S-Learner for CausalML has a key limitation not obvious in the example here. The model might "ignore" the treatment variable if it's not a strong predictor, especially if the treatment is just a single binary column in a forest of hundreds of other features. This can cause the model to "wash out" the treatment effect, leading to an estimate of 0 for everyone. This motivates the need for other types of learners, like the T-Learner, which we'll explore next!
