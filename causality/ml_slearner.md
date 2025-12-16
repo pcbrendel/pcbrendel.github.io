@@ -2,6 +2,8 @@
 title: Causal ML: S-Learner
 ---
 
+# Introduction
+
 Causal machine learning (ML) integrates the flexible, non-parametric power of machine learning algorithms, such as random forests or neural networks, into rigorous causal inference frameworks (like the potential outcomes model) to estimate treatment effects. For epidemiologists, this approach offers two distinct advantages over traditional regression: it handles high-dimensional confounding and complex non-linearities without requiring manual model specification, and it excels at identifying heterogeneous treatment effects to determine which specific subgroups benefit most from an intervention.
 
 The core estimators in causal ML are called "meta-learners." They're "meta" because a new algorithm isn't invented from scratch. Instead, standard machine learning models serve as building blocks to estimate the Conditional Average Treatment Effect (CATE). The CATE helps measure how a treatment's average impact changes across different subgroups.
@@ -10,7 +12,9 @@ The most straightforward learner is the S-Learner (Single Learner). As the name 
 
 In this tutorial, we will start by performing a causal ML analysis "from scratch" in R then repeat the analysis by leveraging Uber's `causalml` package in python. We'll conclude by commenting on any differences between the two approaches and showcasing some of the additional capabilities of `causalml`. The analysis will work with the `df_uc_source` dataset from multibias (see [documentation](https://www.paulbrendel.com/multibias/reference/df_uc_source.html)).
 
-First we load the data and apply a 80-20 train-test split. Variable `X_bi` represents the treatment and variable `Y_bi` represents the outcome. There are four covariates: `C1`, `C2`, `C3`, and `U`.
+# R analysis
+
+First we load the data and apply a 80-20 train-test split. Variable `X_bi` represents the treatment and variable `Y_bi` represents the outcome. There are four covariates: `C1`, `C2`, `C3`, and `U`. All variables take binary values (1 or 0).
 
 ```{r}
 library(multibias)
@@ -105,11 +109,13 @@ We arrive at the following estimates:
 
 For observations with a treatment of X_bi=1, receiving the treatment increases their probability of Y_bi by 10 percentage points. The strong similarity in these estimates between the train and test data makes it unlikely that we're dealing with any concerns of overfitting. One could further inspect model performance on the train and test data by observing the accuracy and ROC AUC.
 
-Normally, in a causal ML analysis, next steps would be to plot the distribution of individual effects and investigate the heterogeneity of the treatment effect across different covariates. We'll revisit this shortly.
+Normally, in a causal ML analysis, next steps would be to plot the distribution of individual effects and investigate the heterogeneity of the treatment effect across different covariates. We'll revisit this idea in the next section.
 
-In python, these types of analyses can be performed with the `causalml` package. Let's see if we can confirm the above results in `causalml` and explore some of its other functionalities.
+# Python analysis via `causalml`
 
-As before, we start by loading the data and applying an 80-20 train test split.
+In python, these types of analyses can be performed with the `causalml` package. Let's see if we can confirm the above results and explore some of the package's other functionalities.
+
+As before, we start by loading the data and applying an 80-20 train test split. Note that the variable naming differs slightly from the above, as the "python convention" seems to be to name the feature matrix as X.
 
 ```{python}
 import pandas as pd
@@ -174,12 +180,11 @@ sns.kdeplot(data=pd.DataFrame({'cate': cate_test.reshape(-1)}), x="cate")
 plt.title("Distribution of CATE in Test Data");
 ```
 
-img
+![slearner_cate_dist](/img/causal/slearner_cate_dist.png)
 
 We observe several notable spikes in CATE across the distribution, each corresponding to a different sub-group in the population. We'll analyze this heterogeneity in the treatment effect by inspecting the mean covariate value across CATE strata. We use a binary stratification here based on whether the CATE is above or below the median.
 
 ```{python}
-# covariate differences by high vs low cate
 df_test = pd.DataFrame({
   'cate': cate_test.reshape(-1),
   'T': T_test,
@@ -195,55 +200,69 @@ df_test.groupby('cate_group')[['cate', 'T', 'Y', 'C1', 'C2', 'C3', 'U']].agg('me
 | High |	0.13 |	0.41 |	0.26 |	0.51 |	0.00 |	0.80 |	1.00 |
 | Low |	0.08 |	0.27 |	0.12 |	0.50 |	0.33 |	0.80 |	0.16 |
 
-One thing immediately stands out: values of U and C2 are extremely different between the two groups! Everyone with an above-median CATE has a U=1 and C2=0. On the other hand, no real difference is observed between in C1 or C3 based on these two CATE strata. Let's dig further dig into understanding *how* the covariates influence the treatment effect. There are a few nice tools within `causalml` to elucidate these factors:
-
-* Plot the Uplift: a visualization used to evaluate how well the causal model identifies those most affected by treatment.
-  * Qini Curve (**count-based** difference in treatment effects)
-  * Cumulative Gain Curve (**rate-based** difference in treatment effects)
-* The feature importance: what predicts the **lift**
+One thing immediately stands out: values of U and C2 are extremely different between the two groups! Everyone with an above-median CATE has a U=1 and C2=0. On the other hand, no real difference is observed between in C1 or C3 based on these two CATE strata. Let's dig further dig into understanding *how* the covariates influence the treatment effect. There are a few nice tools within `causalml` to elucidate these factors. We'll start by plotting the **uplift**: a visualization used to evaluate how well the causal model identifies those most affected by treatment. There are different options for the uplift metric, including Qini (Qini Curve) and Gain (Cumulative Gain Curve).
 
 ```{python}
 plot_qini(
   df_test.drop('cate_group', axis=1),
   outcome_col='Y',
   treatment_col='T',
-  treatment_effect_col='cate',
+  treatment_effect_col=None,
   normalize=True
 )
 
-plot_gain(
-  df_test.drop('cate_group', axis=1),
-  outcome_col='Y',
-  treatment_col='T',
-  treatment_effect_col='cate',
-  normalize=True
-)
+# not shown
+# plot_gain(
+#   df_test.drop('cate_group', axis=1),
+#   outcome_col='Y',
+#   treatment_col='T',
+#   treatment_effect_col=None,
+#   normalize=True,
+#   random_seed=123
+# )
 ```
-img
+![slearner_qini_plot](/img/causal/slearner_qini_plot.png)
 
-Under the hood...
+Note that `treatment_effect_col` is set to None. This parameter was tricky to understand in the package docs. This column should only be set to a specific column if you have a "God view" of the data and know exactly what the outcome would have been with and without treatment for every row.
 
-We can see...
+A few details are relevant in understanding how to interpret these plots:
 
+* The X-axis sequences through the population, ranked left-to-right from those considered "high responders" to those considered "non-responders" independently for each of the given variables. One line (`cate` in our example) will correspond to the predicted treatment effect: *those with the highest predicted treatment effect respond best to treatment*. The other lines will correspond to single-feature benchmarks: *those with U=1 will respond best to treatment*.
+* The Y-axis represents the cumulative uplift, which we normalized from 0-1. In other words, it shows the cumulative percentage of positive responders captured as you move down the sorted population list.
+* The dotted diagonal line represents the result if you picked users randomly. This line can either be done *theoretically* (connection point (0, 0) to the (total population, total uplift) max) or *empirically* (by shuffling the data, hence why `plot_gain()` has a random seed). Each feature is plotted relative to this random line.
+
+So what does this all amount to? What are we looking for here?
+1. Shape. In a perfect scenario, you want a line that rises as high and as quickly as possible above the baseline, indicating that by targeting a small, highly-ranked segment of the population, you can capture the maximum incremental impact. Dips below the diagonal indicate that treatment makes subjects *less likely* to respond positively.
+2. Differences in AUC (area under the curve) between lines. If the CATE line is higher than each of the covariate lines, the model has successfully combined multiple features to find a signal that is stronger than any single variable alone. Otherwise, a simple rule (e.g., just target those with U=1) works better than the complex model.
+
+With all of that out of the way, what are the big takeaways from the uplift plot of our data? We see that our model outperforms any of the single-feature benchmarks, at least for about 3/4 of the population. However, the model's benefit over targeting treatment responders based solely on variable U appears modest. The C2 line matches our observation from earlier: those with a C2 value of 1 have the *worst* response to treatment.
+
+I won't go too deep on the difference between the two plots here, but I will note that Qini is based on a **count-based** difference in treatment effects, while Gain is based on a **rate-based** difference in treatment effects.
+
+Next, we'll take a look at the feature importance, which will tell us what predicts the *uplift*, not what predicts the *outcome*.
 
 ```{python}
 slearner.get_importance(
     X=X_test,
     tau=cate_test,
-    method='auto',
-    features=X_test.columns.tolist()
-)
-
-slearner.plot_importance(
-    X=X_test,
-    tau=cate_test,
     method='permutation',
     features=X_test.columns.tolist()
 )
+
+# not shown
+# slearner.plot_importance(
+#     X=X_test,
+#     tau=cate_test,
+#     method='permutation',
+#     features=X_test.columns.tolist()
+# )
 ```
+There are two different options for the feature importance method: `permutation` and `auto`. The latter is applicable for tree-based models where the estimator has a default implementation of feature importance. Since we used logistic regression for our estimator, the permutation approach was the way to go. In this estimator-agnostic approach, it calculates importance based on the mean decrease in accuracy when a feature column is permuted.
 
-As expected, U and C2 have the great feature importance values: 0.457 and 0.355, respectively. [interpret]
+To no surprise, U and C2 have the greatest feature importance values: 0.88 and 0.70, respectively.
 
-[Comment on logistic regression / interaction / benefit of tree-based model]
+# Discussion
 
-The S-Learner for CausalML has a key limitation not obvious in the example here. The model might "ignore" the treatment variable if it's not a strong predictor, especially if the treatment is just a single binary column in a forest of hundreds of other features. This can cause the model to "wash out" the treatment effect, leading to an estimate of 0 for everyone. This motivates the need for other types of learners, like the T-Learner, which we'll explore next!
+To keep things simple and focus on the mechanics of the S-learner itself, we implemented a vanilla logistic regression as our base model. While this is great for understanding the basic workflow, it is important to acknowledge a major trade-off. A significant limitation of using a standard logistic regression as the base learner **without explicitly adding interaction terms** is that it forces the model to assume the treatment affects everyone in roughly the same way. In practice, adding interaction terms or using a tree-based model would better allow it to learn how the treatment impacts specific subgroups differently.
+
+The S-Learner for CausalML has another key limitation not obvious in the example here. The model might "ignore" the treatment variable if it's not a strong predictor, especially if the treatment is just a single binary column amongst hundreds of other features. This can cause the model to "wash out" the treatment effect, leading to an estimate of 0 for everyone. This motivates the need for other types of learners, like the T-Learner, which we'll explore next!
