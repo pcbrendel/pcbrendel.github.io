@@ -1,11 +1,9 @@
 ---
-title: Causal ML: S-Learner
-mathjax: true
+layout: page
+title: "Causal ML: S-Learner"
 ---
 
-# Introduction
-
-Causal machine learning (ML) integrates the flexible, non-parametric power of machine learning algorithms, such as random forests or neural networks, into rigorous causal inference frameworks (like the potential outcomes model) to estimate treatment effects. For epidemiologists, this approach offers a couple distinct advantages over traditional regression: it handles high-dimensional confounding and complex non-linearities without requiring manual model specification, and it excels at identifying heterogeneous treatment effects to determine which specific subgroups benefit most from an intervention.
+We often think of machine learning as a black box for prediction, but Causal ML repurposes these flexible tools for explanation. By wrapping algorithms like neural networks inside formal causal frameworks, we can estimate treatment effects without agonizing over manual model specification. This is a game-changer for identifying heterogeneity of treatment effects, moving us beyond "does it work?" to "who does it work for?".
 
 The core estimators in causal ML are called "meta-learners." This is not a nod to everyone's favorite tech company; they're "meta" because a new algorithm isn't invented from scratch. Instead, standard machine learning models can be plugged in to serve as building blocks in estimating the Conditional Average Treatment Effect (CATE). The CATE helps measure how a treatment's average impact changes across different subgroups.
 
@@ -271,6 +269,7 @@ To focus on the mechanics of the S-learner itself, we implemented a vanilla logi
 
 However, even if we used a flexible model like Gradient Boosting, S-Learners face a deeper issue known as regularization bias. If the treatment signal is weak relative to the covariates' ability to predict the outcome, a tree-based model might simply choose not to split on the treatment variable at all. The model focuses so much on predicting the outcome that it 'washes out' the causal effect of the treatment. This structural reluctance to estimate heterogeneity motivates the need for T-Learners, which split the modeling process into two distinct steps to ensure the treatment effect is explicitly captured.
 
+{% raw %}
 <script>
 MathJax = {
   tex: {
@@ -281,3 +280,4 @@ MathJax = {
 };
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+{% endraw %}

@@ -20,7 +20,7 @@ title: Causality Home
 
 <br>
 
-# R Tutorials
+# Tutorials
 
 ### [CausalML: S-Learner](/causality/ml_slearner/)
 
