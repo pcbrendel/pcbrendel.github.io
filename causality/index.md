@@ -22,12 +22,14 @@ title: Causality Home
 
 # R Tutorials
 
-### [G-computation](/causality/gcomp/)
-
-### [Causal Impact (Bayesian Structural Time Series)](/causality/causal_impact)
+### [CausalML: S-Learner](/causality/ml_slearner/)
 
 ### [Bias Adjustment: Uncontrolled Confounding](/causality/uc_tutorial/)
 
 ### [Bias Adjustment: Selection Bias](/causality/sel_tutorial/)
 
 ### [Bias Adjustment: Exposure Misclassification](/causality/em_tutorial/)
+
+### [G-computation](/causality/gcomp/)
+
+### [Causal Impact (Bayesian Structural Time Series)](/causality/causal_impact)

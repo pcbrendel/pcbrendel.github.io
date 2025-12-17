@@ -2,24 +2,26 @@
 title: Causal Inference Toolkit
 ---
 
-**Key methods:**
+**Methods:**
 
 * Difference-in-Differences
 * E-value
 * G-computation
-* Interrupted time series
+* Interrupted Time Series
 * Inverse Probability of Treatment Weighting (IPTW)
 * Matching
 * Propensity Scores
 * Survival Analysis
 * Targeted Maximum Likelihood Estimate (TMLE)
+* Synthetic controls
 
-**Key causality books:**
+**Books:**
 
 * [Causality (Pearl)](https://bayes.cs.ucla.edu/BOOK-2K/)
 * [What If (Hernan)](https://miguelhernan.org/whatifbook)
 * [Causal Inference: The Mixtape (Cunningham)](https://mixtape.scunning.com/)
 * [The Effect (Huntington-Klein)](https://theeffectbook.net/)
+* [Causal Analysis: Impact Evaluation and Causal Machine Learning with Applications in R](https://mitpress.mit.edu/9780262545914/causal-analysis/)
 
 **R packages:**
 
