@@ -1,5 +1,6 @@
 ---
 title: Causal ML: S-Learner
+mathjax: true
 ---
 
 # Introduction
@@ -10,7 +11,7 @@ The core estimators in causal ML are called "meta-learners." This is not a nod t
 
 The most straightforward learner is the S-Learner (Single Learner). As the name implies, the S-Learner uses a single machine learning model to estimate causal effects. This model treats the treatment variable and relevant covariates as predictors of the outcome. Once the model is fit, individual treatment effects are calculated by: (1) predicting the outcome for each observation assuming treatment=1, (2) predicting the outcome for each observation assuming treatment=0, and (3) taking the difference between these two predictions for each individual. The final CATE estimate is the average of all these individual treatment effect differences.
 
-In other words, the S-Learner estimates the outcome surface $\mu(x, t) = E[Y|X=x, T=t]$ using a single model. The CATE is then derived as $\hat{\tau}(x) = \hat{\mu}(x, 1) - \hat{\mu}(x, 0)$. Bootstrapping is a common non-parametric method to obtain valid confidence intervals of the CATE estimate.
+In other words, the S-Learner estimates the outcome surface $\mu(x, t) = E[Y\|X=x, T=t]$ using a single model. The CATE is then derived as $\hat{\tau}(x) = \hat{\mu}(x, 1) - \hat{\mu}(x, 0)$. Bootstrapping is a common non-parametric method to obtain valid confidence intervals of the CATE estimate.
 
 In this tutorial, we will start by performing a causal ML analysis "from scratch" in R then repeat the analysis by leveraging Uber's `causalml` package in python. The analysis will work with the `df_uc_source` dataset from multibias (see [documentation](https://www.paulbrendel.com/multibias/reference/df_uc_source.html)).
 
@@ -169,8 +170,8 @@ slearner.estimate_ate(
   bootstrap_size=len(X_test)
 )
 ```
-Train CATE = 0.101 (95% CI: 0.095 to 0.107)
-Test CATE = 0.106 (95% CI: 0.094 to 0.117)
+* Train CATE = 0.101 (95% CI: 0.095 to 0.107)
+* Test CATE = 0.106 (95% CI: 0.094 to 0.117)
 
 These estimates are very similar to those obtained in the R demonstration, demonstrating an average treatment effect of 10%, conditional on the covariates.
 
@@ -197,6 +198,7 @@ df_test['cate_group'] = np.where(df_test['cate'] > np.median(df_test['cate']), "
 
 df_test.groupby('cate_group')[['cate', 'T', 'Y', 'C1', 'C2', 'C3', 'U']].agg('mean')
 ```
+
 | cate_group | cate |	T |	Y |	C1 | C2 |	C3 |	U |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | High |	0.13 |	0.41 |	0.26 |	0.51 |	0.00 |	0.80 |	1.00 |
@@ -268,3 +270,14 @@ To no surprise, U and C2 have the greatest feature importance values: 0.88 and 0
 To focus on the mechanics of the S-learner itself, we implemented a vanilla logistic regression. However, a significant limitation of using a standard logistic regression as the base learner **without explicitly adding interaction terms** is that the model assumes that the treatment effect is constant across the population. Adding interaction terms or using a tree-based model would better allow it to learn how the treatment impacts specific subgroups differently.
 
 However, even if we used a flexible model like Gradient Boosting, S-Learners face a deeper issue known as regularization bias. If the treatment signal is weak relative to the covariates' ability to predict the outcome, a tree-based model might simply choose not to split on the treatment variable at all. The model focuses so much on predicting the outcome that it 'washes out' the causal effect of the treatment. This structural reluctance to estimate heterogeneity motivates the need for T-Learners, which split the modeling process into two distinct steps to ensure the treatment effect is explicitly captured.
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
