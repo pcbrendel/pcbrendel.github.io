@@ -2,18 +2,7 @@
 title: Causal Inference Toolkit
 ---
 
-**Methods:**
-
-* Difference-in-Differences
-* E-value
-* G-computation
-* Interrupted Time Series
-* Inverse Probability of Treatment Weighting (IPTW)
-* Matching
-* Propensity Scores
-* Survival Analysis
-* Targeted Maximum Likelihood Estimate (TMLE)
-* Synthetic controls
+A certainly non-exhaustive series of lists
 
 **Books:**
 
@@ -22,6 +11,21 @@ title: Causal Inference Toolkit
 * [Causal Inference: The Mixtape (Cunningham)](https://mixtape.scunning.com/)
 * [The Effect (Huntington-Klein)](https://theeffectbook.net/)
 * [Causal Analysis: Impact Evaluation and Causal Machine Learning with Applications in R](https://mitpress.mit.edu/9780262545914/causal-analysis/)
+* [Causal Artificial Intelligence: A Roadmap for Building Causally Intelligent Systems](https://causalai-book.net/)
+
+**Methods:**
+
+* Difference-in-Differences
+* E-value
+* G-computation
+* Interrupted Time Series
+* Inverse Probability of Treatment Weighting (IPTW)
+* Marginal Structural Models
+* Matching
+* Propensity Scores
+* Survival Analysis
+* Targeted Maximum Likelihood Estimate (TMLE)
+* Synthetic controls
 
 **R packages:**
 
@@ -38,7 +42,7 @@ title: Causal Inference Toolkit
 * sensemakr
 * tipr
 * tmle
-* WeighIt
+* WeightIt
 
 **Python packages:**
 
