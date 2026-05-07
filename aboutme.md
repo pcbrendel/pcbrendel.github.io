@@ -11,4 +11,10 @@ Another emergent passion of mine is the world of blockchains, particularly ether
 
 Throughout my journey, I've maintained a passion for baseball analytics. I have been doing competitive fantasy baseball for over 15 years and thrive in the competitive, analytical environment. During graduate school I always chose baseball as the subject for biostatistics class projects. I've also contributed a bit to [Pitcher List](https://pitcherlist.com), which has a very fun and welcoming community. I will continually return to baseball data as an outlet to explore and learn new data science concepts. If this work happens to create insights that help my fantasy baseball team - that's a win-win!
 
-![dissertation_pic](img/site/dissertation_pic.jpg)
+### Publications
+
+* [Simultaneous Adjustment in Multiple-bias Modeling](https://pubmed.ncbi.nlm.nih.gov/36718093/)
+* [Impact of COVID-19 on Urological Care Delivery](https://www.auajournals.org/doi/full/10.1097/JU.0000000000002145)
+* [Reading Faces](https://www.ncbi.nlm.nih.gov/pubmed/24463310)
+* [My PhD Dissertation](https://escholarship.org/uc/item/4c50w909)
+* [My Masters Thesis](http://d-scholarship.pitt.edu/23679/)
