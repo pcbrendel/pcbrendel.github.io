@@ -12,9 +12,7 @@ description: ""
 # List of links in the navigation bar
 navbar-links:
   Blog: "blog"
-  Multibias:
-    - R Package: "https://www.paulbrendel.com/multibias/"
-    - Web App: "https://pcbrendel.shinyapps.io/multibias/"
+  Multibias: "https://www.paulbrendel.com/multibias/"
   Causality: "causality"
   Games: "games"
   About Me: "aboutme"

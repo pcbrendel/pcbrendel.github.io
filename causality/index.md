@@ -1,13 +1,6 @@
 ---
 title: Causality Home
 ---
-<br>
-
-<div id="deployment-d476a4db-2c3b-448d-8069-37281d9f215a"></div>
-<script src="https://studio.pickaxe.co/api/embed/bundle.js" defer></script>
-
-<br>
-
 # Background
 
 ### [Causal Inference Overview](/causality/causal_overview/)
@@ -22,14 +15,14 @@ title: Causality Home
 
 # Tutorials
 
-### [CausalML: S-Learner](/causality/ml_slearner/)
-
 ### [Bias Adjustment: Uncontrolled Confounding](/causality/uc_tutorial/)
 
 ### [Bias Adjustment: Selection Bias](/causality/sel_tutorial/)
 
 ### [Bias Adjustment: Exposure Misclassification](/causality/em_tutorial/)
 
-### [G-computation](/causality/gcomp/)
-
 ### [Causal Impact (Bayesian Structural Time Series)](/causality/causal_impact)
+
+### [CausalML: S-Learner](/causality/ml_slearner/)
+
+### [G-computation](/causality/gcomp/)
