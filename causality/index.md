@@ -1,28 +1,34 @@
 ---
-title: Causality Home
+title: Causality
 ---
 # Background
 
-### [Causal Inference Overview](/causality/causal_overview/)
+### [Overview](/causality/causal_overview/)
 
-### [Causal Inference Toolkit](/causality/causal_toolkit/)
+### [Methods](/causality/causal_methods/)
 
-### [Types of Causal Bias](/causality/types_of_bias/)
-
-### [Methods for Bias Analysis](/causality/bias_analysis_methods/)
+### [Toolkit](/causality/causal_toolkit/)
 
 <br>
 
-# Tutorials
+# Causal Bias
 
-### [Bias Adjustment: Uncontrolled Confounding](/causality/uc_tutorial/)
+### [Types of Bias](/causality/types_of_bias/)
 
-### [Bias Adjustment: Selection Bias](/causality/sel_tutorial/)
+### [Quantitative Bias Analysis](/causality/qba/)
 
-### [Bias Adjustment: Exposure Misclassification](/causality/em_tutorial/)
+<br>
 
-### [Causal Impact (Bayesian Structural Time Series)](/causality/causal_impact)
+# Coding Tutorials
 
-### [CausalML: S-Learner](/causality/ml_slearner/)
+### [Bias Adjustment: Uncontrolled Confounding](/causality/tutorials/uc_tutorial/)
 
-### [G-computation](/causality/gcomp/)
+### [Bias Adjustment: Selection Bias](/causality/tutorials/sel_tutorial/)
+
+### [Bias Adjustment: Exposure Misclassification](/causality/tutorials/em_tutorial/)
+
+### [Causal Impact (Bayesian Structural Time Series)](/causality/tutorials/causal_impact)
+
+### [CausalML: S-Learner](/causality/tutorials/ml_slearner/)
+
+### [G-computation](/causality/tutorials/gcomp/)
