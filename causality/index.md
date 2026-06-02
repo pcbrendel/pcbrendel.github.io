@@ -13,9 +13,9 @@ title: Causality
 
 # Causal Bias
 
-### [Types of Bias](/causality/types_of_bias/)
+### [Types of Bias](/causality/bias_types/)
 
-### [Quantitative Bias Analysis](/causality/qba/)
+### [Quantitative Bias Analysis](/causality/bias_qba/)
 
 <br>
 

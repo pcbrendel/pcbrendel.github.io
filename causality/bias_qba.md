@@ -2,27 +2,55 @@
 title: Quantitative Bias Analysis
 ---
 
-Estimates of the effect of an exposure on an outcome are comprised of the true effect, random error, and systematic error. Random error can be thought of as the residual variability of an effect measure that occurs because of a lack of sufficient knowledge to perfectly predict events. In epidemiological studies, a major contributor of random error is sampling variability, error that results from the inability to include everyone from the target population (or a broader conceptual population of everyone with the biological experience) who could have been included in the study.  Random error in epidemiological studies can be modified by changing the study size, efficiently apportioning subjects into study groups, and efficiently stratifying the data into covariate subcategories. The random error of an effect estimate is usually quantified by a standard error and confidence interval. Systematic error, also known as bias, includes all the other (nonrandom) forces that harm the internal validity of a study. The `multibias` R package I've developed serves to help scientists quantify this systematic error.
+Every causal effect estimate contains uncertainty. Quantitative bias analysis (QBA) is the family of methods used to make that uncertainty explicit when it comes from systematic error, the nonrandom threats to internal validity.
+
+In principle, an observed estimate reflects three components: the true causal effect we want to know, random error, and systematic error. Random and systematic error both contribute to distorting the truth, but they are not the same problem and warrant different solutions.
+
+**Random error** is the residual variability that would remain even if the study were perfectly designed and analyzed. It reflects incomplete knowledge about individuals and events, most often because we study a sample rather than the entire target population (or the broader population of everyone who shares the relevant biological experience). Random error is mainly reduced by larger samples and design choices that improve precision. It is usually quantified with a standard error and confidence interval.
+
+**Systematic error**, also simply called bias, comes from nonrandom flaws in design, measurement, or analysis. The three main pillars of systematic error include: uncontrolled confounding, selection bias, and misclassification. Unlike random error, bias does not shrink automatically as the sample grows. To grapple with systematic error, investigators must utilize methods that depend on bias models. These models reflect the strength and direction of the various bias sources (unmeasured confounders, selection mechanisms, and misclassification rates). External data and/or reasoned assumptions can be integrated with these models.
+
+QBA is the science of turning those assumptions into numbers: bias-adjusted effect estimates, tipping-point analyses, and intervals that reflect uncertainty in both sampling and bias. The [`multibias`](https://www.paulbrendel.com/multibias/) R package extends this workflow to multiple biases at once, which is increasingly important as studies grow more complex.
 
 ## Methods for QBA
 
 ### Simple Sensitivity Analysis
 
-Traditional sensitivity analysis involves replacing the sources of uncertainty with fixed values.  The conventional analysis is then repeated with different values of the uncertainty parameters.  The consistency or any patterns in the resulting array of effect estimates can then be compared to the chosen values of the uncertainty parameters.
+Traditional sensitivity analysis involves replacing sources of systematic uncertainty with **fixed, user-specified values** called **bias parameters**. A **bias model**—an algebraic relationship derived from study design and causal assumptions—maps those parameters to a **bias factor**, which is applied to the conventional (biased) effect estimate to obtain a bias-adjusted estimate. The analysis is repeated across a grid or range of plausible bias-parameter values. Patterns in the resulting array of adjusted estimates (how far estimates move toward or away from the null, and which parameter combinations are required to explain away an association) are then compared to the assumptions that produced them.
 
-An example of this method is seen in [Sensitivity analyses to estimate the potential impact of unmeasured confounding in causal research](https://academic.oup.com/ije/article/39/1/107/714781) by Groenwold et al.  In this example, different estimates of the exposure-outcome odds ratio are obtained by changing the values of:
+Sensitivity analysis in epidemiology has a long history. [Cornfield et al. (1959)](https://pubmed.ncbi.nlm.nih.gov/13621204/) famously asked whether a hypothetical unmeasured factor could account for the observed association between cigarette smoking and lung cancer — an early template for “how strong would confounding have to be?” [Greenland and Robins (1985)](https://pubmed.ncbi.nlm.nih.gov/4025298/) extended sensitivity methods to misclassification of exposure and confounders. [Greenland (1996)](https://pubmed.ncbi.nlm.nih.gov/9027513/) unified many of these ideas under a general framework for sensitivity analysis of biases and distinguished simple fixed-value approaches from probabilistic ones.
 
-1. The prevalence of the unmeasured confounder
-2. The confounder-exposure odds ratio
-3. The confounder-outcome odds ratio, conditional on the exposure
+#### How it works
 
-[expand]
+The workflow has four steps:
 
-While this method is an improvement over completely ignoring bias in the analyses, it suffers from some key limitations:
+1. **Specify a bias model** for the suspected source of bias (uncontrolled confounding, selection, or misclassification), usually starting from a directed acyclic graph.
+2. **Identify bias parameters**—quantities not identified from the observed data (e.g., the strength of an unmeasured confounder’s association with exposure and outcome).
+3. **Assign fixed values** to each parameter, drawing on external studies, validation data, subject-matter knowledge, or deliberately conservative scenarios.
+4. **Compute the bias-adjusted estimate** and repeat for other parameter combinations.
 
-1. This method becomes difficult as the number of bias parameters increases
-2. It usually does not demonstrate the full range of bias in the results
-3. The corrected estimates will not account for random error
+Results are often presented as a table (one row per scenario) or a tornado plot showing which parameters move the estimate most. A common inferential question is bias tipping: the combination of bias-parameter values that would shift the adjusted estimate to the null (or below a policy-relevant threshold), which helps readers judge whether residual confounding is a plausible explanation for the observed association.
+
+#### Example
+
+An accessible illustration is [Sensitivity analyses to estimate the potential impact of unmeasured confounding in causal research](https://academic.oup.com/ije/article/39/1/107/714781) by Groenwold et al. The authors consider an observational study with an observed exposure–outcome odds ratio that may be confounded by an unmeasured binary confounder. Under standard simplifying assumptions (binary confounder, constant effect of the confounder on the outcome within exposure strata, etc.), the corrected exposure–outcome odds ratio depends on three bias parameters:
+
+1. The **prevalence** of the unmeasured confounder (often specified separately in exposed and unexposed groups, or as a prevalence difference)
+2. The **confounder–exposure** association (e.g., an odds ratio)
+3. The **confounder–outcome** association, conditional on exposure
+
+The investigator chooses plausible values for each parameter and applies the corresponding bias formula to obtain an adjusted odds ratio. Repeating the calculation across a grid of values shows how strongly the conclusion depends on assumptions about the unmeasured confounder. If only extreme, implausible parameter combinations move the adjusted estimate to the null, the observed association is more robust to confounding than if modest, realistic values can explain it away.
+
+#### Limitations
+
+Simple sensitivity analysis is a substantial improvement over ignoring bias, but it has important limits:
+
+1. **Curse of dimensionality** — Each additional bias parameter multiplies the number of scenarios to consider. Adjusting for two or three biases simultaneously quickly becomes unwieldy without automation.
+2. **Incomplete exploration of uncertainty** — Fixing parameters to point values does not describe how uncertain those inputs are. A grid may miss combinations that matter, and readers can disagree about which scenarios are “plausible.”
+3. **Limited uncertainty quantification** — Under fixed bias parameters, the sampling variance of the conventional estimate often carries over to the bias-adjusted point estimate (e.g., for simple additive corrections), but the analysis does **not** incorporate uncertainty in the bias parameters themselves. Interval estimates that reflect both random and systematic error require probabilistic bias analysis (below).
+4. **Dependence on the bias model** — Adjusted estimates are only as credible as the structural assumptions encoded in the bias model; misspecified models can give a false sense of security.
+
+Despite these limits, simple sensitivity analysis remains the most common entry point to quantitative bias analysis and is often sufficient to show whether a finding is fragile or robust to reasonable bias scenarios.
 
 ### Bayesian Bias Analysis
 
