@@ -14,7 +14,6 @@ navbar-links:
   Blog: "blog"
   Multibias: "https://www.paulbrendel.com/multibias/"
   Causality: "causality"
-  Games: "games"
   About Me: "aboutme"
 
 # Image to show in the navigation bar - image must be a square (width = height)

@@ -1,6 +1,7 @@
 ---
-layout: page
+layout: post
 title: The Collatz Conjecture Game
+social-share: true
 ---
 
 <div class="container">
@@ -167,10 +168,6 @@ title: The Collatz Conjecture Game
 
   const db = getFirestore(app);
   console.log('Firestore database initialized');
-
-  // Configure Firestore for better performance
-  // Note: In Firebase v9+, settings are configured differently
-  // These settings help with performance and reliability
 
   // Enable offline persistence for better caching
   try {
