@@ -3,7 +3,14 @@ title: Adjustment for Uncontrolled Confounding
 ---
 
 ## Overview
-This tutorial will demonstrate how to adjust for an uncontrolled confounder. First, generate a dataset of 100,000 rows with the following binary variables:
+
+Observational studies often lack data on important confounders. When an unmeasured variable *U* confounds the exposure–outcome relationship, standard regression cannot remove the bias—and as we will see, omitting *U* can materially inflate the estimated effect. [Quantitative bias analysis (QBA)](/causality/bias_qba/) makes that systematic uncertainty explicit by encoding assumptions about *U* in **bias parameters** and using them to obtain a bias-adjusted estimate.
+
+Here we work through a probabilistic variant: specify a model for P(*U* \| *X*, *Y*, *C*), use those parameters to predict *U* (or its probability) for each row, and propagate uncertainty with bootstrap resampling. Instead of scanning a table of scenarios, we embed the bias model in the analysis and examine how the adjusted estimate changes when the parameter inputs are correct or wrong.
+
+We simulate data with a known causal effect, show the bias when *U* is unobserved, and implement two adjustment methods: regression weighting and stochastic imputation.
+
+First, generate a dataset of 100,000 rows with the following binary variables:
 
 * *X* = Exposure (1 = exposed, 0 = not exposed)
 * *Y* = Outcome (1 = outcome, 0 = no outcome)
@@ -11,6 +18,8 @@ This tutorial will demonstrate how to adjust for an uncontrolled confounder. Fir
 * *U* = Uncontrolled Confounder (1 = present, 0 = absent)
 
 ```r
+library(dplyr)
+
 set.seed(1234)
 n <- 100000
 
@@ -53,9 +62,23 @@ c(exp(coef(biased_model)[2] + summary(biased_model)$coef[2, 2] * qnorm(.025)),
 ```
 *OR<sub>YX</sub>* = 3.11 (3.03, 3.20)
 
-The odds ratio of the effect of *X* on *Y* increases from ~2 to ~3 when adjustment for the confounder *U* is absent in the model.  In a perfect world, an investigator would simply make sure to control for all confounding variables in the analysis.  However, it may not be feasible or possible to collect data on certain variables.  This bias analysis will allow for the adjustment of uncontrolled confounders even when data for *U* is unavailable.  We will instead rely on assumptions of how the exposure, outcome, and known confounder(s) affect the unknown confounder. These assumptions are quantified in bias parameters used in the analysis.  Using these bias parameters, we can predict the probability of *U* for each observation and use the probabilities for bias adjustment by either imputing the value of *U* or by using a regression weighting approach.
+The odds ratio increases from ~2 to ~3 when *U* is omitted, a concrete illustration of uncontrolled confounding. The sections below specify the assumptions needed to adjust for *U* without observing it, obtain bias parameters, and apply two correction methods. Note that we'll be assuming all base assumptions for causal identification (e.g., positivity) are already present.
 
-Normally, the values of the bias parameters are obtained externally from the literature or from an internal validation sub-study.  However, for this proof of concept, we can obtain the exact values of the parameters.  We will perform the final regression of *Y* on *X* as if we don't have data on *U*. Since we have the values of *U* in our data we can model how *U* is affected by *X*, *Y*, and *C* to obtain accurate bias parameters.
+## Assumptions for bias adjustment
+
+The adjusted estimate depends on a **bias model** that describes how the unmeasured confounder *U* relates to the variables we *do* observe. Here we use a logistic model for the probability that *U* = 1:
+
+P(*U* = 1 \| *X*, *Y*, *C*) = expit(β₀ + β<sub>*X*</sub> *X* + β<sub>*Y*</sub> *Y* + β<sub>*C*</sub> *C*)
+
+The intercept and coefficients are **bias parameters**. They are not identified from the selected sample alone; they must be supplied from external sources.
+
+**Why include *Y*?** The model includes *Y* not because we assume *Y* causes *U*, but because *Y* is observed and may carry information about *U* once *X* and *C* are held fixed. In the DAG above, *U* sits on back-door paths to both *X* and *Y*, and *X* affects *Y*, so *U* and *Y* are associated in the observed data even when *U* does not causally depend on *Y*. Specifying P(*U* \| *X*, *Y*, *C*) is a modeling choice: it uses all available information to predict *U* for each row before re-fitting the outcome model.
+
+**Where parameters come from in practice.** Bias parameters are usually set from prior literature, a validation or surrogate substudy, meta-analytic estimates, or structured expert judgment—not by regressing on the true *U*, which is unknown by definition. Ranges or probability distributions over parameters can be used to reflect uncertainty; the doubled-parameter example later shows how sensitive the adjusted estimate is to misspecification.
+
+**Proof of concept in this simulation.** Because we generated *U*, we can fit `glm(U ~ X + Y + C)` as an oracle exercise: it recovers the conditional associations in this dataset and gives us correct parameters for demonstration. The outcome analysis that follows is otherwise performed as if *U* were never collected.
+
+Given bias parameters, we predict P(*U* \| *X*, *Y*, *C*) for each observation and use those probabilities in either a **weighting** or **imputation** step to approximate controlling for *U* in the outcome regression. Bootstrapping propagates sampling uncertainty through the procedure.
 
 ```r
 u_model <- glm(U ~ X + Y + C,
@@ -64,14 +87,19 @@ u_model <- glm(U ~ X + Y + C,
 summary(u_model)
 ```
 These parameters can be interpreted as follows:
-* Intercept: log\[odds(*U*=1\|*X*=0, *C*=0, *Y*=0)]
-* *X* coefficient: log\[odds(*U*=1\|*X*=1, *C*=0, *Y*=0)] / log\[odds(*U*=1\|*X*=0, *C*=0, *Y*=0)] i.e. the log odds ratio denoting the amount by which the log odds of *U*=1 changes for every 1 unit increase in *X* among the *C*=0, *Y*=0 subgroup.
-* *Y* coefficient: log\[odds(*U*=1\|*X*=0, *C*=0, *Y*=1)] / log\[odds(*U*=1\|*X*=0, *C*=0, *Y*=0)]
-* *C* coefficient: log\[odds(*U*=1\|*X*=0, *C*=1, *Y*=0)] / log\[odds(*U*=1\|*X*=0, *C*=0, *Y*=0)]
 
-Now that values for the bias parameters have been obtained, we'll use these values to perform the bias adjustment with two different approaches. In both cases, we'll build the analysis within a function for quick reiteration. Bootstrapping will be used in order to obtain a confidence interval for the *OR<sub>YX</sub>* estimate.
+* Intercept (β₀): log\[odds(*U*=1 \| *X*=0, *C*=0, *Y*=0)]
+* *X* coefficient (β<sub>*X*</sub>): log\[odds(*U*=1 \| *X*=1, *C*=0, *Y*=0)] − log\[odds(*U*=1 \| *X*=0, *C*=0, *Y*=0)]
+* *Y* coefficient (β<sub>*Y*</sub>): log\[odds(*U*=1 \| *X*=0, *C*=0, *Y*=1)] − log\[odds(*U*=1 \| *X*=0, *C*=0, *Y*=0)]
+* *C* coefficient (β<sub>*C*</sub>): log\[odds(*U*=1 \| *X*=0, *C*=1, *Y*=0)] − log\[odds(*U*=1 \| *X*=0, *C*=0, *Y*=0)]
 
-## 1. Weighting Approach
+Equivalently, exponentiating a coefficient gives an odds ratio for *U*. For example, exp(β<sub>*X*</sub>) = odds(*U*=1 \| *X*=1, *C*=0, *Y*=0) / odds(*U*=1 \| *X*=0, *C*=0, *Y*=0).
+
+With the bias parameters in hand, we implement two adjustment approaches below. In both cases, the analysis is wrapped in a function for quick reiteration.
+
+## 1. Weighting approach
+
+The weighting approach marginalizes over the unobserved *U* by duplicating each row into pseudo-observations with *U*=1 and *U*=0, weighted by their predicted probabilities.
 
 The steps for the weighting approach are as follows:
 
@@ -111,7 +139,7 @@ adjust_uc_wgt_loop <- function(
 }
 ```
 
-## 2. Imputation Approach
+## 2. Imputation approach
 
 The steps for the imputation approach are as follows:
 
@@ -150,11 +178,12 @@ adjust_uc_imp_loop <- function(
 
 ## Evaluate
 
-We can run the analysis using different values of the bias parameters.  When we use the known, correct values for the bias parameters that we obtained earlier, we obtain *OR<sub>YX</sub>* = 2.03 (1.98, 2.07), representing the bias-adjusted effect estimate we expect based on the derivation of the data.
+We can run the analysis using different values of the bias parameters.  When we use the known, correct values for the bias parameters that we obtained earlier, we obtain *OR<sub>YX</sub>* = 2.03, representing the bias-adjusted effect estimate we expect based on the derivation of the data.
 
 ```r
+# weighting
 set.seed(1234)
-correct_results <- adjust_uc_wgt_loop(
+adjusted_results_wgt <- adjust_uc_wgt_loop(
   coef_0 = coef(u_model)[1],
   coef_x = coef(u_model)[2],
   coef_c = coef(u_model)[3],
@@ -162,9 +191,23 @@ correct_results <- adjust_uc_wgt_loop(
   nreps = 10
 )
 
-correct_results$estimate
-correct_results$ci
+adjusted_results_wgt$estimate # 2.03
+adjusted_results_wgt$ci # 1.98, 2.07
+
+# imputation
+set.seed(1234)
+adjusted_results_imp <- adjust_uc_imp_loop(
+  coef_0 = coef(u_model)[1],
+  coef_x = coef(u_model)[2],
+  coef_c = coef(u_model)[3],
+  coef_y = coef(u_model)[4],
+  nreps = 10
+)
+
+adjusted_results_imp$estimate # 2.03
+adjusted_results_imp$ci # 1.95, 2.10
 ```
+
 The output can also include a histogram showing the distribution of the OR<sub>YX</sub> estimates from each bootstrap sample. We can analyze this plot to see how well the odds ratios converge.
 
 ![uc_demo_hist](/img/causal/uc_demo_hist.png)
@@ -172,8 +215,6 @@ The output can also include a histogram showing the distribution of the OR<sub>Y
 If instead we use bias parameters that are each double the correct value, we obtain *OR<sub>YX</sub>* = 0.81 (0.79, 0.82), an incorrect estimate of effect.
 
 ```r
-library(dplyr)
-
 set.seed(1234)
 incorrect_results <- adjust_uc_wgt_loop(
   coef_0 = coef(u_model)[1] * 2,
@@ -183,8 +224,6 @@ incorrect_results <- adjust_uc_wgt_loop(
   nreps = 10
 )
 
-incorrect_results$estimate
-incorrect_results$ci
+incorrect_results$estimate # 0.81
+incorrect_results$ci # 0.79, 0.82
 ```
-
-You can find the full code for this analysis <a href="https://github.com/pcbrendel/causal/blob/master/bias_analysis_uc.R" target="_blank">here</a>.

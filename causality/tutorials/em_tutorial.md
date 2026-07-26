@@ -3,7 +3,14 @@ title: Adjustment for Exposure Misclassification
 ---
 
 ## Overview
-This tutorial will demonstrate how to adjust for exposure misclassification. First, generate a dataset of 100,000 rows with the following binary variables:
+
+In epidemiology, it is not uncommon for an exposure to be measured with error. Reasons for the misclassification can include recall bias, flawed data collection, or imprecise measurement tools.  When an analysis unknowlingly uses a misclassified exposure (*Xstar*) instead of the true exposure (*X*), the estimated effect can be biased in either direction from the null. [Quantitative bias analysis (QBA)](/causality/bias_qba/) makes the systematic uncertainty explicit by encoding assumptions about misclassification in **bias parameters** and using them to obtain a bias-adjusted estimate.
+
+Here we work through a probabilistic variant: specify a model for P(*X* \| *Xstar*, *Y*, *C*), use those parameters to predict *X* (or its probability) for each row, and propagate uncertainty with bootstrap resampling. Instead of scanning a table of scenarios, we embed the bias model in the analysis and examine how the adjusted estimate changes when the parameter inputs are correct or wrong.
+
+We simulate data with a known causal effect, show the bias when *Xstar* is used in place of *X*, and implement two adjustment methods: regression weighting and stochastic imputation.
+
+First, generate a dataset of 100,000 rows with the following binary variables:
 
 * *X* = Exposure (1 = exposed, 0 = not exposed)
 * *Y* = Outcome (1 = outcome, 0 = no outcome)
@@ -53,23 +60,42 @@ c(exp(coef(biased_model)[2] + summary(biased_model)$coef[2, 2] * qnorm(.025)),
 ```
 *OR<sub>YX</sub>* = 1.27 (1.24, 1.31)
 
-The odds ratio of the effect of *X* on *Y* decreases from ~2 to ~1.3 when the exposure *X* is misclassified in the model.  Misclassification is sometimes inevitable due to inaccurate measurement tools or human error.  This bias analysis will allow for correct inference when *Xstar* is used instead of *X*.  We will rely on assumptions of how the misclassified exposure, outcome, and known confounder(s) affect the true exposure (each assumption corresponding to a bias parameter).  Using these assumptions, we will create a model to predict the probability of X, which will then be incorporated as a weight in the outcome regression.  This regression weight provides the bias adjustment.
+The odds ratio falls from ~2 to ~1.3 when *Xstar* replaces *X* in the model, a concrete illustration of exposure misclassification bias. The sections below specify the assumptions needed to adjust for misclassification without observing *X*, obtain bias parameters, and apply two different adjustment methods. Note that we'll be assuming all base assumptions for causal identification (e.g., positivity) are already present.
 
-Normally, the values of the bias parameters are obtained externally from the literature or from an internal validation sub-study.  However, for this proof of concept, we can obtain the exact values of the parameters. We will perform the final regression of *Y* on *Xstar* instead of *X*. Since we know the values of *X*, we can model how *X* is affected by *Xstar*, *C*, and *Y* to obtain accurate bias parameters.
+## Assumptions for bias adjustment
+
+The adjusted estimate depends on a **bias model** that describes how the true exposure *X* relates to the misclassified measure and other observed variables. Here we use a logistic model for the probability that *X* = 1:
+
+P(*X* = 1 \| *Xstar*, *Y*, *C*) = expit(β₀ + β<sub>*Xstar*</sub> *Xstar* + β<sub>*Y*</sub> *Y* + β<sub>*C*</sub> *C*)
+
+The intercept and coefficients are **bias parameters**. They are not identified from the selected sample alone; they must be supplied from external sources.
+
+**Why include *Y*?** The model includes *Y* not because we assume *Y* causes *X*, but because misclassification may differ by outcome—as it does in this simulation, where the sensitivity and specificity of *Xstar* depend on *Y*. Including *Y* lets the bias model reflect differential misclassification. In other settings, external validation data may justify a simpler model without *Y*.
+
+**Where parameters come from in practice.** Bias parameters are usually set from prior literature, an internal validation substudy that compares *Xstar* to a gold-standard measure of *X*, meta-analytic estimates, or structured expert judgment—not by regressing on the true *X*, which is unknown by definition in the main analysis. Ranges or probability distributions over parameters can be used to reflect uncertainty. The doubled-parameter example later shows how sensitive the adjusted estimate is to misspecification.
+
+**Proof of concept in this simulation.** Because we generated *X*, we can fit `glm(X ~ Xstar + Y + C)` as an oracle exercise: it recovers the conditional associations in this dataset and gives us correct parameters for demonstration. The outcome analysis that follows is otherwise performed using *Xstar* in place of *X*.
+
+Given bias parameters, we predict P(*X* \| *Xstar*, *Y*, *C*) for each observation and use those probabilities in either a **weighting** or **imputation** step to approximate using *X* in the outcome regression. Bootstrapping propagates sampling uncertainty through the procedure.
 
 ```r
 x_model <- glm(X ~ Xstar + Y + C, family = binomial(link = "logit"), data = df)
 summary(x_model)
 ```
 These parameters can be interpreted as follows:
-* Intercept = log\[odds(*X*=1\|*Xstar*=0, *C*=0, *Y*=0)]
-* *Xstar* coefficient = log\[odds(*X*=1\|*Xstar*=1, *C*=0, *Y*=0)] / log\[odds(*X*=1\|*Xstar*=0, *C*=0, *Y*=0)] i.e. the log odds ratio denoting the amount by which the log odds of *X*=1 changes for every 1 unit increase in *Xstar* among the *C*=0, *Y*=0 subgroup.
-* *Y* coefficient = log\[odds(*X*=1\|*Xstar*=0, *C*=0, *Y*=1)] / log\[odds(*X*=1\|*Xstar*=0, *C*=0, *Y*=0)]
-* *C* coefficient = log\[odds(*X*=1\|*Xstar*=0, *C*=1, *Y*=0)] / log\[odds(*X*=1\|*Xstar*=0, *C*=0, *Y*=0)]
 
-Now that values for the bias parameters have been obtained, we'll use these values to perform the bias adjustment with two different approaches. In both cases, we'll build the analysis within a function for quick reiteration. Bootstrapping will be used in order to obtain a confidence interval for the *OR<sub>YX</sub>* estimate.
+* Intercept (β₀): log\[odds(*X*=1 \| *Xstar*=0, *C*=0, *Y*=0)]
+* *Xstar* coefficient (β<sub>*Xstar*</sub>): log\[odds(*X*=1 \| *Xstar*=1, *C*=0, *Y*=0)] − log\[odds(*X*=1 \| *Xstar*=0, *C*=0, *Y*=0)]
+* *Y* coefficient (β<sub>*Y*</sub>): log\[odds(*X*=1 \| *Xstar*=0, *C*=0, *Y*=1)] − log\[odds(*X*=1 \| *Xstar*=0, *C*=0, *Y*=0)]
+* *C* coefficient (β<sub>*C*</sub>): log\[odds(*X*=1 \| *Xstar*=0, *C*=1, *Y*=0)] − log\[odds(*X*=1 \| *Xstar*=0, *C*=0, *Y*=0)]
 
-## 1. Weighting Approach
+Equivalently, exponentiating a coefficient gives an odds ratio for *X*. For example, exp(β<sub>*Xstar*</sub>) = odds(*X*=1 \| *Xstar*=1, *C*=0, *Y*=0) / odds(*X*=1 \| *Xstar*=0, *C*=0, *Y*=0).
+
+With the bias parameters in hand, we implement two adjustment approaches below. In both cases, the analysis is wrapped in a function for quick reiteration.
+
+## 1. Weighting approach
+
+The weighting approach marginalizes over the unobserved true exposure by duplicating each row into pseudo-observations with *X* = 1 and *X* = 0, weighted by their predicted probabilities.
 
 The steps for the weighting approach are as follows:
 
@@ -111,7 +137,7 @@ adjust_em_wgt_loop <- function(
 }
 ```
 
-## 2. Imputation Approach
+## 2. Imputation approach
 
 The steps for the imputation approach are as follows:
 
@@ -152,9 +178,23 @@ adjust_em_imp_loop <- function(
 
 ## Evaluate
 
-We can run the analysis using different values of the bias parameters.  When we use the known, correct values for the bias parameters that we obtained earlier we obtain *OR<sub>YX</sub>* = 2.05 (2.04, 2.06), representing the bias-adjusted effect estimate we expect based on the derivation of the data.
+We can run the analysis using different values of the bias parameters.  When we use the known, correct values for the bias parameters that we obtained earlier we obtain *OR<sub>YX</sub>* = 2.05, representing the bias-adjusted effect estimate we expect based on the derivation of the data.
 
 ```r
+# weighting
+set.seed(1234)
+correct_results <- adjust_em_wgt_loop(
+  coef_0 =     coef(x_model)[1],
+  coef_xstar = coef(x_model)[2],
+  coef_y =     coef(x_model)[3],
+  coef_c =     coef(x_model)[4],
+  nreps = 10
+)
+
+correct_results$estimate # 2.05
+correct_results$ci # 2.04, 2.06
+
+# imputation
 set.seed(1234)
 correct_results <- adjust_em_imp_loop(
   coef_0 =     coef(x_model)[1],
@@ -164,8 +204,8 @@ correct_results <- adjust_em_imp_loop(
   nreps = 10
 )
 
-correct_results$estimate
-correct_results$ci
+correct_results$estimate # 2.04
+correct_results$ci # 2.01, 2.08
 ```
 The output can also include a histogram showing the distribution of the OR<sub>YX</sub> estimates from each bootstrap sample. We can analyze this plot to see how well the odds ratios converge.
 
@@ -183,8 +223,6 @@ incorrect_results <- adjust_em_imp_loop(
   nreps = 10
 )
 
-incorrect_results$estimate
-incorrect_results$ci
+incorrect_results$estimate # 2.85
+incorrect_results$ci # 2.84, 2.88
 ```
-
-You can find the full code for this analysis <a href="https://github.com/pcbrendel/causal/blob/master/bias_analysis_em.R" target="_blank">here</a>.

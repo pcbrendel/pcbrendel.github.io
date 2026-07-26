@@ -3,7 +3,14 @@ title: Adjustment for Selection Bias
 ---
 
 ## Overview
-This tutorial will demonstrate how to adjust for selection bias. First, generate a dataset of 100,000 rows with the following binary variables:
+
+Observational studies rarely capture every member of the population of interest. When selection into the study depends on both exposure and outcome (collider stratification on *S*) an analysis restricted to selected participants can distort the exposure–outcome association, even after adjusting for measured confounders. [Quantitative bias analysis (QBA)](/causality/bias_qba/) makes that systematic uncertainty explicit by encoding assumptions about selection in **bias parameters** and using them to obtain a bias-adjusted estimate.
+
+Here we work through a probabilistic variant: specify a model for P(*S* \| *X*, *Y*), use those parameters to estimate each participant's probability of selection, and propagate uncertainty with bootstrap resampling. Instead of scanning a table of scenarios, we embed the bias model in the analysis and examine how the adjusted estimate changes when the parameter inputs are correct or distorted.
+
+In this tutorial, we simulate data with a known causal effect, show the bias among selected participants, and adjust via inverse-probability weighting in the outcome regression.
+
+First, generate a dataset of 100,000 rows with the following binary variables:
 
 * *X* = Exposure (1 = exposed, 0 = not exposed)
 * *Y* = Outcome (1 = outcome, 0 = no outcome)
@@ -56,22 +63,41 @@ c(exp(coef(biased_model)[2] + summary(biased_model)$coef[2, 2] * qnorm(.025)),
 
 *OR<sub>YX</sub>* = 1.32 (1.29, 1.36)
 
-The odds ratio of the effect of *X* on *Y* decreases from ~2 to ~1.3 when the analysis is conducted exclusively on participants with *S*=1.  In a perfect world, an investigator would analyze data consisting of the exact same population as the population in which inferences are desired (i.e. the target pop. = source pop.).  However, it is often not possible to collect data from the entire source population, and sometimes the selected sample will have collider stratification bias due to the conditional study selection.  This bias analysis will allow for the adjustment of selection bias even when data for *S* is unavailable.  We will instead rely on assumptions of how the exposure and outcome affect selection. These assumptions are quantified in bias parameters used in the analysis.  Using these bias parameters, we can model the probability of *S*, which will then be incorporated as a weight in the outcome regression to provide the bias adjustment.
+The odds ratio falls from ~2 to ~1.3 when the analysis is limited to *S* = 1, a concrete illustration of selection bias. The sections below specify the assumptions needed to adjust for selection when the full selection mechanism is unobserved, obtain bias parameters, and apply inverse-probability weighting. Note that we'll be assuming all base assumptions for causal identification (e.g., positivity) are already present.
 
-Normally, the values of the bias parameters are obtained externally from the literature or from an internal validation sub-study.  However, for this proof of concept, we can obtain the exact values of the parameters.  We will perform the final regression of *Y* on *X* as if we are only analyzing those with *S*=1. Since we have the values of *S* in our data, we can model how *S* is affected by *X* and *Y* to obtain accurate bias parameters.
+## Assumptions for bias adjustment
+
+The adjusted estimate depends on a **bias model** that describes how selection into the study relates to the variables we observe among participants. Here we use a logistic model for the probability that *S* = 1:
+
+P(*S* = 1 \| *X*, *Y*) = expit(β₀ + β<sub>*X*</sub> *X* + β<sub>*Y*</sub> *Y*)
+
+The intercept and coefficients are **bias parameters**. They are not identified from the selected sample alone; they must be supplied from external sources.
+
+**Why include *Y*?** In the DAG above, both *X* and *Y* directly affect *S*—that is the selection mechanism we want to encode. In a real study you may not observe *S* for non-participants, but you still need assumptions about how exposure and outcome jointly determine who enters the sample. Specifying P(*S* \| *X*, *Y*) captures those assumptions; omitting *Y* when selection depends on the outcome would misspecify the mechanism.
+
+**Where parameters come from in practice.** Bias parameters are usually set from prior literature, a validation or surrogate substudy, meta-analytic estimates, or structured expert judgment (not by regressing on the true *S* for the full source population, which is often unavailable). Ranges or probability distributions over parameters can be used to reflect uncertainty. The doubled-parameter example later shows how sensitive the adjusted estimate is to misspecification.
+
+**Proof of concept in this simulation.** Because we generated *S* for everyone, we can fit `glm(S ~ X + Y)` as an oracle exercise: it recovers the conditional associations in this dataset and gives us correct parameters for demonstration. The outcome analysis that follows is otherwise performed as if we only had data on participants with *S* = 1.
+
+Given bias parameters, we predict P(*S* \| *X*, *Y*) for each selected observation and weight the outcome regression by the inverse of that probability. Bootstrapping propagates sampling uncertainty through the procedure.
 
 ```r
 s_model <- glm(S ~ X + Y, data = df, family = binomial(link = "logit"))
 summary(s_model)
 ```
 These parameters can be interpreted as follows:
-* Intercept = log\[odds(*S*=1\|*X*=0, *Y*=0)]
-* *X* coefficient = log\[odds(*S*=1\|*X*=1, *Y*=0)] / log\[odds(*S*=1\|*X*=0, *Y*=0)] i.e. the log odds ratio denoting the amount by which the log odds of *S*=1 changes for every 1 unit increase in *X* among the *Y*=0 subgroup.
-* *Y* coefficient = log\[odds(*S*=1\|*X*=0, *Y*=1)] / log\[odds(*S*=1\|*X*=0, *Y*=0)]
 
-Now that values for the bias parameters have been obtained, we'll use these values to perform the bias adjustment. We'll build the analysis within a function for quick reiteration. Bootstrapping will be used in order to obtain a confidence interval for the *OR<sub>YX</sub>* estimate.
+* Intercept (β₀): log\[odds(*S*=1 \| *X*=0, *Y*=0)]
+* *X* coefficient (β<sub>*X*</sub>): log\[odds(*S*=1 \| *X*=1, *Y*=0)] − log\[odds(*S*=1 \| *X*=0, *Y*=0)]
+* *Y* coefficient (β<sub>*Y*</sub>): log\[odds(*S*=1 \| *X*=0, *Y*=1)] − log\[odds(*S*=1 \| *X*=0, *Y*=0)]
 
-## Bias Adjustment
+Equivalently, exponentiating a coefficient gives an odds ratio for *S*. For example, exp(β<sub>*X*</sub>) = odds(*S*=1 \| *X*=1, *Y*=0) / odds(*S*=1 \| *X*=0, *Y*=0).
+
+With the bias parameters in hand, we implement inverse-probability weighting below. The analysis is wrapped in a function for quick reiteration.
+
+## Bias adjustment
+
+Inverse-probability weighting up-weights participants who were less likely to be selected given their *X* and *Y*, approximating the target population that would have been observed without selection distortion.
 
 The steps to adjust for selection bias are as follows:
 
@@ -106,6 +132,9 @@ adjust_sel_loop <- function(
   return(out)
 }
 ```
+
+## Evaluate
+
 We can run the analysis using different values of the bias parameters.  When we use the known, correct values for the bias parameters that we obtained earlier we obtain *OR<sub>YX</sub>* = 2.05 (2.01, 2.07), representing the bias-free effect estimate we expect based on the derivation of the data.
 
 ```r
@@ -117,8 +146,8 @@ correct_results <- adjust_sel_loop(
   nreps = 10
 )
 
-correct_results$estimate
-correct_results$ci
+correct_results$estimate # 2.05
+correct_results$ci # 2.01, 2.07
 ```
 The output can also include a histogram showing the distribution of the *OR<sub>YX</sub>* estimates from each bootstrap sample. We can analyze this plot to see how well the odds ratios converge.
 
@@ -134,5 +163,7 @@ incorrect_results <- adjust_sel_loop(
   coef_y = coef(s_model)[3] * 2,
   nreps = 10
 )
+
+incorrect_results$estimate # 3.92
+incorrect_results$ci # 3.84, 3.96
 ```
-You can find the full code for this analysis <a href="https://github.com/pcbrendel/causal/blob/master/bias_analysis_sel.R" target="_blank">here</a>.
