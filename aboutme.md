@@ -13,8 +13,9 @@ Throughout my journey, I've maintained a passion for baseball analytics. I have 
 
 ### Publications
 
-* [Simultaneous Adjustment in Multiple-bias Modeling](https://pubmed.ncbi.nlm.nih.gov/36718093/)
-* [Impact of COVID-19 on Urological Care Delivery](https://www.auajournals.org/doi/full/10.1097/JU.0000000000002145)
-* [Reading Faces](https://www.ncbi.nlm.nih.gov/pubmed/24463310)
+* [Simultaneous adjustment in multiple-bias modeling](https://pubmed.ncbi.nlm.nih.gov/36718093/)
+* [Impact of COVID-19 on prostate cancer community care](https://ascopubs.org/doi/10.1200/JCO.2021.39.15_suppl.5061)
+* [Impact of COVID-19 on urological care delivery](https://www.auajournals.org/doi/full/10.1097/JU.0000000000002145)
+* [Reading faces: investigating the use of a novel face-based orthography in acquired alexia](https://www.ncbi.nlm.nih.gov/pubmed/24463310)
 * [My PhD Dissertation](https://escholarship.org/uc/item/4c50w909)
 * [My Masters Thesis](http://d-scholarship.pitt.edu/23679/)
