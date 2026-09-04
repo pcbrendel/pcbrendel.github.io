@@ -10,6 +10,15 @@ body {
   color: #404040;
   position: relative;
   background: #FFF;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Keeps the footer pinned to the bottom of the viewport on short pages,
+   so the white page background never shows below it */
+.page-content {
+  flex: 1 0 auto;
 }
 
 p {
@@ -243,6 +252,7 @@ img {
 /* --- Footer --- */
 
 footer {
+  flex-shrink: 0;
   padding: 30px 0;
   background: #F5BE00;
   border-top: 1px #EAEAEA solid;
