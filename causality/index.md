@@ -32,3 +32,5 @@ title: Causality
 ### [CausalML: S-Learner](/causality/tutorials/ml_slearner/)
 
 ### [G-computation](/causality/tutorials/gcomp/)
+
+### [Targeted Maximum Likelihood Estimation](/causality/tutorials/tmle/)
