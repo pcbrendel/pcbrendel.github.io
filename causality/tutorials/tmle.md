@@ -132,7 +132,9 @@ all(Y_pred_X0 >= 0 & Y_pred_X0 <= 1) # TRUE
 
 ### 2. Probability of treatment
 
-Similar to the above work, we will fit a model for the treatment (a propensity model) and produce a couple different predictions with the model. These predictions will eventually be transformed into inverse probability weights, which form the "clever covariate" used to update the outcome predictions from Step 1 in the targeting step.
+Similar to the above work, we will fit a model for the treatment (a propensity model) and produce a couple of different predictions with the model. These predictions will eventually be transformed into inverse probability weights, which form the "clever covariate" used to update the outcome predictions from Step 1 in the targeting step.
+
+This covariate takes the value of the inverse probability of treatment for those who were treated and takes the negative inverse probability of not receiving treatment for those not receiving treatment. Intuitively, this weights each person's residual by how unusual their treatment was given their covariates. People who received treatment they were unlikely to get are under-represented in the data, so they carry the most information about what the unobserved counterfactual would have looked like.
 
 ```{r}
 # fit treatment model
@@ -171,9 +173,23 @@ all(is.finite(IP_X0_pred) & IP_X0_pred <= -1) # TRUE
 IP_X_pred <- ifelse(df$X == 1, IP_X1_pred, IP_X0_pred)
 ```
 
-### 3. Fluctuation parameter + Outcome update
+### 3. Targeting
 
-Now things get a little trickier.
+A more formal way of thinking about the clever covariate is that it allows us to solve the influence curve estimating equation. The influence curve (IC) of an estimator describes how much each observation contributes to the estimate. It works like a per-person "influence score" whose variance determines the estimator's standard error.  For the ATE, the efficient influence curve for each person is:
+
+IC = H * (Y - Q(X, C)) + Q(1, C) - Q(0, C) - ATE
+
+* H is the clever covariate (`IP_X_pred`)
+* Q(X, C) is the predicted outcome (`Y_pred_X_star`)
+* Q(1, C) is the predicted outcome under treatment (`Y_pred_X1_star`)
+* Q(0, C) is the predicted outcome under control (`Y_pred_X0_star`)
+* ATE is the average treatment effect (`ate`)
+
+The last three terms (Q(1, C) - Q(0, C) - ATE) should average to zero, thus the targeting step we do in this section addresses the remaining term: H * (Y - Q(X, C)). We fit the fluctuation model - a logistic regression of the outcome on the clever covariate with no intercept, using the logit of the initial predictions as an offset. Logistic regression always chooses its coefficients so that each covariate's weighted residuals average to zero (i.e., maximum likelihood).
+
+In our fluctuation model the clever covariate H is the only covariate, so the estimated coefficient is the value that makes mean(H * (Y - Q*)) = 0. That is exactly the influence curve estimating equation we wanted to solve!
+
+Now the initial predictions can be held fixed and only nudged by a single fluctuation parameter. This process removes the residual bias in the initial outcome predictions and is what gives TMLE its double robustness.
 
 ```{r}
 # obtain fluctuation parameter
@@ -196,6 +212,8 @@ Y_pred_X0_star <- plogis(qlogis(Y_pred_X0) + eps * IP_X0_pred)
 
 ### 4. Effect estimation
 
+Here we arrive at the ATE by taking the average of the differences between the updated outcome under treatment and the updated outcome under no treatment.
+
 ```{r}
 # estimate ATE
 
@@ -205,6 +223,8 @@ ate
 ```
 
 ### 5. Standard errors
+
+We can use the variance of the influence curve (defined in Step 3) to get valid standard errors for the ATE. [why this works]
 
 ```{r}
 # influence function
@@ -222,6 +242,8 @@ ci
 
 ## Understanding how the targeting works
 
+[this section needs to be updated to work off of the details above]
+
 The efficient influence function (EIF) is the function that captures how
 much a parameter estimate (here, the ATE) would change in response to a
 small perturbation of the data distribution at a single observation.
@@ -229,14 +251,14 @@ It also determines the estimator's asymptotic variance.
 
 The EIF for the ATE is:
 
-D(O) = H(A,W) * (Y - Q̄(A,W)) + [Q̄(1,W) - Q̄(0,W) - ψ]
+D(O) = H * (Y - Q̄(A,W)) + [Q̄(1,W) - Q̄(0,W) - ATE]
 
 where:
-* H(A,W) is the clever covariate (`IP_X_pred`)
+* H is the clever covariate (`IP_X_pred`)
 * Q̄(A,W) is the predicted outcome (`Y_pred_X_star`)
 * Q̄(1,W) is the predicted outcome under treatment (`Y_pred_X1_star`)
 * Q̄(0,W) is the predicted outcome under control (`Y_pred_X0_star`)
-* ψ is the ATE (`ate`)
+* ATE is the average treatment effect (`ate`)
 
 A nuisance function is a function that must be estimated along the way
 (here, Q̄ and the treatment-assignment probability g used to build H(A,W))
@@ -372,6 +394,8 @@ ate_both_misspec <- mean(
 ate # ATE = 0.103 (both models correctly specified)
 ate_both_misspec # ATE = 0.126 (both Q and g misspecified - biased)
 ```
+
+[conclusion]
 
 ```{r}
 sessionInfo()
