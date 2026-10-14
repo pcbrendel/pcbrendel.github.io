@@ -9,7 +9,7 @@ TMLE is a powerful estimation method for causal inference. The reasons when or w
 * You want double robustness.
 * You have positivity problems or extreme propensity scores.
 
-This post will walk through how to 1) implement the method quickly with the `tmle` function, 2) produce the full code step-by-step, 3) understand the intution behind the "targeting" concepts, 4) demonstrate the doubly robust benefits.
+This post will walk through how to 1) implement the method quickly with the `tmle` package, 2) produce the full code step-by-step, 3) further understand the intuition behind the "targeting" concepts, 4) demonstrate the doubly robust benefits.
 
 We'll use the `df_uc_source` dataframe from `multibias`, which has the following binary columns:
 
@@ -20,9 +20,9 @@ We'll use the `df_uc_source` dataframe from `multibias`, which has the following
 * C3 = confounder
 * U = confounder
 
-The dataframe was simulated such that the effect of X on Y, adjusted for all four confounders has a conditional odds ratio of approximately 2.
+The dataframe was simulated such that the effect of X on Y, adjusted for all four confounders, has a conditional odds ratio of approximately 2.
 
-```{r setup, include=FALSE}
+```{r}
 library(tidyverse)
 library(multibias)
 library(tmle)
@@ -39,7 +39,7 @@ df <- df_uc_source |>
 head(df)
 ```
 
-## With TMLE function
+## With the tmle package
 
 To start, we will use the `tmle()` function from the `tmle` package to arrive at the Average Treatment Effect (ATE; Risk Difference) and Odds Ratio (OR) of the X-Y effect in the `df_uc_source` dataframe.
 
@@ -83,7 +83,7 @@ What is this Super Learner mentioned in the outcome and propensity model? Super 
 
 Now we'll pop open the hood and see how to arrive at these results without the aid of a tmle package. We will use the same data as above to see if we can replicate the results from the `tmle()` function output.
 
-Despite the incredible flexibiilty and efficiency of Super Learner mentioned above, we will use GLM regression for all models for demonstration purposes.
+Despite the incredible flexibility and efficiency of Super Learner mentioned above, we will use GLM regression for all models for demonstration purposes.
 
 ### 1. Probability of outcome
 
@@ -152,7 +152,7 @@ IP_X1_pred <- 1 / predict(
   type = "response"
 )
 
-# negative inverse probabilty of not receiving treatment
+# negative inverse probability of not receiving treatment
 
 IP_X0_pred <- -1 / (1 - predict(
   g_mod,
@@ -175,21 +175,23 @@ IP_X_pred <- ifelse(df$X == 1, IP_X1_pred, IP_X0_pred)
 
 ### 3. Targeting
 
-A more formal way of thinking about the clever covariate is that it allows us to solve the influence curve estimating equation. The influence curve (IC) of an estimator describes how much each observation contributes to the estimate. It works like a per-person "influence score" whose variance determines the estimator's standard error.  For the ATE, the efficient influence curve for each person is:
+A more formal way of thinking about the clever covariate is that it allows us to solve the influence curve (IC) estimating equation. The IC of an estimator describes how much each observation contributes to the estimate. It works like a per-person "influence score" whose variance determines the estimator's standard error. Solving this equation means finding predictions for which the IC averages to zero across all observations.
 
-IC = H * (Y - Q(X, C)) + Q(1, C) - Q(0, C) - ATE
+For the ATE, the efficient influence curve for each person is:
 
-* H is the clever covariate (`IP_X_pred`)
-* Q(X, C) is the predicted outcome (`Y_pred_X_star`)
-* Q(1, C) is the predicted outcome under treatment (`Y_pred_X1_star`)
-* Q(0, C) is the predicted outcome under control (`Y_pred_X0_star`)
-* ATE is the average treatment effect (`ate`)
+$$IC = H \cdot (Y - Q(X, C)) + Q(1, C) - Q(0, C) - \text{ATE}$$
 
-The last three terms (Q(1, C) - Q(0, C) - ATE) should average to zero, thus the targeting step we do in this section addresses the remaining term: H * (Y - Q(X, C)). We fit the fluctuation model - a logistic regression of the outcome on the clever covariate with no intercept, using the logit of the initial predictions as an offset. Logistic regression always chooses its coefficients so that each covariate's weighted residuals average to zero (i.e., maximum likelihood).
+* $H$ is the clever covariate (`IP_X_pred`)
+* $\text{ATE}$ is the average treatment effect (`ate`)
+* $Q$ is any set of outcome predictions. We'll evaluate it with two versions: the initial predictions from Step 1, $Q$ (`Y_pred_X`, `Y_pred_X1`, `Y_pred_X0`), and the updated predictions from this step, $Q^{\ast}$ (`Y_pred_X_star`, `Y_pred_X1_star`, `Y_pred_X0_star`).
 
-In our fluctuation model the clever covariate H is the only covariate, so the estimated coefficient is the value that makes mean(H * (Y - Q*)) = 0. That is exactly the influence curve estimating equation we wanted to solve!
+The last three terms of the equation $Q(1, C) - Q(0, C) - \text{ATE}$ average to zero automatically, because the ATE is defined as the average of $Q(1, C) - Q(0, C)$. Thus the targeting step we do in this section addresses the remaining term: $H \cdot (Y - Q(X, C))$. With the initial predictions $Q$, this term generally does not average to zero, since the outcome model was fit to predict $Y$ well, not to satisfy this equation. The goal of targeting is to produce $Q^{\ast}$ such that the expression averages to zero.
 
-Now the initial predictions can be held fixed and only nudged by a single fluctuation parameter. This process removes the residual bias in the initial outcome predictions and is what gives TMLE its double robustness.
+We fit the fluctuation model: a logistic regression of the outcome on the clever covariate with no intercept, using the logit of the initial predictions as an offset. The offset holds the initial predictions fixed, so they are only nudged by a single coefficient, the fluctuation parameter (`eps`).
+
+Logistic regression always chooses its coefficients so that each covariate's weighted residuals average to zero (i.e., maximum likelihood). In our fluctuation model the clever covariate $H$ is the only covariate, so the estimated coefficient is the value that makes $\text{mean}(H \cdot (Y - Q^{\ast}(X, C))) = 0$. That is exactly the influence curve estimating equation we wanted to solve!
+
+This process removes the residual bias in the initial outcome predictions and is a key ingredient in TMLE's double robustness.
 
 ```{r}
 # obtain fluctuation parameter
@@ -224,10 +226,10 @@ ate
 
 ### 5. Standard errors
 
-We can use the variance of the influence curve (defined in Step 3) to get valid standard errors for the ATE. [why this works]
+We can use the variance of the influence curve (defined in Step 3) to get valid standard errors for the ATE. We evaluate the IC at the updated predictions, $Q^{\ast}$, since those produce our final ATE estimate. Because the targeted ATE is approximately the true ATE plus the average of the IC, its variance is approximately $\text{var}(IC)/n$.
 
 ```{r}
-# influence function
+# influence curve
 influence_curve <- IP_X_pred * (df$Y - Y_pred_X_star) +
   (Y_pred_X1_star - Y_pred_X0_star) - ate
 
@@ -240,82 +242,33 @@ ci
 # 95% CI = (0.097, 0.108)
 ```
 
-## Understanding how the targeting works
+## Confirming the targeting logic
 
-[this section needs to be updated to work off of the details above]
-
-The efficient influence function (EIF) is the function that captures how
-much a parameter estimate (here, the ATE) would change in response to a
-small perturbation of the data distribution at a single observation.
-It also determines the estimator's asymptotic variance.
-
-The EIF for the ATE is:
-
-D(O) = H * (Y - Q̄(A,W)) + [Q̄(1,W) - Q̄(0,W) - ATE]
-
-where:
-* H is the clever covariate (`IP_X_pred`)
-* Q̄(A,W) is the predicted outcome (`Y_pred_X_star`)
-* Q̄(1,W) is the predicted outcome under treatment (`Y_pred_X1_star`)
-* Q̄(0,W) is the predicted outcome under control (`Y_pred_X0_star`)
-* ATE is the average treatment effect (`ate`)
-
-A nuisance function is a function that must be estimated along the way
-(here, Q̄ and the treatment-assignment probability g used to build H(A,W))
-but isn't itself the quantity of interest — only the ATE is.
-
-An estimator ψ_hat is asymptotically linear and efficient when the empirical
-mean of D(O), evaluated at the fitted nuisance functions, is (close to)
-zero. That's the "estimating equation" TMLE is built to solve.
-
-Before targeting, there's no reason for that mean to be zero — `Y_pred_X`
-was fit to predict Y well on average, not to zero out this particular
-expression. "Targeting" perturbs `Y_pred_X` just enough, in exactly the
-direction of `IP_X_pred`, to force the first term of D(O) to zero.
-
-This works because `eps_mod` is a canonical-link (logistic) GLM with
-`IP_X_pred` as its only covariate. The normal equations for any
-canonical-link GLM guarantee that, at the MLE,
-`sum(covariate * residual) = 0` exactly. Here that's precisely
-`sum(IP_X_pred * (Y - Y_pred_X_star)) = 0` — the first term of D(O).
+We can check that targeting accomplished what Step 3 promised. With the initial predictions $Q$, the clever-covariate-weighted residuals don't average to zero. With the updated predictions $Q^{\ast}$, they do:
 
 ```{r}
-# before targeting, the EIF's residual term is not zero
+# before targeting: initial predictions
 
 mean(IP_X_pred * (df$Y - Y_pred_X)) # 0.0005
 
-# after targeting (fluctuating Y_pred_X along IP_X_pred), it is ~0 exactly
-# this is a general property of canonical-link GLM score equations,
-# not something specific to this data
+# after targeting: updated predictions
 
 mean(IP_X_pred * (df$Y - Y_pred_X_star)) # -3.0e-13
 ```
 
-The second term of D(O), `Q̄(1,W) - Q̄(0,W) - ψ`, is zero on average by
-construction too — `ate` is literally defined as
-`mean(Y_pred_X1_star - Y_pred_X0_star)`. So both pieces of the EIF average
-to zero, which is why `influence_curve` (their sum) should also average to
-~0:
+The 0.0005 has a useful interpretation: it estimates the first-order bias of the ATE we'd get by plugging in the initial predictions (i.e., G-computation using `Y_pred_X1` and `Y_pred_X0`). That initial estimate is about 0.0005 too low, and targeting shifts it by about that amount. The number is tiny here because our outcome model is close to correctly specified. With a misspecified model, it can be much larger.
+
+The rest of the influence curve, $Q^{\ast}(1, C) - Q^{\ast}(0, C) - \text{ATE}$, averages to zero by construction, so the full influence curve from Step 5 averages to zero too:
 
 ```{r}
 mean(influence_curve) # -3.0e-13
 ```
 
-That's the sense in which TMLE "targets" the initial outcome model: it
-doesn't re-fit Q̄ to improve prediction, it nudges Q̄ along the one
-covariate (the propensity-based clever covariate) needed to solve the
-estimating equation for the parameter we actually care about (the ATE).
-Solving that equation is what gives TMLE its efficiency and
-double-robustness properties.
+This is the sense in which TMLE "targets" the outcome model. It doesn't refit $Q$ to predict $Y$ better. Instead, it nudges $Q$ in the one direction (the clever covariate) needed to solve the estimating equation for the parameter we actually care about, the ATE.
 
 ## Confirming the double robustness property
 
-TMLE is "doubly robust": ψ_hat is consistent if *either* Q̄ (the outcome
-model) or g (the treatment model, used to build `IP_X_pred`) is correctly
-specified — not necessarily both. We can check this by deliberately
-misspecifying the propensity model (dropping `C3` and `U`) while keeping
-the outcome model (`Q_mod`, already fit above) unchanged, and confirming
-the ATE barely moves:
+TMLE is "doubly robust": the ATE estimate is consistent if *either* the outcome model ($Q$) or the propensity model (used to build the clever covariate $H$) is correctly specified, not necessarily both. We can check this by deliberately misspecifying the propensity model (dropping `C3` and `U`) while keeping the outcome model (`Q_mod`, already fit above) unchanged, and confirming the ATE barely moves:
 
 ```{r}
 # propensity model missing confounders C3 and U
@@ -348,12 +301,10 @@ Y_pred_X0_star_misspec <- plogis(
 ate_misspec_g <- mean(Y_pred_X1_star_misspec - Y_pred_X0_star_misspec)
 
 ate # ATE = 0.103 (both models correctly specified)
-ate_misspec_g # ATE = 0.102 (g misspecified, Q still correct)
+ate_misspec_g # ATE = 0.102 (propensity model misspecified, outcome model correct)
 ```
 
-As a contrast, if we also break the outcome model (drop `C3` and `U` from
-`Q_mod` too), so that *neither* nuisance function is correctly specified,
-the estimate is no longer protected and shifts noticeably:
+As a contrast, if we also break the outcome model (drop `C3` and `U` from `Q_mod` too), so that *neither* model is correctly specified, the estimate is no longer protected and shifts noticeably:
 
 ```{r}
 Q_mod_misspec <- glm(
@@ -391,11 +342,17 @@ ate_both_misspec <- mean(
   Y_pred_X1_star_both_misspec - Y_pred_X0_star_both_misspec
 )
 
-ate # ATE = 0.103 (both models correctly specified)
-ate_both_misspec # ATE = 0.126 (both Q and g misspecified - biased)
+ate # ATE = 0.1026 (both models correctly specified)
+ate_both_misspec # ATE = 0.1256 (both models misspecified - biased)
 ```
 
-[conclusion]
+## Conclusion
+
+TMLE can look intimidating, but it boils down to four steps: fit an outcome model, fit a treatment model, use the treatment model to "target" the outcome predictions, and then average the updated predictions. The targeting step is what sets TMLE apart. By nudging the initial predictions along the clever covariate, TMLE solves the influence curve estimating equation, which removes the first-oder bias of the initial estimate and provides valid standard errors.
+
+As we saw above, the estimate stayed close to the truth when only the propensity model was misspecified, but drifted when both models were wrong. Double robustness gives you two chances to get it right, not a free pass.
+
+In practice, use the `tmle()` function rather than coding the steps by hand. Let Super Learner fit the outcome and treatment models with a rich library of algorithms; that flexibility is where TMLE really shines. Finally, remember that TMLE is an estimation method, not an identification strategy. It can't correct for unmeasured confounding, selection bias, or measurement error, so the usual causal assumptions still have to hold.
 
 ```{r}
 sessionInfo()
@@ -416,3 +373,16 @@ sessionInfo()
 # [13] purrr_1.2.2         readr_2.2.0         tidyr_1.3.2
 # [16] tibble_3.3.1        ggplot2_4.0.3       tidyverse_2.0.0
 ```
+
+{% raw %}
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+{% endraw %}
