@@ -27,7 +27,7 @@ p {
 }
 
 p a {
-  color: #008AFF;
+  color: #0070D0;
 }
 
 h1,
@@ -128,7 +128,7 @@ img {
 /* --- Navbar --- */
 
 .navbar-custom {
-  background: black !important;
+  background: #161614 !important; /* matches the logo background */
   border-bottom: 1px solid #EAEAEA;
   font-family: var(--font-sans);
 }
@@ -209,7 +209,7 @@ img {
   display: block;
   padding: 10px;
   padding-left: 30px;
-  background: black;
+  background: #161614;
   text-decoration: none !important;
   border-width: 0 1px 1px 1px;
   font-weight: normal;
@@ -217,7 +217,7 @@ img {
 
 @media only screen and (max-width: 767px) {
   .navbar-custom .nav .navlinks-container.show-children {
-    background: black;
+    background: #161614;
   }
 
   .navbar-custom .nav .navlinks-container.show-children .navlinks-children {
@@ -231,7 +231,7 @@ img {
   }
 
   .navbar-custom .nav .navlinks-container:hover {
-    background: black;
+    background: #161614;
   }
 
   .navbar-custom .nav .navlinks-container:hover .navlinks-children {
@@ -262,6 +262,10 @@ footer {
 
 footer a {
   color: #404040;
+}
+
+footer .text-muted {
+  color: #4D4D4D;
 }
 
 footer .list-inline {
@@ -394,14 +398,14 @@ footer .theme-by {
 }
 
 .blog-tags a {
-  color: #008AFF;
+  color: #0070D0;
   text-decoration: none;
   padding: 0px 5px;
 }
 
 .blog-tags a:hover {
   border-radius: 2px;
-  color: #008AFF;
+  color: #0070D0;
   background-color: #CCC;
 }
 
@@ -775,5 +779,77 @@ pre code {
 @media only screen and (max-width: 767px) {
   .intro-header {
     margin-top: 60px;
+  }
+}
+/* --- Home page --- */
+
+.home {
+  max-width: 640px;
+  margin: 36px auto 60px;
+}
+
+.home-intro p {
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
+
+.home-intro .home-lead {
+  font-size: 21px;
+  line-height: 1.5;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.home-updates {
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid #E5E5E5;
+}
+
+.home-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6B6B6B;
+  margin: 0 0 16px;
+}
+
+.home-updates ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.home-updates li {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 0;
+  line-height: 1.4;
+}
+
+.home-tag {
+  flex: 0 0 auto;
+  min-width: 78px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6B6B6B;
+}
+
+.home a {
+  color: #0070D0;
+}
+
+@media only screen and (max-width: 500px) {
+  .home-intro .home-lead {
+    font-size: 19px;
+  }
+
+  .home-updates li {
+    flex-direction: column;
+    gap: 2px;
   }
 }
