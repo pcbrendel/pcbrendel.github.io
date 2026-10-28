@@ -1,0 +1,166 @@
+---
+title: Trial Odds
+subtitle: Forecasts for FDA approval markets on Kalshi
+---
+
+<style>
+  .to { --model: #1f4e9c; --market: #d96a10; --ink: #1b1b1a; --ink-2: #52514e; --muted: #898781;
+        --grid: #e6e5df; --axis: #c3c2b7; --surface: #ffffff; color: var(--ink); }
+  .to-lead { color: var(--ink-2); margin-top: 32px; }
+  .to-topic { margin: 40px 0 8px; }
+  .to-meta { font-size: 13px; color: var(--muted); margin: 0 0 20px; }
+  .to-market { margin: 0 0 32px; }
+  .to-market h3 { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+  .to-figs { display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 14px; color: var(--ink-2); margin: 0 0 10px; }
+  .to-figs b { color: var(--ink); font-weight: 700; }
+  .to-key { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+  .to-chart { position: relative; height: 260px; }
+  .to details { margin-top: 8px; font-size: 13px; color: var(--ink-2); }
+  .to summary { cursor: pointer; }
+  .to-log { list-style: none; padding: 0; margin: 8px 0 0; font-size: 14px; }
+  .to-log li { margin: 0 0 6px; }
+  .to-log .v { display: inline-block; min-width: 42px; font-weight: 700; }
+  .to-log .d { color: var(--muted); margin-right: 8px; }
+  .to-note { font-size: 13px; color: var(--muted); margin-top: 32px; }
+</style>
+
+<div class="to">
+  <ul class="to-lead">
+    <li>Models of each drug's path to FDA approval.</li>
+    <li>Run daily against the Kalshi market's price. This page is refreshed every Monday. </li>
+    <li>Each chart shows the model's chance of approval before the market's deadline, with a band of plausible values given the uncertainty in its inputs, next to Kalshi's price.</li>
+    <li>Vertical lines mark changes to the model (see Changelog below).</li>
+  </ul>
+  <div id="to-root"></div>
+  <p class="to-note">
+    For informational purposes only. Not investment advice.
+  </p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script id="to-data" type="application/json">{{ site.data.trialodds | jsonify }}</script>
+<script>
+(function () {
+  var data = JSON.parse(document.getElementById("to-data").textContent);
+  var css = getComputedStyle(document.querySelector(".to"));
+  var C = {};
+  ["model", "market", "ink", "ink-2", "muted", "grid", "axis", "surface"].forEach(function (k) {
+    C[k] = css.getPropertyValue("--" + k).trim();
+  });
+  var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  function day(s) { var p = s.split("-"); return MONTHS[+p[1] - 1] + " " + (+p[2]); }
+  // small = this chart's values stay under 10%, so its axis and ranges need a decimal; point values always get one.
+  function pct(v, small) { return v == null ? "–" : (v * 100).toFixed(small ? 1 : 0) + "%"; }
+  function alpha(hex, a) {
+    var n = parseInt(hex.slice(1), 16);
+    return "rgba(" + (n >> 16) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")";
+  }
+  function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+
+  // Thin vertical line + "vX.Y" label at each model version change.
+  var versionLines = {
+    id: "versionLines",
+    afterDatasetsDraw: function (chart, _, opts) {
+      var ctx = chart.ctx, x = chart.scales.x, area = chart.chartArea;
+      (opts.at || []).forEach(function (c) {
+        var px = x.getPixelForValue(c.i);
+        ctx.save();
+        ctx.strokeStyle = C.axis; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(px, area.top); ctx.lineTo(px, area.bottom); ctx.stroke();
+        ctx.fillStyle = C["ink-2"]; ctx.font = "11px " + css.fontFamily; ctx.textBaseline = "top";
+        ctx.fillText(" v" + c.v, px, area.top + 2);
+        ctx.restore();
+      });
+    }
+  };
+
+  function marketChart(box, rows) {
+    var small = rows.every(function (r) { return Math.max(r.model_p90 || 0, r.kalshi_ask) < 0.1; });
+    var labels = rows.map(function (r) { return day(r.as_of); });
+    var changes = [];
+    rows.forEach(function (r, i) { if (i > 0 && r.model_version !== rows[i - 1].model_version) changes.push({ i: i, v: r.model_version }); });
+    var col = function (k) { return rows.map(function (r) { return r[k]; }); };
+    var hidden = { pointRadius: 0, pointHoverRadius: 0, pointHitRadius: 0, borderWidth: 0 };
+    var last = rows.length - 1;
+    var endDot = function (color) {
+      return { pointRadius: rows.map(function (_, i) { return i === last ? 4.5 : 0; }), pointBackgroundColor: color,
+               pointBorderColor: C.surface, pointBorderWidth: 2, pointHoverRadius: 5, pointHitRadius: 12 };
+    };
+    var canvas = el("canvas");
+    box.appendChild(canvas);
+    new Chart(canvas, {
+      type: "line",
+      data: { labels: labels, datasets: [
+        Object.assign({ label: "p10", data: col("model_p10"), fill: false, spanGaps: false }, hidden),
+        Object.assign({ label: "p90", data: col("model_p90"), fill: "-1", backgroundColor: alpha(C.model, 0.12), spanGaps: false }, hidden),
+        Object.assign({ label: "bid", data: col("kalshi_bid"), fill: false }, hidden),
+        Object.assign({ label: "ask", data: col("kalshi_ask"), fill: "-1", backgroundColor: alpha(C.market, 0.18) }, hidden),
+        Object.assign({ label: "Kalshi", data: col("kalshi_mid"), borderColor: C.market, borderWidth: 2, fill: false }, endDot(C.market)),
+        Object.assign({ label: "Model", data: col("model"), borderColor: C.model, borderWidth: 2, fill: false }, endDot(C.model))
+      ] },
+      options: {
+        maintainAspectRatio: false, animation: false,
+        interaction: { mode: "index", intersect: false },
+        layout: { padding: { top: 4, right: 28 } },
+        scales: {
+          x: { grid: { display: false }, border: { color: C.axis }, ticks: { color: C["ink-2"], maxRotation: 0, autoSkipPadding: 16 } },
+          y: { beginAtZero: true, grid: { color: C.grid }, border: { display: false },
+               ticks: { color: C["ink-2"], maxTicksLimit: 6, callback: function (v) { return pct(v, small); } } }
+        },
+        plugins: {
+          legend: { display: false },
+          versionLines: { at: changes },
+          tooltip: {
+            filter: function (item) { return item.dataset.label === "Model"; },
+            backgroundColor: C.surface, borderColor: C.axis, borderWidth: 1, titleColor: C.ink, bodyColor: C["ink-2"],
+            padding: 10, displayColors: false,
+            callbacks: {
+              title: function (items) { return rows[items[0].dataIndex].as_of; },
+              label: function (item) {
+                var r = rows[item.dataIndex], s = small;
+                var range = r.model_p10 == null ? "" : " (80% range " + pct(r.model_p10, s) + "–" + pct(r.model_p90, s) + ")";
+                return ["Model " + pct(r.model, true) + range,
+                        "Kalshi " + pct(r.kalshi_mid, true) + " (bid " + pct(r.kalshi_bid, true) + ", ask " + pct(r.kalshi_ask, true) + ")",
+                        "Model version " + r.model_version];
+              }
+            }
+          }
+        }
+      },
+      plugins: [versionLines]
+    });
+  }
+
+  var root = document.getElementById("to-root");
+  data.topics.forEach(function (t) {
+    root.appendChild(el("h2", "to-topic", t.drug + " approval"));
+    root.appendChild(el("p", "to-meta", "Model v" + t.model_version + " · updated " + t.updated +
+      (t.kalshi_url ? ' · <a href="' + t.kalshi_url + '" target="_blank" rel="noopener">Kalshi market ↗</a>' : "")));
+    var outcomes = [];
+    t.rows.forEach(function (r) { if (outcomes.indexOf(r.outcome) < 0) outcomes.push(r.outcome); });
+    outcomes.forEach(function (o) {
+      var rows = t.rows.filter(function (r) { return r.outcome === o; });
+      var r = rows[rows.length - 1];
+      var sec = el("section", "to-market");
+      sec.appendChild(el("h3", null, "Approved " + o.charAt(0).toLowerCase() + o.slice(1) + "?"));
+      sec.appendChild(el("div", "to-figs",
+        '<span><i class="to-key" style="background:' + C.model + '"></i>Model <b>' + pct(r.model, true) + "</b>" +
+        (r.model_p10 == null ? "" : " (80% range)") + "</span>" +
+        '<span><i class="to-key" style="background:' + C.market + '"></i>Kalshi <b>' + pct(r.kalshi_mid, true) + "</b> (bid–ask band)</span>"));
+      var box = el("div", "to-chart");
+      sec.appendChild(box);
+      root.appendChild(sec);
+      marketChart(box, rows);
+    });
+    if (t.changelog.length) {
+      var log = el("details", null, "<summary>Changelog</summary>");
+      var ul = el("ul", "to-log");
+      t.changelog.forEach(function (c) {
+        ul.appendChild(el("li", null, '<span class="v">v' + c.version + '</span><span class="d">' + c.date + "</span>"));
+      });
+      log.appendChild(ul);
+      root.appendChild(log);
+    }
+  });
+})();
+</script>
