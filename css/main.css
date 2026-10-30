@@ -739,6 +739,21 @@ pre code {
   margin-bottom: 30px;
 }
 
+/* X share button (bootstrap-social only ships the old Twitter style) */
+.btn-x {
+  color: #fff;
+  background-color: #000;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.btn-x:hover,
+.btn-x:focus,
+.btn-x:active {
+  color: #fff;
+  background-color: #333;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
 /* --- Notification boxes --- */
 .box-note,
 .box-warning,

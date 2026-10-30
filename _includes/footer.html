@@ -25,14 +25,17 @@
             </a>
           </li>
           {% endif %}
-		  {% if site.author.twitter and site.footer-links-active.twitter %}
+          {% if site.author.x and site.footer-links-active.x %}
           <li>
-            <a href="https://twitter.com/{{ site.author.twitter }}" title="Twitter">
+            <a href="https://x.com/{{ site.author.x }}" title="X">
               <span class="fa-stack fa-lg" aria-hidden="true">
                 <i class="fa fa-circle fa-stack-2x"></i>
-                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                <!-- Font Awesome 4 has no X logo, so it's drawn inline -->
+                <span class="fa-stack-1x fa-inverse">
+                  <svg viewBox="0 0 24 24" width="0.85em" height="0.85em" fill="currentColor" style="vertical-align: -0.1em;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </span>
               </span>
-              <span class="sr-only">Twitter</span>
+              <span class="sr-only">X</span>
             </a>
           </li>
           {% endif %}
