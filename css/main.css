@@ -1,5 +1,10 @@
 :root {
   --font-sans: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ink: #1f1f1f;
+  --gold: #F5BE00;
+  --gold-soft: rgba(245, 190, 0, 0.35);
+  --charcoal: #161614;
+  --amber: #8A6400;
 }
 
 /* --- General --- */
@@ -26,8 +31,33 @@ p {
   margin: 30px 0;
 }
 
-p a {
-  color: #0070D0;
+/* Content links: dark amber text (gold itself is too faint on white)
+   with a soft dotted underline that turns solid on hover */
+p a,
+td a,
+[role="main"] li a,
+.blog-post a,
+.home a {
+  color: var(--amber);
+  text-decoration: underline dotted;
+  text-decoration-color: rgba(138, 100, 0, 0.5);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.2s ease;
+}
+
+p a:hover,
+p a:focus,
+td a:hover,
+td a:focus,
+[role="main"] li a:hover,
+[role="main"] li a:focus,
+.blog-post a:hover,
+.blog-post a:focus,
+.home a:hover,
+.home a:focus {
+  color: var(--amber);
+  text-decoration: underline solid;
+  text-decoration-color: var(--amber);
 }
 
 h1,
@@ -41,7 +71,46 @@ h6 {
 }
 
 a {
-  color: #0085a1;
+  color: var(--ink);
+}
+
+/* Heading links (e.g. the Causality index): amber with an arrow,
+   so they stand apart from plain section headers */
+[role="main"] h1 a,
+[role="main"] h2 a,
+[role="main"] h3 a,
+[role="main"] h4 a {
+  color: var(--amber);
+  text-decoration: none;
+}
+
+[role="main"] h1 a::after,
+[role="main"] h2 a::after,
+[role="main"] h3 a::after,
+[role="main"] h4 a::after {
+  content: " \2192";
+  display: inline-block;
+  margin-left: 4px;
+  transition: transform 0.2s ease;
+}
+
+[role="main"] h1 a:hover,
+[role="main"] h2 a:hover,
+[role="main"] h3 a:hover,
+[role="main"] h4 a:hover,
+[role="main"] h1 a:focus,
+[role="main"] h2 a:focus,
+[role="main"] h3 a:focus,
+[role="main"] h4 a:focus {
+  color: var(--amber);
+  text-decoration: none;
+}
+
+[role="main"] h1 a:hover::after,
+[role="main"] h2 a:hover::after,
+[role="main"] h3 a:hover::after,
+[role="main"] h4 a:hover::after {
+  transform: translateX(4px);
 }
 
 .header_class {
@@ -50,7 +119,7 @@ a {
 
 a:hover,
 a:focus {
-  color: #0085a1;
+  color: var(--ink);
 }
 
 blockquote {
@@ -90,15 +159,15 @@ hr.small {
 }
 
 ::-moz-selection {
-  color: white;
+  color: var(--ink);
   text-shadow: none;
-  background: #0085a1;
+  background: var(--gold);
 }
 
 ::selection {
-  color: white;
+  color: var(--ink);
   text-shadow: none;
-  background: #0085a1;
+  background: var(--gold);
 }
 
 img::selection {
@@ -302,13 +371,20 @@ footer .theme-by {
 /* --- Post preview --- */
 
 .post-preview {
-  padding: 20px 0;
+  padding: 20px 0 20px 16px;
   border-bottom: 1px solid #eee;
+  border-left: 3px solid transparent;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.post-preview:hover {
+  border-left-color: var(--gold);
+  transform: translateX(4px);
 }
 
 @media only screen and (min-width: 768px) {
   .post-preview {
-    padding: 35px 0;
+    padding: 35px 0 35px 20px;
   }
 }
 
@@ -324,7 +400,15 @@ footer .theme-by {
 .post-preview a:focus,
 .post-preview a:hover {
   text-decoration: none;
-  color: #0085a1;
+  color: var(--ink);
+}
+
+.post-preview .post-title a:hover,
+.post-preview a:hover .post-title {
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
 }
 
 .post-preview .post-title {
@@ -398,15 +482,15 @@ footer .theme-by {
 }
 
 .blog-tags a {
-  color: #0070D0;
+  color: var(--ink);
   text-decoration: none;
   padding: 0px 5px;
 }
 
 .blog-tags a:hover {
   border-radius: 2px;
-  color: #0070D0;
-  background-color: #CCC;
+  color: var(--ink);
+  background-color: var(--gold-soft);
 }
 
 .post-preview .blog-tags {
@@ -653,11 +737,17 @@ footer .theme-by {
   }
 }
 
+.pager li a,
 .pager li a:hover,
 .pager li a:focus {
-  color: #FFF;
-  background: #0085a1;
-  border: 1px solid #0085a1;
+  text-decoration: none;
+}
+
+.pager li a:hover,
+.pager li a:focus {
+  color: var(--gold);
+  background: var(--charcoal);
+  border: 1px solid var(--charcoal);
 }
 
 .pager {
@@ -840,22 +930,41 @@ pre code {
   display: flex;
   align-items: baseline;
   gap: 12px;
-  padding: 8px 0;
+  padding: 8px 10px;
+  margin: 0 -10px;
+  border-radius: 6px;
   line-height: 1.4;
+  transition: background-color 0.2s ease;
+}
+
+.home-updates li:hover {
+  background-color: rgba(245, 190, 0, 0.12);
 }
 
 .home-tag {
   flex: 0 0 auto;
-  min-width: 78px;
-  font-size: 12px;
+  min-width: 92px;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--gold-soft);
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #6B6B6B;
+  color: var(--ink);
 }
 
-.home a {
-  color: #0070D0;
+/* Generative art banner (drawn by js/home-art.js) */
+.home-art {
+  display: block;
+  width: 100%;
+  height: 180px;
+  margin: 0 0 32px;
+  border-radius: 12px;
+  background: var(--charcoal);
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 500px) {
@@ -865,6 +974,56 @@ pre code {
 
   .home-updates li {
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
   }
+
+  .home-art {
+    height: 140px;
+  }
+}
+
+/* --- Nav hover underline --- */
+
+@media only screen and (min-width: 768px) {
+  .navbar-custom .nav > li > a {
+    position: relative;
+  }
+
+  .navbar-custom .nav > li > a::after {
+    content: "";
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    bottom: 8px;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+  }
+
+  .navbar-custom .nav > li > a:hover::after,
+  .navbar-custom .nav > li > a:focus::after {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::after {
+    transition: none !important;
+  }
+
+  .post-preview:hover {
+    transform: none;
+  }
+}
+
+/* Long display equations (MathJax) scroll on their own on small screens
+   instead of making the whole page scroll sideways */
+mjx-container[display="true"] {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
