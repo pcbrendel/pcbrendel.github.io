@@ -8,9 +8,10 @@ subtitle: Forecasts for medication markets on Kalshi
         --grid: #e6e5df; --axis: #c3c2b7; --surface: #ffffff; color: var(--ink); }
   .to-c-model { color: var(--model); }
   .to-c-market { color: var(--market); }
-  .to-nav { display: flex; align-items: center; gap: 12px 16px; flex-wrap: wrap; margin: 40px 0 8px; }
+  .to-nav { display: flex; align-items: center; gap: 12px; margin: 40px 0 8px; }
   .to-title { position: relative; flex: 0 1 auto; min-width: 0; }
-  .to-topic { margin: 0; display: inline-flex; align-items: center; gap: 8px; }
+  .to-topic { margin: 0; display: inline-flex; align-items: center; gap: 8px; max-width: 100%; }
+  .to-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .to-chev { width: 10px; height: 10px; flex: none; border: solid var(--ink-2); border-width: 0 2px 2px 0;
              transform: translateY(-3px) rotate(45deg); }
   /* Invisible native select over the heading: click the drug name to jump to any drug. */
@@ -26,6 +27,16 @@ subtitle: Forecasts for medication markets on Kalshi
   .to-next::before { transform: translateX(-2px) rotate(-45deg); }
   .to-arrow:hover:not(:disabled) { border-color: var(--ink-2); background: var(--grid); }
   .to-arrow:disabled { opacity: 0.35; cursor: default; }
+  /* Phones: smaller heading and arrows so the name and the pager share one line. */
+  @media (max-width: 480px) {
+    .to-nav { gap: 8px; }
+    .to-topic { font-size: 22px; gap: 6px; }
+    .to-name-tail { display: none; }
+    .to-chev { width: 8px; height: 8px; }
+    .to-pager { gap: 4px; }
+    .to-count { font-size: 13px; min-width: 2.8em; }
+    .to-arrow { width: 32px; height: 32px; }
+  }
   .to-panel.from-r { animation: to-in-r 0.22s ease-out; }
   .to-panel.from-l { animation: to-in-l 0.22s ease-out; }
   @keyframes to-in-r { from { opacity: 0; transform: translateX(24px); } }
@@ -111,6 +122,45 @@ subtitle: Forecasts for medication markets on Kalshi
     var end = new Date(+p[0], +p[1] - 1, +p[2]), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     return Math.round((end - today) / 864e5);
   }
+  // Dates as whole-day numbers (days since 1970-01-01, UTC), so the x-axis spaces points by real time.
+  function dayNum(s) { var p = s.split("-"); return Date.UTC(+p[0], +p[1] - 1, +p[2]) / 864e5; }
+  function fromDayNum(n) { return new Date(n * 864e5); }
+
+  // Date ticks that fit the span: every 1/2/3/7/14 days for short histories, else the 1st of every
+  // 1/2/3/6/12 months. Aims for one label per ~65px.
+  function dateTicks(min, max, width) {
+    var room = Math.max(2, Math.floor(width / 65)), out = [], i, n;
+    var daySteps = [1, 2, 3, 7, 14];
+    for (i = 0; i < daySteps.length; i++) {
+      if ((max - min) / daySteps[i] + 1 <= room) {
+        for (n = min; n <= max; n += daySteps[i]) out.push({ value: n, unit: "day" });
+        return out;
+      }
+    }
+    var a = fromDayNum(min), monthSteps = [1, 2, 3, 6, 12];
+    for (i = 0; i < monthSteps.length; i++) {
+      var step = monthSteps[i], y = a.getUTCFullYear(), m = a.getUTCMonth();   // m is 0-based
+      while (m % step) m++;
+      out = [];
+      for (;; m += step) {
+        n = Date.UTC(y, m, 1) / 864e5;   // Date.UTC rolls month 12 over into the next year
+        if (n > max) break;
+        if (n >= min) out.push({ value: n, unit: "month" });
+      }
+      if (out.length <= room || i === monthSteps.length - 1) return out;
+    }
+  }
+  // "Oct 23" or "Nov"; adds the year on the first tick of each new year, and on the
+  // first tick when the chart spans more than one year.
+  function tickLabel(value, index, ticks) {
+    var d = fromDayNum(value), t = ticks[index];
+    var y = d.getUTCFullYear();
+    var yearOf = function (k) { return fromDayNum(ticks[k].value).getUTCFullYear(); };
+    var showYear = index > 0 ? yearOf(index - 1) !== y : yearOf(ticks.length - 1) !== y;
+    var label = MONTHS[d.getUTCMonth()] + (t && t.unit === "day" ? " " + d.getUTCDate() : "");
+    return showYear ? label + (t && t.unit === "day" ? ", " : " ") + y : label;
+  }
+
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
 
   // Thin vertical line + "vX.Y" label at each model version change.
@@ -119,7 +169,7 @@ subtitle: Forecasts for medication markets on Kalshi
     afterDatasetsDraw: function (chart, _, opts) {
       var ctx = chart.ctx, x = chart.scales.x, area = chart.chartArea;
       (opts.at || []).forEach(function (c) {
-        var px = x.getPixelForValue(c.i);
+        var px = x.getPixelForValue(c.x);
         ctx.save();
         ctx.strokeStyle = C.axis; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(px, area.top); ctx.lineTo(px, area.bottom); ctx.stroke();
@@ -130,12 +180,30 @@ subtitle: Forecasts for medication markets on Kalshi
     }
   };
 
+  // Dashed guide line under the pointer while hovering (unlike the solid, labelled version lines).
+  var hoverLine = {
+    id: "hoverLine",
+    afterDatasetsDraw: function (chart) {
+      var active = chart.tooltip && chart.tooltip.getActiveElements();
+      if (!active || !active.length) return;
+      var px = active[0].element.x, area = chart.chartArea;
+      var ctx = chart.ctx;
+      ctx.save();
+      ctx.strokeStyle = C["ink-2"]; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+      ctx.beginPath(); ctx.moveTo(px, area.top); ctx.lineTo(px, area.bottom); ctx.stroke();
+      ctx.restore();
+    }
+  };
+
   function marketChart(box, rows, outcome) {
     var small = rows.every(function (r) { return Math.max(r.model_p90 || 0, r.kalshi_ask) < 0.1; });
-    var labels = rows.map(function (r) { return day(r.as_of); });
+    var xs = rows.map(function (r) { return dayNum(r.as_of); });
+    // A one-day history gets a day of room on each side so the axis isn't zero-width.
+    var xMin = xs[0], xMax = xs[xs.length - 1];
+    if (xMax === xMin) { xMin -= 1; xMax += 1; }
     var changes = [];
-    rows.forEach(function (r, i) { if (i > 0 && r.model_version !== rows[i - 1].model_version) changes.push({ i: i, v: r.model_version }); });
-    var col = function (k) { return rows.map(function (r) { return r[k]; }); };
+    rows.forEach(function (r, i) { if (i > 0 && r.model_version !== rows[i - 1].model_version) changes.push({ x: xs[i], v: r.model_version }); });
+    var col = function (k) { return rows.map(function (r, i) { return { x: xs[i], y: r[k] }; }); };
     var hidden = { pointRadius: 0, pointHoverRadius: 0, pointHitRadius: 0, borderWidth: 0 };
     var last = rows.length - 1;
     var endDot = function (color) {
@@ -149,7 +217,7 @@ subtitle: Forecasts for medication markets on Kalshi
     box.appendChild(canvas);
     new Chart(canvas, {
       type: "line",
-      data: { labels: labels, datasets: [
+      data: { datasets: [
         Object.assign({ label: "p10", data: col("model_p10"), fill: false, spanGaps: false }, hidden),
         Object.assign({ label: "p90", data: col("model_p90"), fill: "-1", backgroundColor: alpha(C.model, 0.12), spanGaps: false }, hidden),
         Object.assign({ label: "bid", data: col("kalshi_bid"), fill: false }, hidden),
@@ -159,10 +227,12 @@ subtitle: Forecasts for medication markets on Kalshi
       ] },
       options: {
         maintainAspectRatio: false, animation: false,
-        interaction: { mode: "index", intersect: false },
+        interaction: { mode: "index", intersect: false, axis: "x" },
         layout: { padding: { top: 4, right: 28 } },
         scales: {
-          x: { grid: { display: false }, border: { color: C.axis }, ticks: { color: C["ink-2"], maxRotation: 0, autoSkipPadding: 16 } },
+          x: { type: "linear", min: xMin, max: xMax, grid: { display: false }, border: { color: C.axis },
+               afterBuildTicks: function (axis) { axis.ticks = dateTicks(xMin, xMax, axis.chart.width); },
+               ticks: { color: C["ink-2"], maxRotation: 0, autoSkipPadding: 16, callback: tickLabel } },
           y: { beginAtZero: true, grid: { color: C.grid }, border: { display: false },
                ticks: { color: C["ink-2"], maxTicksLimit: 6, callback: function (v) { return pct(v, small); } } }
         },
@@ -186,7 +256,7 @@ subtitle: Forecasts for medication markets on Kalshi
           }
         }
       },
-      plugins: [versionLines]
+      plugins: [versionLines, hoverLine]
     });
   }
 
@@ -272,7 +342,7 @@ subtitle: Forecasts for medication markets on Kalshi
   var nav = el("div", "to-nav");
   var title = el("div", "to-title");
   var h2 = el("h2", "to-topic");
-  var name = el("span");
+  var name = el("span", "to-name");
   h2.appendChild(name);
   title.appendChild(h2);
   nav.appendChild(title);
@@ -306,7 +376,8 @@ subtitle: Forecasts for medication markets on Kalshi
     if (dir && !quiet) { void x.panel.offsetWidth; x.panel.classList.add(dir); }
     at = i;
     x.activate();
-    name.textContent = x.t.drug + " approval";
+    name.textContent = x.t.drug;
+    name.appendChild(el("span", "to-name-tail", " approval"));
     if (many) {
       select.value = i;
       count.textContent = (i + 1) + " / " + topics.length;
