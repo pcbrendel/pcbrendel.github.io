@@ -1,37 +1,86 @@
 ---
 title: Trial Odds
-subtitle: Forecasts for FDA approval markets on Kalshi
+subtitle: Forecasts for medication markets on Kalshi
 ---
 
 <style>
   .to { --model: #1f4e9c; --market: #d96a10; --ink: #1b1b1a; --ink-2: #52514e; --muted: #898781;
         --grid: #e6e5df; --axis: #c3c2b7; --surface: #ffffff; color: var(--ink); }
-  .to-lead { color: var(--ink-2); margin-top: 32px; }
-  .to-topic { margin: 40px 0 8px; }
+  .to-c-model { color: var(--model); }
+  .to-c-market { color: var(--market); }
+  .to-nav { display: flex; align-items: center; gap: 12px 16px; flex-wrap: wrap; margin: 40px 0 8px; }
+  .to-title { position: relative; flex: 0 1 auto; min-width: 0; }
+  .to-topic { margin: 0; display: inline-flex; align-items: center; gap: 8px; }
+  .to-chev { width: 10px; height: 10px; flex: none; border: solid var(--ink-2); border-width: 0 2px 2px 0;
+             transform: translateY(-3px) rotate(45deg); }
+  /* Invisible native select over the heading: click the drug name to jump to any drug. */
+  .to-title select { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; font-size: 16px; }
+  .to-title:hover .to-chev { border-color: var(--ink); }
+  .to-title:focus-within .to-topic { outline: 2px solid var(--model); outline-offset: 4px; border-radius: 4px; }
+  .to-pager { display: flex; align-items: center; gap: 10px; flex: none; margin-left: auto; }
+  .to-count { font-size: 14px; color: var(--ink-2); min-width: 3.2em; text-align: center; font-variant-numeric: tabular-nums; }
+  .to-arrow { width: 36px; height: 36px; padding: 0; border: 1px solid var(--axis); border-radius: 50%;
+              background: var(--surface); color: var(--ink); cursor: pointer; display: grid; place-items: center; }
+  .to-arrow::before { content: ""; width: 8px; height: 8px; border: solid currentColor; border-width: 0 2px 2px 0; }
+  .to-prev::before { transform: translateX(2px) rotate(135deg); }
+  .to-next::before { transform: translateX(-2px) rotate(-45deg); }
+  .to-arrow:hover:not(:disabled) { border-color: var(--ink-2); background: var(--grid); }
+  .to-arrow:disabled { opacity: 0.35; cursor: default; }
+  .to-panel.from-r { animation: to-in-r 0.22s ease-out; }
+  .to-panel.from-l { animation: to-in-l 0.22s ease-out; }
+  @keyframes to-in-r { from { opacity: 0; transform: translateX(24px); } }
+  @keyframes to-in-l { from { opacity: 0; transform: translateX(-24px); } }
+  @media (prefers-reduced-motion: reduce) { .to-panel.from-r, .to-panel.from-l { animation: none; } }
   .to-meta { font-size: 13px; color: var(--muted); margin: 0 0 20px; }
   .to-market { margin: 0 0 32px; }
-  .to-market h3 { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+  .to-picks { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+  .to-pick { font: inherit; font-size: 14px; font-weight: 600; color: var(--ink-2); padding: 5px 12px;
+             border: 1px solid var(--axis); border-radius: 999px; background: var(--surface); cursor: pointer; }
+  .to-pick:hover { border-color: var(--ink-2); }
+  .to-pick[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--surface); }
   .to-figs { display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 14px; color: var(--ink-2); margin: 0 0 10px; }
   .to-figs b { color: var(--ink); font-weight: 700; }
   .to-key { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
   .to-chart { position: relative; height: 260px; }
   .to details { margin-top: 8px; font-size: 13px; color: var(--ink-2); }
-  .to summary { cursor: pointer; }
+  .to summary { cursor: pointer; width: fit-content; }
   .to-log { list-style: none; padding: 0; margin: 8px 0 0; font-size: 14px; }
   .to-log li { margin: 0 0 6px; }
   .to-log .v { display: inline-block; min-width: 42px; font-weight: 700; }
   .to-log .d { color: var(--muted); margin-right: 8px; }
   .to-note { font-size: 13px; color: var(--muted); margin-top: 32px; }
+  .to-faq-open { display: block; margin-top: 8px; padding: 0; border: 0; background: none; font: inherit; font-size: 13px; cursor: pointer; }
+  /* FAQ and Changelog look like the site's other links (css/main.css): amber, dotted underline, solid on hover. */
+  .to-faq-open, .to summary { color: var(--amber, #8A6400); text-decoration: underline dotted;
+                              text-decoration-color: rgba(138, 100, 0, 0.5); text-underline-offset: 4px;
+                              transition: text-decoration-color 0.2s ease; }
+  .to-faq-open:hover, .to-faq-open:focus-visible, .to summary:hover, .to summary:focus-visible {
+    text-decoration-style: solid; text-decoration-color: var(--amber, #8A6400); }
+  .to-faq { width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 64px); padding: 0; border: 0;
+            border-radius: 12px; background: var(--surface); color: var(--ink); box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
+  .to-faq::backdrop { background: rgba(27,27,26,0.45); }
+  .to-faq-head { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+                 padding: 16px 20px; background: var(--surface); border-bottom: 1px solid var(--grid); }
+  .to-faq-head h2 { margin: 0; font-size: 20px; }
+  .to-faq-close { width: 32px; height: 32px; flex: none; padding: 0; border: 1px solid var(--axis); border-radius: 50%;
+                  background: var(--surface); color: var(--ink); font-size: 20px; line-height: 1; cursor: pointer; }
+  .to-faq-close:hover { border-color: var(--ink-2); background: var(--grid); }
+  .to-faq-body { padding: 4px 20px 20px; font-size: 15px; color: var(--ink-2); }
+  .to-faq-body h3 { margin: 18px 0 4px; font-size: 16px; font-weight: 700; color: var(--ink); }
+  .to-faq-body p { margin: 0; }
 </style>
 
 <div class="to">
-  <ul class="to-lead">
-    <li>Models of each drug's path to FDA approval.</li>
-    <li>Run daily against the Kalshi market's price. This page is refreshed every Monday. </li>
-    <li>Each chart shows the model's chance of approval before the market's deadline, with a band of plausible values given the uncertainty in its inputs, next to Kalshi's price.</li>
-    <li>Vertical lines mark changes to the model (see Changelog below).</li>
-  </ul>
   <div id="to-root"></div>
+  <dialog class="to-faq" id="to-faq" aria-labelledby="to-faq-title">
+    <div class="to-faq-head">
+      <h2 id="to-faq-title">Frequently Asked Questions</h2>
+      <button type="button" class="to-faq-close" aria-label="Close">&times;</button>
+    </div>
+    <div class="to-faq-body">
+      {% capture faq %}{% include_relative faq.md %}{% endcapture %}{{ faq | markdownify }}
+    </div>
+  </dialog>
   <p class="to-note">
     For informational purposes only. Not investment advice.
   </p>
@@ -49,11 +98,18 @@ subtitle: Forecasts for FDA approval markets on Kalshi
   });
   var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   function day(s) { var p = s.split("-"); return MONTHS[+p[1] - 1] + " " + (+p[2]); }
+  function longDay(s) { return day(s) + ", " + s.split("-")[0]; }
   // small = this chart's values stay under 10%, so its axis and ranges need a decimal; point values always get one.
   function pct(v, small) { return v == null ? "–" : (v * 100).toFixed(small ? 1 : 0) + "%"; }
   function alpha(hex, a) {
     var n = parseInt(hex.slice(1), 16);
     return "rgba(" + (n >> 16) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")";
+  }
+  // Whole days from today (local) to a YYYY-MM-DD date.
+  function daysUntil(s) {
+    var p = s.split("-"), now = new Date();
+    var end = new Date(+p[0], +p[1] - 1, +p[2]), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    return Math.round((end - today) / 864e5);
   }
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
 
@@ -74,7 +130,7 @@ subtitle: Forecasts for FDA approval markets on Kalshi
     }
   };
 
-  function marketChart(box, rows) {
+  function marketChart(box, rows, outcome) {
     var small = rows.every(function (r) { return Math.max(r.model_p90 || 0, r.kalshi_ask) < 0.1; });
     var labels = rows.map(function (r) { return day(r.as_of); });
     var changes = [];
@@ -86,7 +142,10 @@ subtitle: Forecasts for FDA approval markets on Kalshi
       return { pointRadius: rows.map(function (_, i) { return i === last ? 4.5 : 0; }), pointBackgroundColor: color,
                pointBorderColor: C.surface, pointBorderWidth: 2, pointHoverRadius: 5, pointHitRadius: 12 };
     };
-    var canvas = el("canvas");
+    var canvas = el("canvas"), now = rows[last];
+    canvas.setAttribute("role", "img");
+    canvas.setAttribute("aria-label", "Model " + pct(now.model, true) + " vs. Kalshi " + pct(now.kalshi_mid, true) +
+      " for approval " + outcome.charAt(0).toLowerCase() + outcome.slice(1) + ", as of " + longDay(now.as_of) + ".");
     box.appendChild(canvas);
     new Chart(canvas, {
       type: "line",
@@ -115,7 +174,7 @@ subtitle: Forecasts for FDA approval markets on Kalshi
             backgroundColor: C.surface, borderColor: C.axis, borderWidth: 1, titleColor: C.ink, bodyColor: C["ink-2"],
             padding: 10, displayColors: false,
             callbacks: {
-              title: function (items) { return rows[items[0].dataIndex].as_of; },
+              title: function (items) { return longDay(rows[items[0].dataIndex].as_of); },
               label: function (item) {
                 var r = rows[item.dataIndex], s = small;
                 var range = r.model_p10 == null ? "" : " (80% range " + pct(r.model_p10, s) + "–" + pct(r.model_p90, s) + ")";
@@ -132,26 +191,64 @@ subtitle: Forecasts for FDA approval markets on Kalshi
   }
 
   var root = document.getElementById("to-root");
-  data.topics.forEach(function (t) {
-    root.appendChild(el("h2", "to-topic", t.drug + " approval"));
-    root.appendChild(el("p", "to-meta", "Model v" + t.model_version + " · updated " + t.updated +
+
+  // FAQ pop-up (content comes from faq.md). Closes with ×, Esc, or a click outside the box.
+  var faq = document.getElementById("to-faq");
+  function openFaq() { if (faq.showModal) faq.showModal(); else faq.setAttribute("open", ""); }
+  faq.querySelector(".to-faq-close").addEventListener("click", function () { faq.close ? faq.close() : faq.removeAttribute("open"); });
+  faq.addEventListener("click", function (e) {
+    var r = faq.getBoundingClientRect();
+    if (e.target === faq && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)) faq.close();
+  });
+
+  // Everything for one drug: meta line, market buttons, charts, changelog. Starts hidden.
+  function buildTopic(t) {
+    var panel = el("div", "to-panel");
+    panel.hidden = true;
+    panel.appendChild(el("p", "to-meta", "Model v" + t.model_version + " · data through " + longDay(t.updated) +
       (t.kalshi_url ? ' · <a href="' + t.kalshi_url + '" target="_blank" rel="noopener">Kalshi market ↗</a>' : "")));
     var outcomes = [];
     t.rows.forEach(function (r) { if (outcomes.indexOf(r.outcome) < 0) outcomes.push(r.outcome); });
-    outcomes.forEach(function (o) {
+    // One market at a time, picked with buttons. A chart is drawn the first time its market is shown,
+    // since Chart.js can't size a canvas inside a hidden element.
+    var picks = el("div", "to-picks");
+    picks.setAttribute("role", "group");
+    picks.setAttribute("aria-label", t.drug + " market");
+    if (outcomes.length > 1) panel.appendChild(picks);
+    var cur = 0;
+    var markets = outcomes.map(function (o, i) {
       var rows = t.rows.filter(function (r) { return r.outcome === o; });
       var r = rows[rows.length - 1];
+      var btn = el("button", "to-pick", o);
+      btn.type = "button";
+      btn.addEventListener("click", function () { show(i); });
+      picks.appendChild(btn);
+      var left = daysUntil(r.deadline);
       var sec = el("section", "to-market");
-      sec.appendChild(el("h3", null, "Approved " + o.charAt(0).toLowerCase() + o.slice(1) + "?"));
+      sec.hidden = true;
       sec.appendChild(el("div", "to-figs",
+        (outcomes.length > 1 ? "" : "<span><b>" + o + "</b></span>") +
         '<span><i class="to-key" style="background:' + C.model + '"></i>Model <b>' + pct(r.model, true) + "</b>" +
         (r.model_p10 == null ? "" : " (80% range)") + "</span>" +
-        '<span><i class="to-key" style="background:' + C.market + '"></i>Kalshi <b>' + pct(r.kalshi_mid, true) + "</b> (bid–ask band)</span>"));
+        '<span><i class="to-key" style="background:' + C.market + '"></i>Kalshi <b>' + pct(r.kalshi_mid, true) + "</b> (bid–ask band)</span>" +
+        "<span>" + (left > 0 ? left + (left === 1 ? " day" : " days") + " until Kalshi market closes (" + longDay(r.deadline) + ")"
+                            : "Kalshi market closed " + longDay(r.deadline)) + "</span>"));
       var box = el("div", "to-chart");
       sec.appendChild(box);
-      root.appendChild(sec);
-      marketChart(box, rows);
+      panel.appendChild(sec);
+      return { btn: btn, sec: sec, box: box, rows: rows, outcome: o, drawn: false };
     });
+    function show(i) {
+      cur = i;
+      markets.forEach(function (m, j) { m.sec.hidden = j !== i; m.btn.setAttribute("aria-pressed", j === i); });
+      var m = markets[i];
+      if (m && !m.drawn) { marketChart(m.box, m.rows, m.outcome); m.drawn = true; }
+    }
+    var faqBtn = el("button", "to-faq-open", "Frequently Asked Questions");
+    faqBtn.type = "button";
+    faqBtn.setAttribute("aria-haspopup", "dialog");
+    faqBtn.addEventListener("click", openFaq);
+    panel.appendChild(faqBtn);
     if (t.changelog.length) {
       var log = el("details", null, "<summary>Changelog</summary>");
       var ul = el("ul", "to-log");
@@ -159,8 +256,99 @@ subtitle: Forecasts for FDA approval markets on Kalshi
         ul.appendChild(el("li", null, '<span class="v">v' + c.version + '</span><span class="d">' + c.date + "</span>"));
       });
       log.appendChild(ul);
-      root.appendChild(log);
+      panel.appendChild(log);
     }
-  });
+    return { t: t, panel: panel, activate: function () { show(cur); } };
+  }
+
+  // Drugs with the most data points (rows across all their markets) come first; ties keep the data file's order.
+  var topics = data.topics.map(function (t, i) { return { t: t, i: i }; })
+    .sort(function (a, b) { return b.t.rows.length - a.t.rows.length || a.i - b.i; })
+    .map(function (x) { return buildTopic(x.t); });
+  if (!topics.length) return;
+  var many = topics.length > 1;
+
+  // Header: drug name (doubles as a jump-to dropdown) on the left, ‹ n / N › on the right.
+  var nav = el("div", "to-nav");
+  var title = el("div", "to-title");
+  var h2 = el("h2", "to-topic");
+  var name = el("span");
+  h2.appendChild(name);
+  title.appendChild(h2);
+  nav.appendChild(title);
+  var select, prev, next, count;
+  if (many) {
+    h2.appendChild(el("i", "to-chev"));
+    select = el("select");
+    select.setAttribute("aria-label", "Choose a drug");
+    topics.forEach(function (x, i) { var o = el("option", null, x.t.drug); o.value = i; select.appendChild(o); });
+    select.addEventListener("change", function () { go(+select.value); });
+    title.appendChild(select);
+    var pager = el("div", "to-pager");
+    prev = el("button", "to-arrow to-prev"); prev.type = "button";
+    next = el("button", "to-arrow to-next"); next.type = "button";
+    count = el("span", "to-count");
+    count.setAttribute("aria-live", "polite");
+    prev.addEventListener("click", function () { go(at - 1); });
+    next.addEventListener("click", function () { go(at + 1); });
+    pager.appendChild(prev); pager.appendChild(count); pager.appendChild(next);
+    nav.appendChild(pager);
+  }
+  root.appendChild(nav);
+  topics.forEach(function (x) { root.appendChild(x.panel); });
+
+  var at = -1;
+  function go(i, quiet) {
+    if (i < 0 || i >= topics.length || i === at) return;
+    var dir = at < 0 ? "" : (i > at ? "from-r" : "from-l");
+    topics.forEach(function (x, j) { x.panel.hidden = j !== i; x.panel.classList.remove("from-r", "from-l"); });
+    var x = topics[i];
+    if (dir && !quiet) { void x.panel.offsetWidth; x.panel.classList.add(dir); }
+    at = i;
+    x.activate();
+    name.textContent = x.t.drug + " approval";
+    if (many) {
+      select.value = i;
+      count.textContent = (i + 1) + " / " + topics.length;
+      prev.disabled = i === 0;
+      next.disabled = i === topics.length - 1;
+      prev.setAttribute("aria-label", i > 0 ? "Previous: " + topics[i - 1].t.drug : "Previous");
+      next.setAttribute("aria-label", i < topics.length - 1 ? "Next: " + topics[i + 1].t.drug : "Next");
+      prev.title = prev.getAttribute("aria-label");
+      next.title = next.getAttribute("aria-label");
+      if (!quiet && location.hash.slice(1) !== x.t.slug) history.replaceState(null, "", "#" + x.t.slug);
+    }
+  }
+  function fromHash() {
+    var s = decodeURIComponent(location.hash.slice(1)).toLowerCase();
+    for (var i = 0; i < topics.length; i++) if (topics[i].t.slug === s) return i;
+    return -1;
+  }
+  go(Math.max(fromHash(), 0), true);
+
+  if (many) {
+    window.addEventListener("hashchange", function () { var i = fromHash(); if (i >= 0) go(i); });
+    // Left/right arrow keys, unless the reader is typing or using a form control.
+    document.addEventListener("keydown", function (e) {
+      if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.defaultPrevented || faq.open) return;
+      var tag = (e.target.tagName || "").toLowerCase();
+      if (tag === "input" || tag === "textarea" || tag === "select" || e.target.isContentEditable) return;
+      if (e.key === "ArrowLeft") go(at - 1);
+      else if (e.key === "ArrowRight") go(at + 1);
+    });
+    // Horizontal swipe on touch screens. Swipes that start on a chart are left alone,
+    // since dragging there scrubs the tooltip.
+    var sx = null, sy = 0;
+    root.addEventListener("touchstart", function (e) {
+      sx = e.target.tagName === "CANVAS" || e.touches.length > 1 ? null : e.touches[0].clientX;
+      sy = e.touches[0].clientY;
+    }, { passive: true });
+    root.addEventListener("touchend", function (e) {
+      if (sx == null) return;
+      var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+      sx = null;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > 2 * Math.abs(dy)) go(at + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+  }
 })();
 </script>

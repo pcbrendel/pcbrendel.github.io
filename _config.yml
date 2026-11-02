@@ -137,6 +137,7 @@ exclude:
   - LICENSE
   - README.md
   - Vagrantfile
+  - trialodds/faq.md   # pulled into the Trial Odds FAQ pop-up, not its own page
 
 # prose.io config
 prose:
