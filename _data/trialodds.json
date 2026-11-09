@@ -3,8 +3,8 @@
   {
    "slug": "cytisinicline",
    "drug": "Cytisinicline",
-   "model_version": "1.0",
-   "updated": "2026-11-02",
+   "model_version": "2.0",
+   "updated": "2026-11-09",
    "kalshi_url": "https://kalshi.com/markets/kxfdaapprove/will-the-fda-approve-drug/kxfdaapprove-cyt",
    "rows": [
     {
@@ -32,6 +32,90 @@
      "model_version": "1.0"
     },
     {
+     "as_of": "2026-11-03",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0059,
+     "model_p10": 0.0,
+     "model_p90": 0.0173,
+     "kalshi_bid": 0.07,
+     "kalshi_ask": 0.13,
+     "kalshi_mid": 0.1,
+     "model_version": "1.0"
+    },
+    {
+     "as_of": "2026-11-04",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0054,
+     "model_p10": 0.0001,
+     "model_p90": 0.0165,
+     "kalshi_bid": 0.07,
+     "kalshi_ask": 0.13,
+     "kalshi_mid": 0.1,
+     "model_version": "1.0"
+    },
+    {
+     "as_of": "2026-11-05",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0055,
+     "model_p10": 0.0001,
+     "model_p90": 0.0158,
+     "kalshi_bid": 0.07,
+     "kalshi_ask": 0.13,
+     "kalshi_mid": 0.1,
+     "model_version": "1.0"
+    },
+    {
+     "as_of": "2026-11-06",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0055,
+     "model_p10": 0.0,
+     "model_p90": 0.0157,
+     "kalshi_bid": 0.07,
+     "kalshi_ask": 0.13,
+     "kalshi_mid": 0.1,
+     "model_version": "1.0"
+    },
+    {
+     "as_of": "2026-11-07",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0051,
+     "model_p10": 0.0,
+     "model_p90": 0.0145,
+     "kalshi_bid": 0.07,
+     "kalshi_ask": 0.13,
+     "kalshi_mid": 0.1,
+     "model_version": "1.0"
+    },
+    {
+     "as_of": "2026-11-08",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0049,
+     "model_p10": 0.0,
+     "model_p90": 0.0134,
+     "kalshi_bid": 0.07,
+     "kalshi_ask": 0.13,
+     "kalshi_mid": 0.1,
+     "model_version": "2.0"
+    },
+    {
+     "as_of": "2026-11-09",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0046,
+     "model_p10": 0.0,
+     "model_p90": 0.0126,
+     "kalshi_bid": 0.07,
+     "kalshi_ask": 0.13,
+     "kalshi_mid": 0.1,
+     "model_version": "2.0"
+    },
+    {
      "as_of": "2026-11-01",
      "outcome": "Before Jul 1, 2027",
      "deadline": "2027-07-01",
@@ -54,9 +138,97 @@
      "kalshi_ask": 0.42,
      "kalshi_mid": 0.39,
      "model_version": "1.0"
+    },
+    {
+     "as_of": "2026-11-03",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.4451,
+     "model_p10": 0.3233,
+     "model_p90": 0.5724,
+     "kalshi_bid": 0.36,
+     "kalshi_ask": 0.42,
+     "kalshi_mid": 0.39,
+     "model_version": "1.0"
+    },
+    {
+     "as_of": "2026-11-04",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.4432,
+     "model_p10": 0.3216,
+     "model_p90": 0.5693,
+     "kalshi_bid": 0.37,
+     "kalshi_ask": 0.43,
+     "kalshi_mid": 0.4,
+     "model_version": "1.0"
+    },
+    {
+     "as_of": "2026-11-05",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.4402,
+     "model_p10": 0.318,
+     "model_p90": 0.5654,
+     "kalshi_bid": 0.35,
+     "kalshi_ask": 0.43,
+     "kalshi_mid": 0.39,
+     "model_version": "1.0"
+    },
+    {
+     "as_of": "2026-11-06",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.4377,
+     "model_p10": 0.3157,
+     "model_p90": 0.5642,
+     "kalshi_bid": 0.35,
+     "kalshi_ask": 0.43,
+     "kalshi_mid": 0.39,
+     "model_version": "1.0"
+    },
+    {
+     "as_of": "2026-11-07",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.435,
+     "model_p10": 0.3139,
+     "model_p90": 0.5623,
+     "kalshi_bid": 0.35,
+     "kalshi_ask": 0.43,
+     "kalshi_mid": 0.39,
+     "model_version": "1.0"
+    },
+    {
+     "as_of": "2026-11-08",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.4319,
+     "model_p10": 0.3031,
+     "model_p90": 0.5668,
+     "kalshi_bid": 0.35,
+     "kalshi_ask": 0.43,
+     "kalshi_mid": 0.39,
+     "model_version": "2.0"
+    },
+    {
+     "as_of": "2026-11-09",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.4294,
+     "model_p10": 0.3,
+     "model_p90": 0.5645,
+     "kalshi_bid": 0.36,
+     "kalshi_ask": 0.43,
+     "kalshi_mid": 0.395,
+     "model_version": "2.0"
     }
    ],
    "changelog": [
+    {
+     "version": "2.0",
+     "date": "2026-11-07"
+    },
     {
      "version": "1.0",
      "date": "2026-11-01"
@@ -66,8 +238,8 @@
   {
    "slug": "retatrutide",
    "drug": "Retatrutide",
-   "model_version": "3.1",
-   "updated": "2026-11-02",
+   "model_version": "5.0",
+   "updated": "2026-11-09",
    "kalshi_url": "https://kalshi.com/markets/kxfdaretatrutide",
    "rows": [
     {
@@ -191,6 +363,90 @@
      "model_version": "3.1"
     },
     {
+     "as_of": "2026-11-03",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0011,
+     "model_p10": 0.0001,
+     "model_p90": 0.004,
+     "kalshi_bid": 0.03,
+     "kalshi_ask": 0.04,
+     "kalshi_mid": 0.035,
+     "model_version": "3.1"
+    },
+    {
+     "as_of": "2026-11-04",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0011,
+     "model_p10": 0.0001,
+     "model_p90": 0.004,
+     "kalshi_bid": 0.0,
+     "kalshi_ask": 0.01,
+     "kalshi_mid": 0.01,
+     "model_version": "3.1"
+    },
+    {
+     "as_of": "2026-11-05",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0011,
+     "model_p10": 0.0001,
+     "model_p90": 0.004,
+     "kalshi_bid": 0.0,
+     "kalshi_ask": 0.01,
+     "kalshi_mid": 0.01,
+     "model_version": "3.1"
+    },
+    {
+     "as_of": "2026-11-06",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0009,
+     "model_p10": 0.0,
+     "model_p90": 0.0038,
+     "kalshi_bid": 0.0,
+     "kalshi_ask": 0.01,
+     "kalshi_mid": 0.01,
+     "model_version": "4.0"
+    },
+    {
+     "as_of": "2026-11-07",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0009,
+     "model_p10": 0.0,
+     "model_p90": 0.0038,
+     "kalshi_bid": 0.01,
+     "kalshi_ask": 0.02,
+     "kalshi_mid": 0.015,
+     "model_version": "4.0"
+    },
+    {
+     "as_of": "2026-11-08",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0009,
+     "model_p10": 0.0,
+     "model_p90": 0.0039,
+     "kalshi_bid": 0.01,
+     "kalshi_ask": 0.02,
+     "kalshi_mid": 0.015,
+     "model_version": "5.0"
+    },
+    {
+     "as_of": "2026-11-09",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0009,
+     "model_p10": 0.0,
+     "model_p90": 0.0039,
+     "kalshi_bid": 0.01,
+     "kalshi_ask": 0.02,
+     "kalshi_mid": 0.015,
+     "model_version": "5.0"
+    },
+    {
      "as_of": "2026-10-23",
      "outcome": "Before Jul 1, 2027",
      "deadline": "2027-07-01",
@@ -309,9 +565,101 @@
      "kalshi_ask": 0.24,
      "kalshi_mid": 0.235,
      "model_version": "3.1"
+    },
+    {
+     "as_of": "2026-11-03",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.118,
+     "model_p10": 0.0296,
+     "model_p90": 0.2248,
+     "kalshi_bid": 0.23,
+     "kalshi_ask": 0.24,
+     "kalshi_mid": 0.235,
+     "model_version": "3.1"
+    },
+    {
+     "as_of": "2026-11-04",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.118,
+     "model_p10": 0.0296,
+     "model_p90": 0.2248,
+     "kalshi_bid": 0.22,
+     "kalshi_ask": 0.23,
+     "kalshi_mid": 0.225,
+     "model_version": "3.1"
+    },
+    {
+     "as_of": "2026-11-05",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.118,
+     "model_p10": 0.0296,
+     "model_p90": 0.2248,
+     "kalshi_bid": 0.2,
+     "kalshi_ask": 0.21,
+     "kalshi_mid": 0.205,
+     "model_version": "3.1"
+    },
+    {
+     "as_of": "2026-11-06",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.1065,
+     "model_p10": 0.0276,
+     "model_p90": 0.2067,
+     "kalshi_bid": 0.2,
+     "kalshi_ask": 0.21,
+     "kalshi_mid": 0.205,
+     "model_version": "4.0"
+    },
+    {
+     "as_of": "2026-11-07",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.1065,
+     "model_p10": 0.0276,
+     "model_p90": 0.2067,
+     "kalshi_bid": 0.2,
+     "kalshi_ask": 0.21,
+     "kalshi_mid": 0.205,
+     "model_version": "4.0"
+    },
+    {
+     "as_of": "2026-11-08",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.1065,
+     "model_p10": 0.0243,
+     "model_p90": 0.2047,
+     "kalshi_bid": 0.2,
+     "kalshi_ask": 0.21,
+     "kalshi_mid": 0.205,
+     "model_version": "5.0"
+    },
+    {
+     "as_of": "2026-11-09",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.1065,
+     "model_p10": 0.0243,
+     "model_p90": 0.2047,
+     "kalshi_bid": 0.13,
+     "kalshi_ask": 0.14,
+     "kalshi_mid": 0.135,
+     "model_version": "5.0"
     }
    ],
    "changelog": [
+    {
+     "version": "5.0",
+     "date": "2026-11-07"
+    },
+    {
+     "version": "4.0",
+     "date": "2026-11-05"
+    },
     {
      "version": "3.1",
      "date": "2026-11-01"
