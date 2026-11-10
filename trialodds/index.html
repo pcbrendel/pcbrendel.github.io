@@ -53,19 +53,15 @@ subtitle: Forecasts for medication markets on Kalshi
   .to-figs b { color: var(--ink); font-weight: 700; }
   .to-key { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
   .to-chart { position: relative; height: 260px; }
-  .to details { margin-top: 8px; font-size: 13px; color: var(--ink-2); }
-  .to summary { cursor: pointer; width: fit-content; }
-  .to-log { list-style: none; padding: 0; margin: 8px 0 0; font-size: 14px; }
-  .to-log li { margin: 0 0 6px; }
-  .to-log .v { display: inline-block; min-width: 42px; font-weight: 700; }
-  .to-log .d { color: var(--muted); margin-right: 8px; }
+  .to-chart-key { margin: 6px 0 0; font-size: 13px; color: var(--ink-2); }
+  .to-chart-key span { font-size: 10px; margin-right: 4px; }
   .to-note { font-size: 13px; color: var(--muted); margin-top: 32px; }
   .to-faq-open { display: block; margin-top: 8px; padding: 0; border: 0; background: none; font: inherit; font-size: 13px; cursor: pointer; }
-  /* FAQ and Changelog look like the site's other links (css/main.css): amber, dotted underline, solid on hover. */
-  .to-faq-open, .to summary { color: var(--amber, #8A6400); text-decoration: underline dotted;
-                              text-decoration-color: rgba(138, 100, 0, 0.5); text-underline-offset: 4px;
-                              transition: text-decoration-color 0.2s ease; }
-  .to-faq-open:hover, .to-faq-open:focus-visible, .to summary:hover, .to summary:focus-visible {
+  /* The FAQ button looks like the site's other links (css/main.css): amber, dotted underline, solid on hover. */
+  .to-faq-open { color: var(--amber, #8A6400); text-decoration: underline dotted;
+                 text-decoration-color: rgba(138, 100, 0, 0.5); text-underline-offset: 4px;
+                 transition: text-decoration-color 0.2s ease; }
+  .to-faq-open:hover, .to-faq-open:focus-visible {
     text-decoration-style: solid; text-decoration-color: var(--amber, #8A6400); }
   .to-faq { width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 64px); padding: 0; border: 0;
             border-radius: 12px; background: var(--surface); color: var(--ink); box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
@@ -163,24 +159,24 @@ subtitle: Forecasts for medication markets on Kalshi
 
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
 
-  // Thin vertical line + "vX.Y" label at each model version change.
+  // Thin vertical line topped with a small ▼ at each model update; the key under the chart explains the ▼.
   var versionLines = {
     id: "versionLines",
     afterDatasetsDraw: function (chart, _, opts) {
       var ctx = chart.ctx, x = chart.scales.x, area = chart.chartArea;
       (opts.at || []).forEach(function (c) {
-        var px = x.getPixelForValue(c.x);
+        var px = x.getPixelForValue(c.x), top = area.top;
         ctx.save();
         ctx.strokeStyle = C.axis; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(px, area.top); ctx.lineTo(px, area.bottom); ctx.stroke();
-        ctx.fillStyle = C["ink-2"]; ctx.font = "11px " + css.fontFamily; ctx.textBaseline = "top";
-        ctx.fillText(" v" + c.v, px, area.top + 2);
+        ctx.beginPath(); ctx.moveTo(px, top); ctx.lineTo(px, area.bottom); ctx.stroke();
+        ctx.fillStyle = C["ink-2"];
+        ctx.beginPath(); ctx.moveTo(px - 5, top - 4); ctx.lineTo(px + 5, top - 4); ctx.lineTo(px, top + 4); ctx.closePath(); ctx.fill();
         ctx.restore();
       });
     }
   };
 
-  // Dashed guide line under the pointer while hovering (unlike the solid, labelled version lines).
+  // Dashed guide line under the pointer while hovering (unlike the solid, marked update lines).
   var hoverLine = {
     id: "hoverLine",
     afterDatasetsDraw: function (chart) {
@@ -202,7 +198,7 @@ subtitle: Forecasts for medication markets on Kalshi
     var xMin = xs[0], xMax = xs[xs.length - 1];
     if (xMax === xMin) { xMin -= 1; xMax += 1; }
     var changes = [];
-    rows.forEach(function (r, i) { if (i > 0 && r.model_version !== rows[i - 1].model_version) changes.push({ x: xs[i], v: r.model_version }); });
+    rows.forEach(function (r, i) { if (i > 0 && r.model_version !== rows[i - 1].model_version) changes.push({ x: xs[i] }); });
     var col = function (k) { return rows.map(function (r, i) { return { x: xs[i], y: r[k] }; }); };
     var hidden = { pointRadius: 0, pointHoverRadius: 0, pointHitRadius: 0, borderWidth: 0 };
     var last = rows.length - 1;
@@ -215,6 +211,7 @@ subtitle: Forecasts for medication markets on Kalshi
     canvas.setAttribute("aria-label", "Model " + pct(now.model, true) + " vs. Kalshi " + pct(now.kalshi_mid, true) +
       " for approval " + outcome.charAt(0).toLowerCase() + outcome.slice(1) + ", as of " + longDay(now.as_of) + ".");
     box.appendChild(canvas);
+    if (changes.length) box.after(el("p", "to-chart-key", '<span aria-hidden="true">▼</span> Model update'));
     new Chart(canvas, {
       type: "line",
       data: { datasets: [
@@ -228,7 +225,7 @@ subtitle: Forecasts for medication markets on Kalshi
       options: {
         maintainAspectRatio: false, animation: false,
         interaction: { mode: "index", intersect: false, axis: "x" },
-        layout: { padding: { top: 4, right: 28 } },
+        layout: { padding: { top: 8, right: 28 } },
         scales: {
           x: { type: "linear", min: xMin, max: xMax, grid: { display: false }, border: { color: C.axis },
                afterBuildTicks: function (axis) { axis.ticks = dateTicks(xMin, xMax, axis.chart.width); },
@@ -249,8 +246,7 @@ subtitle: Forecasts for medication markets on Kalshi
                 var r = rows[item.dataIndex], s = small;
                 var range = r.model_p10 == null ? "" : " (80% range " + pct(r.model_p10, s) + "–" + pct(r.model_p90, s) + ")";
                 return ["Model " + pct(r.model, true) + range,
-                        "Kalshi " + pct(r.kalshi_mid, true) + " (bid " + pct(r.kalshi_bid, true) + ", ask " + pct(r.kalshi_ask, true) + ")",
-                        "Model version " + r.model_version];
+                        "Kalshi " + pct(r.kalshi_mid, true) + " (bid " + pct(r.kalshi_bid, true) + ", ask " + pct(r.kalshi_ask, true) + ")"];
               }
             }
           }
@@ -271,11 +267,11 @@ subtitle: Forecasts for medication markets on Kalshi
     if (e.target === faq && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)) faq.close();
   });
 
-  // Everything for one drug: meta line, market buttons, charts, changelog. Starts hidden.
+  // Everything for one drug: meta line, market buttons, charts, FAQ link. Starts hidden.
   function buildTopic(t) {
     var panel = el("div", "to-panel");
     panel.hidden = true;
-    panel.appendChild(el("p", "to-meta", "Model v" + t.model_version + " · data through " + longDay(t.updated) +
+    panel.appendChild(el("p", "to-meta", "Data through " + longDay(t.updated) +
       (t.kalshi_url ? ' · <a href="' + t.kalshi_url + '" target="_blank" rel="noopener">Kalshi market ↗</a>' : "")));
     var outcomes = [];
     t.rows.forEach(function (r) { if (outcomes.indexOf(r.outcome) < 0) outcomes.push(r.outcome); });
@@ -319,15 +315,6 @@ subtitle: Forecasts for medication markets on Kalshi
     faqBtn.setAttribute("aria-haspopup", "dialog");
     faqBtn.addEventListener("click", openFaq);
     panel.appendChild(faqBtn);
-    if (t.changelog.length) {
-      var log = el("details", null, "<summary>Changelog</summary>");
-      var ul = el("ul", "to-log");
-      t.changelog.forEach(function (c) {
-        ul.appendChild(el("li", null, '<span class="v">v' + c.version + '</span><span class="d">' + c.date + "</span>"));
-      });
-      log.appendChild(ul);
-      panel.appendChild(log);
-    }
     return { t: t, panel: panel, activate: function () { show(cur); } };
   }
 

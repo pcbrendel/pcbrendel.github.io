@@ -8,7 +8,7 @@ Daily forecasts of whether each drug gets FDA approval before each Kalshi market
 
 ### What are the vertical lines?
 
-They mark model updates. See the Changelog for when each version came out.
+They mark the dates the forecasting model was updated.
 
 ### How often is this updated?
 
