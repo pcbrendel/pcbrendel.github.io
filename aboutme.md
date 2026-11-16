@@ -11,6 +11,12 @@ In the world of programming, I fell in love with the idea of open-source R & Pyt
 
 Throughout this journey, I've maintained a passion for baseball analytics. I have played competitive fantasy baseball for over 15 years and thrive in the competitive, analytical environment. During school I always chose baseball as the subject for biostatistics class projects. I've also contributed a bit to [Pitcher List](https://pitcherlist.com), which has a fun and welcoming community. I continually return to baseball data as an outlet to explore and learn new data science concepts. If this work happens to create insights that help my fantasy baseball team - that's a win-win!
 
+### Previously
+
+* [Valo Health](https://www.valohealth.com/)
+* [Closed Loop](https://www.closedloop.ai/)
+* [Verana Health](https://veranahealth.com/)
+
 ### Publications
 
 * [Simultaneous adjustment in multiple-bias modeling](https://pubmed.ncbi.nlm.nih.gov/36718093/)
