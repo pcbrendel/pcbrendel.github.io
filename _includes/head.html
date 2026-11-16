@@ -21,6 +21,16 @@
 
   {% include gtm_head.html %}
 
+  <!-- Google tag (gtag.js): in the shared head so every page is tracked -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B71J520WG7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-B71J520WG7');
+  </script>
+
   {% if layout.common-ext-css %}
     {% for css in layout.common-ext-css %}
       {% include ext-css.html css=css %}
