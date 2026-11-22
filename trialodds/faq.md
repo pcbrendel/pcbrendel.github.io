@@ -1,19 +1,23 @@
+## Trial Odds
+
 ### What is this?
 
-Daily forecasts of whether each drug gets FDA approval before each Kalshi market's deadline.
-
-### How do I read the charts?
-
-<b class="to-c-model">Blue</b> is the model and its 80% range. <b class="to-c-market">Orange</b> is Kalshi's price and bid–ask band.
-
-### What are the vertical lines?
-
-They mark the dates the forecasting model was updated.
+Forecasts for medication markets on Kalshi. Each forecast comes from a Trial Odds model, and the first is DART.
 
 ### Why is this labeled beta?
 
-The model is new and has a short track record: forecasts began in October 2026 and none of the markets shown have resolved yet. The model, the drugs covered, and this page may all change. The ▼ marks on the charts show each model update.
+The forecasts have a short track record: they began in October 2026 and none of the markets shown have resolved yet. The models, the drugs covered, and this page may all change.
 
 ### How often is this updated?
 
 This page is refreshed every Monday.
+
+## DART
+
+### What is DART?
+
+DART (Drug Approval Release Timing) makes daily forecasts of whether each drug gets FDA approval before each Kalshi market's deadline. The name nods to the old joke that many expert forecasters do no better than a dart-throwing chimp. DART is trying to beat the chimp, and the market.
+
+### How do I read the charts?
+
+<b class="to-c-model">Blue</b> is DART's forecast and its 80% range. <b class="to-c-market">Orange</b> is Kalshi's price and bid–ask band.

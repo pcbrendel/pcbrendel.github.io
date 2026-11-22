@@ -1,6 +1,7 @@
 ---
 title: Trial Odds
 subtitle: Forecasts for medication markets on Kalshi
+meta-description: DART model forecasts of whether drugs win FDA approval before each Kalshi market's deadline, charted against Kalshi prices.
 badge: Beta
 wide: true
 ---
@@ -11,6 +12,10 @@ wide: true
   .to-c-model { color: var(--model); }
   .to-c-market { color: var(--market); }
   .to-nav { display: flex; align-items: center; gap: 12px; margin: 40px 0 8px; }
+  /* Which Trial Odds model the forecasts below come from. */
+  .to-model-tag { margin: 32px 0 0; font-size: 13px; color: var(--ink-2); letter-spacing: 0.02em; }
+  .to-model-tag b { color: var(--model); font-weight: 700; letter-spacing: 0.06em; }
+  .to-model-tag + #to-root .to-nav { margin-top: 4px; }
   .to-title { position: relative; flex: 0 1 auto; min-width: 0; }
   .to-topic { margin: 0; display: inline-flex; align-items: center; gap: 8px; max-width: 100%; }
   .to-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -55,8 +60,6 @@ wide: true
   .to-figs b { color: var(--ink); font-weight: 700; }
   .to-key { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
   .to-chart { position: relative; height: 260px; }
-  .to-chart-key { margin: 6px 0 0; font-size: 13px; color: var(--ink-2); }
-  .to-chart-key span { font-size: 10px; margin-right: 4px; }
   .to-note { font-size: 13px; color: var(--muted); margin-top: 32px; max-width: 750px; }
   .to-faq-open { display: block; margin-top: 8px; padding: 0; border: 0; background: none; font: inherit; font-size: 13px; cursor: pointer; }
   /* The FAQ button looks like the site's other links (css/main.css): amber, dotted underline, solid on hover. */
@@ -76,10 +79,15 @@ wide: true
   .to-faq-close:hover { border-color: var(--ink-2); background: var(--grid); }
   .to-faq-body { padding: 4px 20px 20px; font-size: 15px; color: var(--ink-2); }
   .to-faq-body h3 { margin: 18px 0 4px; font-size: 16px; font-weight: 700; color: var(--ink); }
+  /* Group labels in faq.md (## Trial Odds, ## DART, ...): one group per model, plus general questions. */
+  .to-faq-body h2 { margin: 28px 0 -6px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+                    text-transform: uppercase; color: var(--muted); }
+  .to-faq-body h2:first-child { margin-top: 16px; }
   .to-faq-body p { margin: 0; }
 </style>
 
 <div class="to">
+  <p class="to-model-tag"><b>DART</b> · Drug Approval Release Timing model</p>
   <div id="to-root"></div>
   <dialog class="to-faq" id="to-faq" aria-labelledby="to-faq-title">
     <div class="to-faq-head">
@@ -91,7 +99,7 @@ wide: true
     </div>
   </dialog>
   <p class="to-note">
-    <b>Beta.</b> The model is new and still changing, so forecasts may be revised. Feedback is welcome on X at
+    <b>Beta.</b> The DART model is new and still changing, so forecasts may be revised. Feedback is welcome on X at
     <a href="https://x.com/{{ site.author.x }}" target="_blank" rel="noopener">@{{ site.author.x }}</a>.<br>
     For informational purposes only. Not investment advice.
   </p>
@@ -102,6 +110,7 @@ wide: true
 <script>
 (function () {
   var data = JSON.parse(document.getElementById("to-data").textContent);
+  var MODEL = "DART";   // name of the model whose forecasts this page shows
   var css = getComputedStyle(document.querySelector(".to"));
   var C = {};
   ["model", "market", "ink", "ink-2", "muted", "grid", "axis", "surface"].forEach(function (k) {
@@ -163,24 +172,7 @@ wide: true
 
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
 
-  // Thin vertical line topped with a small ▼ at each model update; the key under the chart explains the ▼.
-  var versionLines = {
-    id: "versionLines",
-    afterDatasetsDraw: function (chart, _, opts) {
-      var ctx = chart.ctx, x = chart.scales.x, area = chart.chartArea;
-      (opts.at || []).forEach(function (c) {
-        var px = x.getPixelForValue(c.x), top = area.top;
-        ctx.save();
-        ctx.strokeStyle = C.axis; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(px, top); ctx.lineTo(px, area.bottom); ctx.stroke();
-        ctx.fillStyle = C["ink-2"];
-        ctx.beginPath(); ctx.moveTo(px - 5, top - 4); ctx.lineTo(px + 5, top - 4); ctx.lineTo(px, top + 4); ctx.closePath(); ctx.fill();
-        ctx.restore();
-      });
-    }
-  };
-
-  // Dashed guide line under the pointer while hovering (unlike the solid, marked update lines).
+  // Dashed guide line under the pointer while hovering.
   var hoverLine = {
     id: "hoverLine",
     afterDatasetsDraw: function (chart) {
@@ -201,8 +193,6 @@ wide: true
     // A one-day history gets a day of room on each side so the axis isn't zero-width.
     var xMin = xs[0], xMax = xs[xs.length - 1];
     if (xMax === xMin) { xMin -= 1; xMax += 1; }
-    var changes = [];
-    rows.forEach(function (r, i) { if (i > 0 && r.model_version !== rows[i - 1].model_version) changes.push({ x: xs[i] }); });
     var col = function (k) { return rows.map(function (r, i) { return { x: xs[i], y: r[k] }; }); };
     var hidden = { pointRadius: 0, pointHoverRadius: 0, pointHitRadius: 0, borderWidth: 0 };
     var last = rows.length - 1;
@@ -212,10 +202,9 @@ wide: true
     };
     var canvas = el("canvas"), now = rows[last];
     canvas.setAttribute("role", "img");
-    canvas.setAttribute("aria-label", "Model " + pct(now.model, true) + " vs. Kalshi " + pct(now.kalshi_mid, true) +
+    canvas.setAttribute("aria-label", MODEL + " " + pct(now.model, true) + " vs. Kalshi " + pct(now.kalshi_mid, true) +
       " for approval " + outcome.charAt(0).toLowerCase() + outcome.slice(1) + ", as of " + longDay(now.as_of) + ".");
     box.appendChild(canvas);
-    if (changes.length) box.after(el("p", "to-chart-key", '<span aria-hidden="true">▼</span> Model update'));
     new Chart(canvas, {
       type: "line",
       data: { datasets: [
@@ -224,7 +213,7 @@ wide: true
         Object.assign({ label: "bid", data: col("kalshi_bid"), fill: false }, hidden),
         Object.assign({ label: "ask", data: col("kalshi_ask"), fill: "-1", backgroundColor: alpha(C.market, 0.18) }, hidden),
         Object.assign({ label: "Kalshi", data: col("kalshi_mid"), borderColor: C.market, borderWidth: 2, fill: false }, endDot(C.market)),
-        Object.assign({ label: "Model", data: col("model"), borderColor: C.model, borderWidth: 2, fill: false }, endDot(C.model))
+        Object.assign({ label: MODEL, data: col("model"), borderColor: C.model, borderWidth: 2, fill: false }, endDot(C.model))
       ] },
       options: {
         maintainAspectRatio: false, animation: false,
@@ -239,9 +228,8 @@ wide: true
         },
         plugins: {
           legend: { display: false },
-          versionLines: { at: changes },
           tooltip: {
-            filter: function (item) { return item.dataset.label === "Model"; },
+            filter: function (item) { return item.dataset.label === MODEL; },
             backgroundColor: C.surface, borderColor: C.axis, borderWidth: 1, titleColor: C.ink, bodyColor: C["ink-2"],
             padding: 10, displayColors: false,
             callbacks: {
@@ -249,14 +237,14 @@ wide: true
               label: function (item) {
                 var r = rows[item.dataIndex], s = small;
                 var range = r.model_p10 == null ? "" : " (80% range " + pct(r.model_p10, s) + "–" + pct(r.model_p90, s) + ")";
-                return ["Model " + pct(r.model, true) + range,
+                return [MODEL + " " + pct(r.model, true) + range,
                         "Kalshi " + pct(r.kalshi_mid, true) + " (bid " + pct(r.kalshi_bid, true) + ", ask " + pct(r.kalshi_ask, true) + ")"];
               }
             }
           }
         }
       },
-      plugins: [versionLines, hoverLine]
+      plugins: [hoverLine]
     });
   }
 
@@ -298,7 +286,7 @@ wide: true
       sec.hidden = true;
       sec.appendChild(el("div", "to-figs",
         (outcomes.length > 1 ? "" : "<span><b>" + o + "</b></span>") +
-        '<span><i class="to-key" style="background:' + C.model + '"></i>Model <b>' + pct(r.model, true) + "</b>" +
+        '<span><i class="to-key" style="background:' + C.model + '"></i>' + MODEL + ' <b>' + pct(r.model, true) + "</b>" +
         (r.model_p10 == null ? "" : " (80% range)") + "</span>" +
         '<span><i class="to-key" style="background:' + C.market + '"></i>Kalshi <b>' + pct(r.kalshi_mid, true) + "</b> (bid–ask band)</span>" +
         "<span>" + (left > 0 ? left + (left === 1 ? " day" : " days") + " until Kalshi market closes (" + longDay(r.deadline) + ")"
