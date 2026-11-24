@@ -10,7 +10,7 @@ The forecasts have a short track record: they began in October 2026 and none of 
 
 ### How often is this updated?
 
-This page is refreshed every Monday.
+This page is refreshed every day.
 
 ## DART
 
