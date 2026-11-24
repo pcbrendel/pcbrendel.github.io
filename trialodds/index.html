@@ -1,21 +1,24 @@
 ---
 title: Trial Odds
-subtitle: Forecasts for medication markets on Kalshi
+subtitle: DART (Drug Approval Release Timing) forecasts for medication markets on Kalshi
+# Shown in the header; plain `subtitle` stays for meta/og descriptions.
+subtitle-html: '<span class="to-dart">DART</span> <span class="to-dart-expand">(Drug Approval Release Timing)</span> forecasts for medication markets on Kalshi'
 meta-description: DART model forecasts of whether drugs win FDA approval before each Kalshi market's deadline, charted against Kalshi prices.
 badge: Beta
 wide: true
 ---
 
 <style>
+  /* Header subtitle: smaller than the theme default (27px) so it sits clearly under the title. */
+  .intro-header .page-heading .page-subheading { font-size: 20px; line-height: 1.35; }
+  .to-dart { font-weight: 800; letter-spacing: 0.08em; color: #1f4e9c; }
+  .to-dart-expand { color: #898781; }
   .to { --model: #1f4e9c; --market: #d96a10; --ink: #1b1b1a; --ink-2: #52514e; --muted: #898781;
         --grid: #e6e5df; --axis: #c3c2b7; --surface: #ffffff; color: var(--ink); }
   .to-c-model { color: var(--model); }
   .to-c-market { color: var(--market); }
   .to-nav { display: flex; align-items: center; gap: 12px; margin: 40px 0 8px; }
   /* Which Trial Odds model the forecasts below come from. */
-  .to-model-tag { margin: 32px 0 0; font-size: 13px; color: var(--ink-2); letter-spacing: 0.02em; }
-  .to-model-tag b { color: var(--model); font-weight: 700; letter-spacing: 0.06em; }
-  .to-model-tag + #to-root .to-nav { margin-top: 4px; }
   .to-title { position: relative; flex: 0 1 auto; min-width: 0; }
   .to-topic { margin: 0; display: inline-flex; align-items: center; gap: 8px; max-width: 100%; }
   .to-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -87,7 +90,6 @@ wide: true
 </style>
 
 <div class="to">
-  <p class="to-model-tag"><b>DART</b> · Drug Approval Release Timing model</p>
   <div id="to-root"></div>
   <dialog class="to-faq" id="to-faq" aria-labelledby="to-faq-title">
     <div class="to-faq-head">
