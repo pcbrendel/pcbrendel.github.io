@@ -3,8 +3,8 @@
   {
    "slug": "cytisinicline",
    "drug": "Cytisinicline",
-   "model_version": "3.3",
-   "updated": "2026-11-23",
+   "model_version": "4.0",
+   "updated": "2026-11-25",
    "kalshi_url": "https://kalshi.com/markets/kxfdaapprove/will-the-fda-approve-drug/kxfdaapprove-cyt",
    "rows": [
     {
@@ -257,7 +257,31 @@
      "kalshi_bid": 0.01,
      "kalshi_ask": 0.02,
      "kalshi_mid": 0.015,
-     "model_version": "3.3"
+     "model_version": "4.0"
+    },
+    {
+     "as_of": "2026-11-24",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0,
+     "model_p10": 0.0,
+     "model_p90": 0.0,
+     "kalshi_bid": 0.01,
+     "kalshi_ask": 0.02,
+     "kalshi_mid": 0.015,
+     "model_version": "4.0"
+    },
+    {
+     "as_of": "2026-11-25",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0,
+     "model_p10": 0.0,
+     "model_p90": 0.0,
+     "kalshi_bid": 0.02,
+     "kalshi_ask": 0.03,
+     "kalshi_mid": 0.025,
+     "model_version": "4.0"
     },
     {
      "as_of": "2026-11-01",
@@ -503,16 +527,48 @@
      "as_of": "2026-11-23",
      "outcome": "Before Jul 1, 2027",
      "deadline": "2027-07-01",
-     "model": 0.5974,
-     "model_p10": 0.4765,
-     "model_p90": 0.7112,
+     "model": 0.6965,
+     "model_p10": 0.5858,
+     "model_p90": 0.801,
      "kalshi_bid": 0.47,
      "kalshi_ask": 0.48,
      "kalshi_mid": 0.475,
-     "model_version": "3.3"
+     "model_version": "4.0"
+    },
+    {
+     "as_of": "2026-11-24",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.6965,
+     "model_p10": 0.5858,
+     "model_p90": 0.801,
+     "kalshi_bid": 0.47,
+     "kalshi_ask": 0.48,
+     "kalshi_mid": 0.475,
+     "model_version": "4.0"
+    },
+    {
+     "as_of": "2026-11-25",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.6965,
+     "model_p10": 0.5858,
+     "model_p90": 0.801,
+     "kalshi_bid": 0.47,
+     "kalshi_ask": 0.48,
+     "kalshi_mid": 0.475,
+     "model_version": "4.0"
     }
    ],
    "changelog": [
+    {
+     "version": "4.0",
+     "date": "2026-11-23"
+    },
+    {
+     "version": "3.4",
+     "date": "2026-11-23"
+    },
     {
      "version": "3.3",
      "date": "2026-11-22"
@@ -550,8 +606,8 @@
   {
    "slug": "retatrutide",
    "drug": "Retatrutide",
-   "model_version": "7.3",
-   "updated": "2026-11-23",
+   "model_version": "7.5",
+   "updated": "2026-11-25",
    "kalshi_url": "https://kalshi.com/markets/kxfdaretatrutide",
    "rows": [
     {
@@ -888,7 +944,31 @@
      "kalshi_bid": 0.01,
      "kalshi_ask": 0.02,
      "kalshi_mid": 0.015,
-     "model_version": "7.3"
+     "model_version": "7.4"
+    },
+    {
+     "as_of": "2026-11-24",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.001,
+     "model_p10": 0.0,
+     "model_p90": 0.0024,
+     "kalshi_bid": 0.01,
+     "kalshi_ask": 0.02,
+     "kalshi_mid": 0.015,
+     "model_version": "7.4"
+    },
+    {
+     "as_of": "2026-11-25",
+     "outcome": "Before Jan 1, 2027",
+     "deadline": "2027-01-01",
+     "model": 0.0009,
+     "model_p10": 0.0,
+     "model_p90": 0.0026,
+     "kalshi_bid": 0.01,
+     "kalshi_ask": 0.02,
+     "kalshi_mid": 0.015,
+     "model_version": "7.5"
     },
     {
      "as_of": "2026-10-23",
@@ -1224,7 +1304,31 @@
      "kalshi_bid": 0.07,
      "kalshi_ask": 0.08,
      "kalshi_mid": 0.075,
-     "model_version": "7.3"
+     "model_version": "7.4"
+    },
+    {
+     "as_of": "2026-11-24",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.0506,
+     "model_p10": 0.0094,
+     "model_p90": 0.1086,
+     "kalshi_bid": 0.07,
+     "kalshi_ask": 0.08,
+     "kalshi_mid": 0.075,
+     "model_version": "7.4"
+    },
+    {
+     "as_of": "2026-11-25",
+     "outcome": "Before Jul 1, 2027",
+     "deadline": "2027-07-01",
+     "model": 0.0501,
+     "model_p10": 0.0096,
+     "model_p90": 0.1087,
+     "kalshi_bid": 0.07,
+     "kalshi_ask": 0.08,
+     "kalshi_mid": 0.075,
+     "model_version": "7.5"
     },
     {
      "as_of": "2026-11-11",
@@ -1344,7 +1448,31 @@
      "kalshi_bid": 0.7,
      "kalshi_ask": 0.72,
      "kalshi_mid": 0.71,
-     "model_version": "7.3"
+     "model_version": "7.4"
+    },
+    {
+     "as_of": "2026-11-24",
+     "outcome": "Before Jan 1, 2028",
+     "deadline": "2028-01-01",
+     "model": 0.4571,
+     "model_p10": 0.3278,
+     "model_p90": 0.5881,
+     "kalshi_bid": 0.71,
+     "kalshi_ask": 0.72,
+     "kalshi_mid": 0.715,
+     "model_version": "7.4"
+    },
+    {
+     "as_of": "2026-11-25",
+     "outcome": "Before Jan 1, 2028",
+     "deadline": "2028-01-01",
+     "model": 0.4575,
+     "model_p10": 0.3271,
+     "model_p90": 0.589,
+     "kalshi_bid": 0.71,
+     "kalshi_ask": 0.72,
+     "kalshi_mid": 0.715,
+     "model_version": "7.5"
     },
     {
      "as_of": "2026-11-11",
@@ -1464,7 +1592,31 @@
      "kalshi_bid": 0.85,
      "kalshi_ask": 0.9,
      "kalshi_mid": 0.875,
-     "model_version": "7.3"
+     "model_version": "7.4"
+    },
+    {
+     "as_of": "2026-11-24",
+     "outcome": "Before Jul 1, 2028",
+     "deadline": "2028-07-01",
+     "model": 0.7582,
+     "model_p10": 0.6548,
+     "model_p90": 0.8521,
+     "kalshi_bid": 0.86,
+     "kalshi_ask": 0.9,
+     "kalshi_mid": 0.88,
+     "model_version": "7.4"
+    },
+    {
+     "as_of": "2026-11-25",
+     "outcome": "Before Jul 1, 2028",
+     "deadline": "2028-07-01",
+     "model": 0.7581,
+     "model_p10": 0.6553,
+     "model_p90": 0.8523,
+     "kalshi_bid": 0.86,
+     "kalshi_ask": 0.9,
+     "kalshi_mid": 0.88,
+     "model_version": "7.5"
     },
     {
      "as_of": "2026-11-11",
@@ -1584,10 +1736,42 @@
      "kalshi_bid": 0.89,
      "kalshi_ask": 0.9,
      "kalshi_mid": 0.895,
-     "model_version": "7.3"
+     "model_version": "7.4"
+    },
+    {
+     "as_of": "2026-11-24",
+     "outcome": "Before Jan 1, 2029",
+     "deadline": "2029-01-01",
+     "model": 0.8562,
+     "model_p10": 0.7854,
+     "model_p90": 0.9178,
+     "kalshi_bid": 0.89,
+     "kalshi_ask": 0.9,
+     "kalshi_mid": 0.895,
+     "model_version": "7.4"
+    },
+    {
+     "as_of": "2026-11-25",
+     "outcome": "Before Jan 1, 2029",
+     "deadline": "2029-01-01",
+     "model": 0.8565,
+     "model_p10": 0.785,
+     "model_p90": 0.9172,
+     "kalshi_bid": 0.89,
+     "kalshi_ask": 0.9,
+     "kalshi_mid": 0.895,
+     "model_version": "7.5"
     }
    ],
    "changelog": [
+    {
+     "version": "7.5",
+     "date": "2026-11-24"
+    },
+    {
+     "version": "7.4",
+     "date": "2026-11-23"
+    },
     {
      "version": "7.3",
      "date": "2026-11-21"
@@ -1657,8 +1841,8 @@
   {
    "slug": "vamikibart",
    "drug": "Vamikibart",
-   "model_version": "0.2",
-   "updated": "2026-11-23",
+   "model_version": "0.3",
+   "updated": "2026-11-25",
    "kalshi_url": "https://kalshi.com/markets/kxvamikibart",
    "rows": [
     {
@@ -1720,9 +1904,37 @@
      "kalshi_ask": 0.66,
      "kalshi_mid": 0.62,
      "model_version": "0.2"
+    },
+    {
+     "as_of": "2026-11-24",
+     "outcome": "a full approval or an accelerated approval",
+     "deadline": "2027-08-01",
+     "model": 0.396,
+     "model_p10": 0.2841,
+     "model_p90": 0.5012,
+     "kalshi_bid": 0.64,
+     "kalshi_ask": 0.72,
+     "kalshi_mid": 0.68,
+     "model_version": "0.3"
+    },
+    {
+     "as_of": "2026-11-25",
+     "outcome": "a full approval or an accelerated approval",
+     "deadline": "2027-08-01",
+     "model": 0.396,
+     "model_p10": 0.2841,
+     "model_p90": 0.5012,
+     "kalshi_bid": 0.65,
+     "kalshi_ask": 0.72,
+     "kalshi_mid": 0.685,
+     "model_version": "0.3"
     }
    ],
    "changelog": [
+    {
+     "version": "0.3",
+     "date": "2026-11-24"
+    },
     {
      "version": "0.2",
      "date": "2026-11-21"
