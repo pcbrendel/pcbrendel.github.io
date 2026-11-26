@@ -269,17 +269,24 @@ wide: true
       (t.kalshi_url ? ' · <a href="' + t.kalshi_url + '" target="_blank" rel="noopener">Kalshi market ↗</a>' : "")));
     var outcomes = [];
     t.rows.forEach(function (r) { if (outcomes.indexOf(r.outcome) < 0) outcomes.push(r.outcome); });
+    // Button label for a market. Kalshi names most markets by date ("Before Jan 1, 2027"); ones it names
+    // otherwise (e.g. "a full approval or an accelerated approval") get the same form from their deadline.
+    function label(o) {
+      if (/^before /i.test(o)) return o;
+      var r = t.rows.filter(function (x) { return x.outcome === o; })[0];
+      return "Before " + longDay(r.deadline);
+    }
     // One market at a time, picked with buttons. A chart is drawn the first time its market is shown,
     // since Chart.js can't size a canvas inside a hidden element.
     var picks = el("div", "to-picks");
     picks.setAttribute("role", "group");
     picks.setAttribute("aria-label", t.drug + " market");
-    if (outcomes.length > 1) panel.appendChild(picks);
+    panel.appendChild(picks);
     var cur = 0;
     var markets = outcomes.map(function (o, i) {
       var rows = t.rows.filter(function (r) { return r.outcome === o; });
       var r = rows[rows.length - 1];
-      var btn = el("button", "to-pick", o);
+      var btn = el("button", "to-pick", label(o));
       btn.type = "button";
       btn.addEventListener("click", function () { show(i); });
       picks.appendChild(btn);
@@ -287,16 +294,15 @@ wide: true
       var sec = el("section", "to-market");
       sec.hidden = true;
       sec.appendChild(el("div", "to-figs",
-        (outcomes.length > 1 ? "" : "<span><b>" + o + "</b></span>") +
         '<span><i class="to-key" style="background:' + C.model + '"></i>' + MODEL + ' <b>' + pct(r.model, true) + "</b>" +
         (r.model_p10 == null ? "" : " (80% range)") + "</span>" +
         '<span><i class="to-key" style="background:' + C.market + '"></i>Kalshi <b>' + pct(r.kalshi_mid, true) + "</b> (bid–ask band)</span>" +
-        "<span>" + (left > 0 ? left + (left === 1 ? " day" : " days") + " until Kalshi market closes (" + longDay(r.deadline) + ")"
+        "<span>" + (left > 0 ? left + (left === 1 ? " day" : " days") + " until Kalshi market closes"
                             : "Kalshi market closed " + longDay(r.deadline)) + "</span>"));
       var box = el("div", "to-chart");
       sec.appendChild(box);
       panel.appendChild(sec);
-      return { btn: btn, sec: sec, box: box, rows: rows, outcome: o, drawn: false };
+      return { btn: btn, sec: sec, box: box, rows: rows, outcome: label(o), drawn: false };
     });
     function show(i) {
       cur = i;
